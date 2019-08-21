@@ -162,20 +162,24 @@ public class AnalysisOrderUtil {
 	 * 解析日志
 	 * @param order
 	 */
-	public static void returnLogOrder(String order){
+	public static void returnLogOrder(String order) {
 		initLogMap();
-		String comm= EquipUtil.getCommand(order,"A5");
+		String comm = EquipUtil.getCommand(order, "A5");
 		//拆分字符串
-		String[]arr = comm.split("(?<=\\G.{2})");
-		EquipLog el=new EquipLog.Builder()
-						.id(0)
-						.logId((get10HexNum(arr[14])<<4)+get10HexNum(arr[12]))
-						.equipId (get10HexNum(arr[2]+arr[3]+arr[4]+arr[5]))
-						.equipId02(get10HexNum(arr[6]+arr[7]+arr[8]+arr[9]))
-						.order(arr[10]+arr[11]+arr[12])
-						.desc(LogMap.get(arr[11]))
-						.datetime(get10HexNum(arr[13])+"-"+low8(arr[14])+"-"+get10HexNum(arr[15])
-								+" "+get10HexNum(arr[16])+":"+get10HexNum(arr[17])+":"+get10HexNum(arr[18]))
-						.build();
+		String[] arr = comm.split("(?<=\\G.{2})");
+		if ("FF".equals(arr[11])) {
+			//日志传输结束
+		} else {
+			EquipLog el = new EquipLog.Builder()
+					.id(0)
+					.logId((get10HexNum(arr[14]) << 4) + get10HexNum(arr[12]))
+					.equipId(get10HexNum(arr[2] + arr[3] + arr[4] + arr[5]))
+					.equipId02(get10HexNum(arr[6] + arr[7] + arr[8] + arr[9]))
+					.order(arr[10] + arr[11] + arr[12])
+					.desc(LogMap.get(arr[11]))
+					.datetime(get10HexNum(arr[13]) + "-" + low8(arr[14]) + "-" + get10HexNum(arr[15])
+							+ " " + get10HexNum(arr[16]) + ":" + get10HexNum(arr[17]) + ":" + get10HexNum(arr[18]))
+					.build();
+		}
 	}
 }

@@ -5,6 +5,7 @@ public class EquipLog {
 	private int logId;//日志id
 	private int equipId;//记录的遥控器或者手环ID
 	private int equipId02;//查询设备ID
+	private int userID;//查询人ID
 	private String name;//查询人
 	private int prisonerId;//犯人id
 	private String prisonerName;//犯人姓名
@@ -18,6 +19,7 @@ public class EquipLog {
 		setLogId(builder.logId);
 		setEquipId(builder.equipId);
 		setEquipId02(builder.equipId02);
+		setUserID(builder.userID);
 		setName(builder.name);
 		setPrisonerId(builder.prisonerId);
 		setPrisonerName(builder.prisonerName);
@@ -34,6 +36,7 @@ public class EquipLog {
 				", logId=" + logId +
 				", equipId=" + equipId +
 				", equipId02=" + equipId02 +
+				", userID=" + userID +
 				", name='" + name + '\'' +
 				", prisonerId=" + prisonerId +
 				", prisonerName='" + prisonerName + '\'' +
@@ -42,6 +45,14 @@ public class EquipLog {
 				", desc='" + desc + '\'' +
 				", order='" + order + '\'' +
 				'}';
+	}
+
+	public int getUserID() {
+		return userID;
+	}
+
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 	public int getId() {
@@ -137,6 +148,7 @@ public class EquipLog {
 		private int logId;
 		private int equipId;
 		private int equipId02;
+		private int userID;
 		private String name;
 		private int prisonerId;
 		private String prisonerName;
@@ -165,6 +177,11 @@ public class EquipLog {
 
 		public Builder equipId02(int equipId02) {
 			this.equipId02 = equipId02;
+			return this;
+		}
+
+		public Builder userID(int userID) {
+			this.userID = userID;
 			return this;
 		}
 

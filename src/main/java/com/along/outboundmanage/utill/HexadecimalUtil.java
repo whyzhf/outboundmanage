@@ -65,7 +65,6 @@ public class HexadecimalUtil {
 	}
 	//num & 0xff
 	public static int  low8(Object num){
-
 		return Integer.parseInt(num+"",16) & 0xff;
 	}
 }

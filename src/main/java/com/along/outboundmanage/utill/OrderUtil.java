@@ -1,5 +1,11 @@
 package com.along.outboundmanage.utill;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
+import static com.along.outboundmanage.utill.HexadecimalUtil.get10HexNum;
+
 /**
  * 发送命令
  */
@@ -92,6 +98,24 @@ public class OrderUtil {
 	}
 
 	/**
+	 * 普通命令反馈
+	 * @param order
+	 * @return
+	 */
+	public static  String retuenCreatePubOrder(String order){
+		//拆分字符串
+		String[]arr = order.split("(?<=\\G.{2})");
+		if ("00".equals(arr[12])){
+			return "fail";
+		}else if ("01".equals(arr[12])){
+			return "Equipment unprotected";
+		}else if ("FF".equals(arr[12])){
+			return "Success";
+		}
+		return "-1";
+	}
+
+	/**
 	 * 群组命令
 	 * @param param:
 	 *                0:无处理
@@ -134,7 +158,23 @@ public class OrderUtil {
 		CMD2=arr[param];
 		CMD3="00";
 	}
-
+	/**
+	 * 群组命令反馈
+	 * @param order
+	 * @return
+	 */
+	public static  String retuenCreateGroupOrder(String order){
+		//拆分字符串
+		String[]arr = order.split("(?<=\\G.{2})");
+		if ("00".equals(arr[13])){
+			return "fail";
+		}else if ("01".equals(arr[13])){
+			return "Equipment unprotected";
+		}else if ("FF".equals(arr[13])){
+			return "Success";
+		}
+		return "-1";
+	}
 	/**
 	 * 查询命令
 	 * @param param
@@ -167,13 +207,6 @@ public class OrderUtil {
 		 * 	    0：无处理。
 		 * 		0X04:0000 0100：查询脚扣软件版本
 		 */
-	}
-
-	/**
-	 * 设置设备命令
-	 * @param param
-	 */
-	public static  void setIDOrder(int param){
 		if (0==param){
 			//查询ID
 			CMD1="03";
@@ -191,6 +224,31 @@ public class OrderUtil {
 			CMD3 = "00";
 		}
 	}
+	/**
+	 * 查询命令反馈(未完成)
+	 *      获取系统电压
+	 * 		获取系统硬件版本、软件版本
+	 * 		获取系统状态
+	 * @param order
+	 * @return
+	 */
+	public static  String retuenSelectOrderBy0x05(String order){
+		//拆分字符串
+		String[]arr = order.split("(?<=\\G.{2})");
+		Map<String,Object> resMap=new HashMap<>();
+		resMap.put("power",get10HexNum(arr[12]));
+		resMap.put("sysStatus",get10HexNum(arr[12]));
+		resMap.put("hardVision",get10HexNum(arr[12]));
+		resMap.put("softwareVision",get10HexNum(arr[12]));
+		return getJsonStr(resMap);
+	}
+	/**
+	 * 设置设备ID命令
+	 * @param param
+	 */
+	public static  void setIDOrder(int param){
+
+	}
 
 	/**
 	 * 设置防破拆命令
@@ -199,7 +257,21 @@ public class OrderUtil {
 	public static  void setPreventOrder(int param){
 
 	}
-
+	/**
+	 * 设置防破拆命令反馈
+	 * @param order
+	 * @return
+	 */
+	public static  String retuenSetPreventOrder(String order){
+		//拆分字符串
+		String[]arr = order.split("(?<=\\G.{2})");
+		if ("00".equals(arr[12])){
+			return "fail";
+		}else if ("FF".equals(arr[12])){
+			return "Success";
+		}
+		return "-1";
+	}
 	/**
 	 * 获取日志命令
 	 *
