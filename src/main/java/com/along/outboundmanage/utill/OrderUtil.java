@@ -1,5 +1,8 @@
 package com.along.outboundmanage.utill;
 
+/**
+ * 发送命令
+ */
 public class OrderUtil {
 
 	public static void main(String[] args) {
@@ -13,9 +16,14 @@ public class OrderUtil {
 
 	}
 
+	/**
+	 * 命令组
+	 */
 	private static String CMD1="";
 	private static String CMD2="";
 	private static String CMD3="";
+
+
 	/**
 	 *  发送命令
 	 * @param equip :接收命令的设备ID 脚扣：0-799999   遥控器：800000-899999  手环：900000-949999
@@ -142,31 +150,46 @@ public class OrderUtil {
 		 * CMD2
 		 *  MAC ID
 		 *      0：无处理。
-		 * 		1：查询设备自身唯一ID号，用于编程设备遥控器可控制ID。
+		 * 		0X80:1000 0000：查询设备自身唯一ID号，用于编程设备遥控器可控制ID。
 		 * 	Power Check
 		 * 	    0：无处理。
-		 * 		1：查询设备当前电量信息。
+		 * 		0X40:0100 0000：查询设备当前电量信息。
 		 * 	Device Time
 		 * 	    0：无处理。
-		 * 		1：查询脚扣设备当前时间。
+		 * 		0X20:0010 0000：查询脚扣设备当前时间。
 		 * 	Device Sys Status
 		 * 	    0：无处理。
-		 * 		1：查询脚扣系统状态
+		 * 		0X10:0001 0000：查询脚扣系统状态
 		 * 	Device Hard Vision
 		 * 	    0：无处理。
-		 * 		1：查询脚扣硬件版本
+		 * 		0X08:0000 1000：查询脚扣硬件版本
 		 * 	Device Software Vision
 		 * 	    0：无处理。
-		 * 		1：查询脚扣软件版本
+		 * 		0X04:0000 0100：查询脚扣软件版本
 		 */
 	}
 
 	/**
-	 * 设置设备ID命令
+	 * 设置设备命令
 	 * @param param
 	 */
 	public static  void setIDOrder(int param){
-
+		if (0==param){
+			//查询ID
+			CMD1="03";
+			CMD2="80";
+			CMD3="00";
+		}else if (1==param) {
+			//查询系统时间和组号
+			CMD1 = "04";
+			CMD2 = "80";
+			CMD3 = "00";
+		}else if (2==param) {
+			//获取系统电压,系统硬件版本、软件版本,获取系统状态
+			CMD1 = "05";
+			CMD2 = "5C";
+			CMD3 = "00";
+		}
 	}
 
 	/**
@@ -178,10 +201,12 @@ public class OrderUtil {
 	}
 
 	/**
-	 * 返回日志命令
-	 * @param param
+	 * 获取日志命令
+	 *
 	 */
-	public static  void getLogOrder(int param){
-
+	public static  void getLogOrder(){
+		CMD1 = "09";
+		CMD2 = "00";
+		CMD3 = "00";
 	}
 }
