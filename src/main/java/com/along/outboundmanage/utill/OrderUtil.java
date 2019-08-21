@@ -273,7 +273,7 @@ public class OrderUtil {
 		return "-1";
 	}
 	/**
-	 * 发送获取日志命令
+	 * 发送了获取日志命令
 	 *
 	 */
 	public static  void getLogOrder(){
