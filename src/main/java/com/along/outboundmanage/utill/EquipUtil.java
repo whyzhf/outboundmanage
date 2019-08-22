@@ -7,12 +7,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.along.outboundmanage.utill.HexadecimalUtil.*;
+import static com.along.outboundmanage.utill.HexadecimalUtil.get16NumAdd0;
 
 public class EquipUtil {
 	public static void main(String[] args) {
 		//System.out.println("AA14000C34FC000C35010C80001208020A31211F");
 		//System.out.println(send("799996","800001","0C","80","00"));
-		System.out.println(Receive("A514000C34FC000000000D010000000000000008"));
+		//System.out.println(Receive("A514000C34FC000000000D010000000000000008"));
+		String str="AA14000C34FC000C35010C80001208020A31211F";
+		String[]arr = str.split("(?<=\\G.{2})");
+		int sum=0;
+		for (int i = 1; i < arr.length-1; i++) {
+			System.out.println(arr[i]+" = "+get10HexNum(arr[i]));
+			sum+=get10HexNum(arr[i]);
+		}
+		System.out.println(sum+" = "+get16Num(sum));
+		System.out.println("low8 "+get16Num(low8(sum)));
 	}
 	/**
 	 * 机器连接
@@ -34,10 +44,18 @@ public class EquipUtil {
 		//添加head,len
 		sb.append("AA14");
 		//添加设备id
-		sum+=Integer.parseInt(equip);
-		sb.append(get16NumAdd0(equip,8));
+		//sum+=Integer.parseInt(equip);
+		String str=get16NumAdd0(equip,8);
+		//拆分字符串
+		String[]arr = str.split("(?<=\\G.{2})");
+		sum=sum+(get10HexNum(arr[0])+get10HexNum(arr[1])+get10HexNum(arr[2])+get10HexNum(arr[3]));
+		sb.append(str);
 		//添加遥控器id
-		sum+=Integer.parseInt(equip02);
+		//sum+=Integer.parseInt(equip02);
+		String str2=get16NumAdd0(equip02,8);
+		//拆分字符串
+		String[]arr2 = str2.split("(?<=\\G.{2})");
+		sum=sum+(get10HexNum(arr2[0])+get10HexNum(arr2[1])+get10HexNum(arr2[2])+get10HexNum(arr2[3]));
 		sb.append(get16NumAdd0(equip02,8));
 		//添加命令
 		//CMD1
@@ -51,11 +69,12 @@ public class EquipUtil {
 		sb.append(CMD3);
 		//添加时间
 		String time=get16NumByTime("yy-MM-dd-HH-mm-ss");
-		time="1208020A3121-118";
+		//time="1208020A3121-118";
 		sum+=Integer.parseInt(time.split("-")[1]);
 		sb.append(time.split("-")[0]);
 		//添加校验位
-		sb.append(low8(sum));
+		//System.out.println(sum+"::"+get16Num(sum));
+		sb.append(get16Num(low8(sum)));
 		return sb.toString();
 	}
 	/**
@@ -111,7 +130,7 @@ public class EquipUtil {
 		int sum=0;
 
 		//求和
-		for (int i = 1; i < arr.length-1; i++) {
+		for (int i =1; i < arr.length-1; i++) {
 			System.out.println(arr[i]+" "+get10HexNum(arr[i]));
 			sum+=get10HexNum(arr[i]);
 		}
