@@ -57,4 +57,13 @@ public class GeneralUtils {
         return  JSONObject.toJSONString(obj);
     }
 
+	/**
+	 * 将字符串切割成数组，每组param个字符
+	 * @param str 字符串
+	 * @param param 每组param个字符
+	 * @return
+	 */
+	public static String[] getSplitStr(String str,int param){
+		return  str.split("(?<=\\G.{"+param+"})");
+	}
 }

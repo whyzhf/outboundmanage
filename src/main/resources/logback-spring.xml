@@ -75,8 +75,8 @@
         </encoder>
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <!--<level>debug</level>-->
-            <level>ERROR</level>
+            <level>debug</level>
+           <!-- <level>ERROR</level>-->
         </filter>
     </appender>
     <!-- additivity 避免执行2次 -->
@@ -87,7 +87,7 @@
     </logger>
     <!--开发环境日志处理 -->
     <springProfile name="dev">
-        <root level="ERROR">
+        <root level="INFO">
             <appender-ref ref="STDOUT" />
             <appender-ref ref="DEV_ERROR_FILE" />
         </root>

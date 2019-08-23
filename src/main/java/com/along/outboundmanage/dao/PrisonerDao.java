@@ -10,7 +10,7 @@ public interface PrisonerDao {
 	@Insert("INSERT INTO outbound_prisoner" +
 			" ( card, name, equipment_id, area_id,intime,ifdel)" +
 			" VALUES( #{OutboundPrisoner.card}, #{OutboundPrisoner.name}," +
-			"#{OutboundPrisoner.equipmentId},#{OutboundPrisoner.areaId}.now(),0)")
+			"#{OutboundPrisoner.equipmentId},#{OutboundPrisoner.areaId},now(),0)")
 	@Options(useGeneratedKeys = true, keyProperty = "OutboundPrisoner.id", keyColumn = "id")
 	int addPrisoner(@Param("OutboundPrisoner") OutboundPrisoner outboundPrisoner);
 

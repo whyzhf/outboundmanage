@@ -14,14 +14,21 @@ public class EquipUtil {
 		//System.out.println("AA14000C34FC000C35010C80001208020A31211F");
 		//System.out.println(send("799996","800001","0C","80","00"));
 		//System.out.println(Receive("A514000C34FC000000000D010000000000000008"));
-		String str="AA14000C34FC000C35010C80001208020A31211F";
+		//String str="AA14000C34FC000C35010C80001208020A31211F";
+		String str="AA 14 00 0C 34 FC 00 00 00 00 0D 01 00 00 00 00 00 00 00 08";
+		str=str.replaceAll(" ","");
 		String[]arr = str.split("(?<=\\G.{2})");
 		int sum=0;
-		for (int i = 1; i < arr.length-1; i++) {
+		int coun=0;
+		for (int i = 2; i < arr.length-1; i++) {
+			coun = (coun + get10HexNum(arr[i])) % 0xfff;
 			System.out.println(arr[i]+" = "+get10HexNum(arr[i]));
 			sum+=get10HexNum(arr[i]);
 		}
+		byte bt = (byte)(coun & 0xff);//取校验和低8位
+		System.out.println("bt:: "+bt);
 		System.out.println(sum+" = "+get16Num(sum));
+		System.out.println(coun+" = "+get16Num(coun));
 		System.out.println("low8 "+get16Num(low8(sum)));
 	}
 	/**

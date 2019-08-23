@@ -153,7 +153,7 @@ public class LoginController {
 
     }
     /**
-     * 修改用户信息
+     * 删除用户信息
      * @param request
      * @return
      */
