@@ -45,6 +45,7 @@ import java.util.Map;
 
 /**
  * HttpClient工具类
+ * get/post等各种请求访问工具类
  */
 public class HttpClientUtils {
 
