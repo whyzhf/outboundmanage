@@ -86,7 +86,7 @@ public class LoginController {
         }else {
             return  ResultGenerator.setFailResult(ResultCode.LOGIN_FILE.code(),ResultCode.LOGIN_FILE.message());
          }
-
+       // System.out.println(session.getAttribute("user"));
         return ResultGenerator.genSuccessResult(map);
 
     }

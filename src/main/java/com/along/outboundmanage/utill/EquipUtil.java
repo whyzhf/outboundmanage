@@ -12,10 +12,11 @@ import static com.along.outboundmanage.utill.HexadecimalUtil.get16NumAdd0;
 public class EquipUtil {
 	public static void main(String[] args) {
 		//System.out.println("AA14000C34FC000C35010C80001208020A31211F");
-		//System.out.println(send("799996","800001","0C","80","00"));
+		//System.out.println(Receive("A514000C35010050002A033948500B2038334827"));
+		//	System.out.println(send("00000090","800001","0D","01","00"));
 		//System.out.println(Receive("A514000C34FC000000000D010000000000000008"));
 		//String str="AA14000C34FC000C35010C80001208020A31211F";
-		String str="AA 14 00 0C 34 FC 00 00 00 00 0D 01 00 00 00 00 00 00 00 08";
+		/*String str="AA 14 00 0C 34 FC 00 00 00 00 0D 01 00 00 00 00 00 00 00 08";
 		str=str.replaceAll(" ","");
 		String[]arr = str.split("(?<=\\G.{2})");
 		int sum=0;
@@ -29,7 +30,7 @@ public class EquipUtil {
 		System.out.println("bt:: "+bt);
 		System.out.println(sum+" = "+get16Num(sum));
 		System.out.println(coun+" = "+get16Num(coun));
-		System.out.println("low8 "+get16Num(low8(sum)));
+		System.out.println("low8 "+get16Num(low8(sum)));*/
 	}
 	/**
 	 * 机器连接
@@ -47,7 +48,7 @@ public class EquipUtil {
 	 * */
 	public static String send(String equip,String equip02,String CMD1,String CMD2,String CMD3){
 		StringBuffer sb=new StringBuffer(40);
-		int sum=20;
+		int sum=190;
 		//添加head,len
 		sb.append("AA14");
 		//添加设备id
@@ -58,7 +59,7 @@ public class EquipUtil {
 		sum=sum+(get10HexNum(arr[0])+get10HexNum(arr[1])+get10HexNum(arr[2])+get10HexNum(arr[3]));
 		sb.append(str);
 		//添加遥控器id
-		//sum+=Integer.parseInt(equip02);
+
 		String str2=get16NumAdd0(equip02,8);
 		//拆分字符串
 		String[]arr2 = str2.split("(?<=\\G.{2})");
@@ -81,28 +82,12 @@ public class EquipUtil {
 		sb.append(time.split("-")[0]);
 		//添加校验位
 		//System.out.println(sum+"::"+get16Num(sum));
-		sb.append(get16Num(low8(sum)));
+		sb.append(get16Num(low8(sum)).toUpperCase());
+		System.out.println("------------------------------");
+		System.out.println(sb.toString());
 		return sb.toString();
 	}
-	/**
-	 * 接收命令
-	 * 1.获取有效命令串getCommand（）
-	 * 2.命令串校验check（）
-	 * 3.解析命令串
-	 * */
-	public static String Receive(String str){
-		String comm=getCommand(str,"A5");
-		comm=check(comm);
-		if ("-1".equals(comm)){//校验失败
-			return "error";
-		}else if("00".equals(comm)){//执行失败
-			return "fail";
-		}else if("FF".equals(comm)){//执行成功
-			return "Success";
-		}else{
-			return "other error ";
-		}
-	}
+
 	/**
 	 * 用于建立十六进制字符的输出的大写字符数组
 	 */
@@ -129,24 +114,24 @@ public class EquipUtil {
 
 	/**
 	* 校验
-	* 校验：除命令头两个字节和校验字节外所有字节的累加和低8位。
+	* 校验：除校验字节外所有字节的累加和低8位。
 	* */
-	public static String  check(String string){
+	public static String[]  check(String string){
 		//拆分字符串
 		String[]arr = string.split("(?<=\\G.{2})");
 		int sum=0;
 
 		//求和
-		for (int i =1; i < arr.length-1; i++) {
-			System.out.println(arr[i]+" "+get10HexNum(arr[i]));
+		for (int i =0; i < arr.length-1; i++) {
+			//System.out.println(arr[i]+" "+get10HexNum(arr[i]));
 			sum+=get10HexNum(arr[i]);
 		}
-		System.out.println(get16Num((low8(get16Num(sum))+"")));
+
 		//校验
-		if(get16Num((low8(get16Num(sum))+"")).equals(arr[arr.length - 1])){
-			return arr[12];
-		}else{
-			return "-1";
+		if(get16Num((low8(sum)+"")).equals(arr[arr.length - 1])){
+			return arr;
+		}else{//失败
+			return null;
 		}
 	}
 

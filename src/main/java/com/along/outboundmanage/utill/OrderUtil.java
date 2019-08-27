@@ -3,6 +3,7 @@ package com.along.outboundmanage.utill;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.along.outboundmanage.utill.EquipUtil.check;
 import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
 import static com.along.outboundmanage.utill.HexadecimalUtil.get10HexNum;
 
@@ -12,7 +13,7 @@ import static com.along.outboundmanage.utill.HexadecimalUtil.get10HexNum;
 public class OrderUtil {
 
 	public static void main(String[] args) {
-
+		System.out.println(retuenCreatePubOrder("A5140000005A000C35010104FF00000000000059"));
 	}
 
 	/**
@@ -49,6 +50,7 @@ public class OrderUtil {
 	 * @return
 	 */
 	public static String Receive(String str){
+
 		return "";
 	}
 
@@ -103,14 +105,21 @@ public class OrderUtil {
 	 * @return
 	 */
 	public static  String retuenCreatePubOrder(String order){
-		//拆分字符串
-		String[]arr = order.split("(?<=\\G.{2})");
-		if ("00".equals(arr[12])){
-			return "fail";
-		}else if ("01".equals(arr[12])){
-			return "Equipment unprotected";
-		}else if ("FF".equals(arr[12])){
-			return "Success";
+		//命令校验
+		String[] arr=check(order);
+		if(arr==null){
+			return "4440";//命令校验码出错
+		}else{
+
+			System.out.println(arr[11]);
+			//命令解析
+			if ("00".equals(arr[12])){
+				return "4400";//执行失败
+			}else if ("01".equals(arr[12])){
+				return "4300";//设备未布防
+			}else if ("FF".equals(arr[12])){
+				return "2200";//执行成功
+			}
 		}
 		return "-1";
 	}
@@ -164,14 +173,19 @@ public class OrderUtil {
 	 * @return
 	 */
 	public static  String retuenCreateGroupOrder(String order){
-		//拆分字符串
-		String[]arr = order.split("(?<=\\G.{2})");
-		if ("00".equals(arr[13])){
-			return "fail";
-		}else if ("01".equals(arr[13])){
-			return "Equipment unprotected";
-		}else if ("FF".equals(arr[13])){
-			return "Success";
+		//命令校验
+		String[] arr=check(order);
+		if(arr==null){
+			return "4440";//命令校验码出错
+		}else {
+			//命令解析
+			if ("00".equals(arr[13])){
+				return "4400";//执行失败
+			}else if ("01".equals(arr[13])){
+				return "4300";//设备未布防
+			}else if ("FF".equals(arr[13])){
+				return "2200";//执行成功
+			}
 		}
 		return "-1";
 	}
@@ -233,13 +247,18 @@ public class OrderUtil {
 	 * @return
 	 */
 	public static  String retuenSelectOrderBy0x05(String order){
-		//拆分字符串
-		String[]arr = order.split("(?<=\\G.{2})");
-		Map<String,Object> resMap=new HashMap<>();
-		resMap.put("power",get10HexNum(arr[12]));
-		resMap.put("sysStatus",get10HexNum(arr[12]));
-		resMap.put("hardVision",get10HexNum(arr[12]));
-		resMap.put("softwareVision",get10HexNum(arr[12]));
+		Map<String, Object> resMap = new HashMap<>();
+		//命令校验
+		String[] arr=check(order);
+		if(arr==null){
+			return "4440";//命令校验码出错
+		}else {
+			//命令解析
+			resMap.put("power", get10HexNum(arr[12]));
+			resMap.put("hardVision", get10HexNum(arr[13]) + ":" + get10HexNum(arr[14]));
+			resMap.put("softwareVision", get10HexNum(arr[15]) + ":" + get10HexNum(arr[16]));
+			resMap.put("sysStatus", get10HexNum(arr[17]) + ":" + get10HexNum(arr[18]));
+		}
 		return getJsonStr(resMap);
 	}
 	/**
@@ -263,13 +282,19 @@ public class OrderUtil {
 	 * @return
 	 */
 	public static  String retuenSetPreventOrder(String order){
-		//拆分字符串
-		String[]arr = order.split("(?<=\\G.{2})");
-		if ("00".equals(arr[12])){
-			return "fail";
-		}else if ("FF".equals(arr[12])){
-			return "Success";
+		//命令校验
+		String[] arr=check(order);
+		if(arr==null){
+			return "4440";//命令校验码出错
+		}else{
+			//命令解析
+			if ("00".equals(arr[12])){
+				return "4400";//执行失败
+			}else if ("FF".equals(arr[12])){
+				return "2200";//执行成功
+			}
 		}
+
 		return "-1";
 	}
 	/**
