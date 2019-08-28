@@ -1,10 +1,72 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+   <!--<script inline="javascript">
+        window.getSession = (
+            function(){
+                const session = {
+                    getPath:[[@{/}]],
+                };
+                return function(key){
+                    return session[key]
+                }
+            }
+            )();
+
+    </script>-->
 </head>
 <body>
-        登录
+    <input type="button" value="login" onclick="Clicked()"/>
+
 </body>
+<script type="text/javascript" inline="javascript">
+    function Clicked(){
+        var user={ "userName":"A0004",
+            "password":"F59BD65F7EDAFB087A81D4DCA06C4910"}
+        $.ajax({
+            url: 'login/logVal',
+            type: 'post',
+            data: JSON.stringify(user),
+            contentType: 'application/json',//发送给服务器的格式
+            dataType: 'json',//接收服务器数据的格式
+            success: function (res) {
+               /* var users = [[${session}]];
+                console.log(users)*/
+                add()
+            }
+
+        })
+
+    }
+
+    function add(){
+        // 存储值：将对象转换为Json字符串
+        var userEntity={ "userName":"A0004",
+            "password":"F59BD65F7EDAFB087A81D4DCA06C4910"}
+        sessionStorage.setItem('user', JSON.stringify(userEntity));
+
+       // 取值时：把获取到的Json字符串转换回对象
+        var userJsonStr = sessionStorage.getItem('user');
+        userEntity = JSON.parse(userJsonStr);
+     //   console.log(session); // => tom
+
+        $.ajax({
+            url: 'login/userList',
+            type: 'post',
+            data:{"areaId":1800,"pageNum":1,"pageSize":10},
+          //  contentType: 'application/json',//发送给服务器的格式
+            dataType: 'json',//接收服务器数据的格式
+            success: function (res) {
+                /* var users = [[${session}]];
+                 console.log(users)*/
+            }
+
+        })
+    }
+</script>
 </html>

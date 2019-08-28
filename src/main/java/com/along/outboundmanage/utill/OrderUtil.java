@@ -1,5 +1,7 @@
 package com.along.outboundmanage.utill;
 
+import com.along.outboundmanage.model.EquipLog;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -305,5 +307,25 @@ public class OrderUtil {
 		CMD1 = "09";
 		CMD2 = "00";
 		CMD3 = "00";
+	}
+
+	/**
+	 * 设置防破拆命令反馈
+	 * @param order
+	 * @return
+	 */
+	public static  String retuenLogOrder(String order){
+		//命令校验
+		String[] arr=check(order);
+		if(arr==null){
+			return "4440";//命令校验码出错
+		}else{
+			//命令解析
+			EquipLog el=new EquipLog.Builder()
+					.equipId(get10HexNum(arr[2]+arr[3]+arr[4]+arr[5]))
+					.equipId02(get10HexNum(arr[6]+arr[7]+arr[8]+arr[9])).build();
+		}
+
+		return "-1";
 	}
 }

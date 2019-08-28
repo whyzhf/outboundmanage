@@ -4,6 +4,7 @@ import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.model.OutboundRoadlog;
 import com.along.outboundmanage.model.OutboundRoute;
+import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.RouteService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,9 +22,9 @@ public class RouteController {
 	/*****************************路线管理**********************************************/
 	@ResponseBody
 	@RequestMapping("/getRouteList")
-	public Result getRouteList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
-		List<OutboundRoute> allList = routeService.getAllRoute(areaId);
+	public Result getRouteList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundRoute> allList = routeService.getAllRoute(pubParam.getAreaId());
 		PageInfo<OutboundRoute> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
@@ -40,8 +41,8 @@ public class RouteController {
 
 	@ResponseBody
 	@RequestMapping("/delRoute")
-	public Result delRoute(String ids){
-		if(routeService.delRoute(ids)){
+	public Result delRoute(@RequestBody PubParam pubParam){
+		if(routeService.delRoute(pubParam.getIds())){
 			return ResultGenerator.setCustomResult(200,"删除成功");
 		}else{
 			return ResultGenerator.setCustomResult(4000,"删除失败");
@@ -74,7 +75,7 @@ public class RouteController {
 	//清除记录（gps位置）
 	@ResponseBody
 	@RequestMapping("/delRoadLog")
-	public Result delRoadLog(int id, HttpServletRequest request){
+	public Result delRoadLog(@RequestBody PubParam pubParam, HttpServletRequest request){
 
 		return ResultGenerator.genSuccessResult();
 	}
@@ -82,7 +83,7 @@ public class RouteController {
 	//当前位置（gps位置）
 	@ResponseBody
 	@RequestMapping("/currRoad")
-	public Result currRoad(int id, HttpServletRequest request){
+	public Result currRoad(@RequestBody PubParam pubParam, HttpServletRequest request){
 
 		return ResultGenerator.genSuccessResult();
 	}

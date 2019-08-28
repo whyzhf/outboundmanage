@@ -9,6 +9,7 @@ import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.model.OutboundTask;
 import com.along.outboundmanage.model.OutboundTaskDesc;
+import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.AreaService;
 import com.along.outboundmanage.service.TaskService;
 import com.github.pagehelper.PageHelper;
@@ -37,17 +38,17 @@ public class TaskController {
 	/*****************************任务管理**********************************************/
 	@ResponseBody
 	@RequestMapping("/getTaskList")
-	public Result getTaskList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
-		List<OutboundTask> allPolice = taskService.getAllTask(areaId);
+	public Result getTaskList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundTask> allPolice = taskService.getAllTask(pubParam.getAreaId());
 		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allPolice);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
 	//任务详情
 	@ResponseBody
 	@RequestMapping("/getTaskDesc")
-	public Result getTaskDesc(int taskId){
-		return ResultGenerator.genSuccessResult( taskService.getTaskDesc(taskId));
+	public Result getTaskDesc(@RequestBody PubParam pubParam){
+		return ResultGenerator.genSuccessResult( taskService.getTaskDesc(pubParam.getTaskId()));
 	}
 	@ResponseBody
 	@RequestMapping("/upTask")
@@ -58,10 +59,11 @@ public class TaskController {
 			return ResultGenerator.setCustomResult(4000,"修改失败");
 		}
 	}
+
 	@ResponseBody
 	@RequestMapping("/delTask")
-	public Result delTask(String ids){
-		if(taskService.delTask(ids)){
+	public Result delTask(@RequestBody PubParam pubParam){
+		if(taskService.delTask(pubParam.getIds())){
 			return ResultGenerator.setCustomResult(200,"删除成功");
 		}else{
 			return ResultGenerator.setCustomResult(4000,"删除失败");
@@ -81,13 +83,13 @@ public class TaskController {
 	//开始任务
 	@ResponseBody
 	@RequestMapping("/startTask")
-	public Result startTask(String ids){
+	public Result startTask(@RequestBody PubParam pubParam){
 		//  0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
 		Calendar calendar= Calendar.getInstance();
 		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String status="3";
 		String time= " start_time='"+(dateFormat.format(calendar.getTime()))+"' ";
-		if(taskService.startTask(ids,status,time)){
+		if(taskService.startTask(pubParam.getIds(),status,time)){
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}else{
 			return ResultGenerator.setCustomResult(4000,"修改失败");
@@ -96,11 +98,11 @@ public class TaskController {
 	//结束任务(备份历史数据,关系表清空  未测)
 	@ResponseBody
 	@RequestMapping("/endTask")
-	public Result endTask(String ids){
+	public Result endTask(@RequestBody PubParam pubParam){
 		//  0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
 		String status="4";
 		String time= " start_time='"+(getNowData("yyyy-MM-dd hh:mm:ss"))+"' ";
-		if(taskService.endTask(ids,status,time)){
+		if(taskService.endTask(pubParam.getIds(),status,time)){
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}else{
 			return ResultGenerator.setCustomResult(4000,"修改失败");
@@ -111,27 +113,28 @@ public class TaskController {
 	//当前任务
 	@ResponseBody
 	@RequestMapping("/getMyCurTaskList")
-	public Result getMyCurTaskList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId,int userId){
-		PageHelper.startPage(pageNum,pageSize);
-		List<OutboundTask> allList = taskService.getMyCurrTaskByStatus("1,3",areaId+"",userId);
+	public Result getMyCurTaskList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundTask> allList = taskService.getMyCurrTaskByStatus("1,3",pubParam.getAreaId()+"",pubParam.getUserId());
 		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
+
 	//历史任务
 	@ResponseBody
 	@RequestMapping("/getMyHisTaskList")
-	public Result getMyHisTaskList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize,int userId, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
-		List<String> allList = taskService.getAllMyTaskHistoryFir(userId,areaId+"");
+	public Result getMyHisTaskList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<String> allList = taskService.getAllMyTaskHistoryFir(pubParam.getUserId(),pubParam.getAreaId()+"");
 		PageInfo<Object> pageInfo = new PageInfo<>(allList.stream().map(e-> JSON.parseObject(e)).collect(Collectors.toList()));
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
 	//历史任务(详情)
 	@ResponseBody
 	@RequestMapping("/getMyHisTaskSec")
-	public Result getMyHisTaskSec(int userId, int taskId,int areaId){
+	public Result getMyHisTaskSec(@RequestBody PubParam pubParam){
 
-		String allList = taskService.getMyTaskHistorySec(userId,taskId,areaId);
+		String allList = taskService.getMyTaskHistorySec(pubParam.getUserId(),pubParam.getTaskId(),pubParam.getAreaId());
 
 		return ResultGenerator.genSuccessResult(JSON.parseObject(allList));
 	}
@@ -139,9 +142,9 @@ public class TaskController {
 	//任务清单
 	@ResponseBody
 	@RequestMapping("/getTaskAuditList")
-	public Result getTaskAuditList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
-		String areaIds=String.join(",",areaService.getAreaIdsByPar(areaId).stream().map(e->e+"").collect(Collectors.toList()));
+	public Result getTaskAuditList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		String areaIds=String.join(",",areaService.getAreaIdsByPar(pubParam.getAreaId()).stream().map(e->e+"").collect(Collectors.toList()));
 		List<OutboundTask> allList =new ArrayList<>();
 		if (areaIds!=null && !areaIds.equals("")) {
 			allList = taskService.getTaskByStatus("0,1,2", areaIds);
@@ -166,10 +169,10 @@ public class TaskController {
 	//任务清单
 	@ResponseBody
 	@RequestMapping("/getTaskCenterList")
-	public Result getTaskCenterList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
+	public Result getTaskCenterList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
 
-		List<OutboundTask> allList = taskService.getTaskByStatus("3",areaId+"");
+		List<OutboundTask> allList = taskService.getTaskByStatus("3",pubParam.getAreaId()+"");
 		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}

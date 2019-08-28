@@ -40,16 +40,24 @@ public class RXTXUtil{
 	public static void main(String[] args) throws UnsupportedEncodingException, InterruptedException {
 		//init();
 		//System.out.println(init());
+		for (int i = 0; i < 2002; i++) {
+			System.out.println("-----------第"+i+"次启动定点电击-----------------");
+		//	System.out.println("reve:" + init(send("00000090", "800001", "01", "20", "00"), "COM3", 115200));
+			System.out.println("reve:" + init("AA140000005A0000000009000000000000000021", "COM3", 115200));
+		}
+		/*
 		String[] arr={"00","02","04","08","10","20","40","80"};
+		String[] arr2={"无处理","关闭脚扣主锁","打开脚扣主锁","设置脚扣的当前时间","关闭定点电击","启动定点电击","设备撤防","设备布防"};
 		for (int i = 0; i < 8; i++) {
 			try {
-				System.out.println(	init(send("00000090","800001","01",arr[i],"00"),"COM3",115200));
+				System.out.println("-----------"+arr2[i]+"-----------------");
+				System.out.println("reve:"+	init(send("00000090","800001","01",arr[i],"00"),"COM3",115200));
 
 				//System.out.println(	init(send("00000090","800001","03","40","00"),"COM3",115200));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 
 
 
@@ -71,6 +79,9 @@ public class RXTXUtil{
 		//openSerialPort("COM3",115200);
 		if (serialPort==null) {
 			openSerialPort(portName, baudRate);
+		}else{
+			closeSerialPort();
+			openSerialPort(portName, baudRate);
 		}
 		//发送消息
 		//order=send("00000090","800001","03","80","00");
@@ -83,7 +94,7 @@ public class RXTXUtil{
 				System.out.println(str);
 				str=str.substring(str.indexOf("a5"),str.indexOf("a5")+80);
 				str=str.replaceAll(" ","").toUpperCase();
-				closeSerialPort();
+
 
 				String[]arr2 = str.split("(?<=\\G.{2})");
 				str= arr2[0]+arr2[1]+"#"+arr2[2]+" "+arr2[3]+" "+arr2[4]+" "+arr2[5]+"#"+arr2[6]+" "+arr2[7]+" "+arr2[8]+" "+arr2[9]
@@ -267,7 +278,6 @@ public class RXTXUtil{
 		hexString = hexString.replaceAll(" ", "");
 		int len = hexString.length();
 		byte[] bytes = new byte[len / 2];
-		System.out.println(len+"  "+hexString);
 		for (int i = 0; i < len; i += 2) {
 			// 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个字节
 			bytes[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4) + Character

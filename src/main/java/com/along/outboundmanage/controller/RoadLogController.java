@@ -3,6 +3,7 @@ package com.along.outboundmanage.controller;
 import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.model.OutboundRoadlog;
+import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.RoadLogService;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class RoadLogController {
 	//清除记录（gps位置）
 	@ResponseBody
 	@RequestMapping("/delRoadLog")
-	public Result delRoadLog(int id, HttpServletRequest request){
+	public Result delRoadLog(@RequestBody PubParam pubParam, HttpServletRequest request){
 
 		return ResultGenerator.genSuccessResult();
 	}
@@ -39,7 +40,7 @@ public class RoadLogController {
 	//当前位置（gps位置）
 	@ResponseBody
 	@RequestMapping("/currRoad")
-	public Result currRoad(int id, HttpServletRequest request){
+	public Result currRoad(@RequestBody PubParam pubParam, HttpServletRequest request){
 
 		return ResultGenerator.genSuccessResult();
 	}

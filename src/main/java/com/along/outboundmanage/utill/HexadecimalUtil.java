@@ -67,4 +67,10 @@ public class HexadecimalUtil {
 	public static int  low8(Object num){
 		return Integer.parseInt(num+"") & 0xff;
 	}
+	//获取高四位
+	public static int getHeight4(byte data){
+		int height;
+		height = ((data & 0xf0) >> 4);
+		return height;
+	}
 }

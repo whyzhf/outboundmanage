@@ -16,6 +16,25 @@ public class OutboundSession {
 	private int roleId;
 	private String roleName;
 
+
+
+	public OutboundSession() {
+	}
+
+	private OutboundSession(Builder builder) {
+		setUserId(builder.userId);
+		setUserName(builder.userName);
+		setTrueName(builder.trueName);
+		setCard(builder.card);
+		setAreaId(builder.areaId);
+		setAreaName(builder.areaName);
+		setParId(builder.parId);
+		setType(builder.type);
+		setLevel(builder.level);
+		setRoleId(builder.roleId);
+		setRoleName(builder.roleName);
+	}
+
 	@Override
 	public String toString() {
 		return "OutboundSession{" +
@@ -128,5 +147,81 @@ public class OutboundSession {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	public static final class Builder {
+		private int userId;
+		private String userName;
+		private String trueName;
+		private String card;
+		private int areaId;
+		private String areaName;
+		private int parId;
+		private int type;
+		private int level;
+		private int roleId;
+		private String roleName;
+
+		public Builder() {
+		}
+
+		public Builder userId(int userId) {
+			this.userId = userId;
+			return this;
+		}
+
+		public Builder userName(String userName) {
+			this.userName = userName;
+			return this;
+		}
+
+		public Builder trueName(String trueName) {
+			this.trueName = trueName;
+			return this;
+		}
+
+		public Builder card(String card) {
+			this.card = card;
+			return this;
+		}
+
+		public Builder areaId(int areaId) {
+			this.areaId = areaId;
+			return this;
+		}
+
+		public Builder areaName(String areaName) {
+			this.areaName = areaName;
+			return this;
+		}
+
+		public Builder parId(int parId) {
+			this.parId = parId;
+			return this;
+		}
+
+		public Builder type(int type) {
+			this.type = type;
+			return this;
+		}
+
+		public Builder level(int level) {
+			this.level = level;
+			return this;
+		}
+
+		public Builder roleId(int roleId) {
+			this.roleId = roleId;
+			return this;
+		}
+
+		public Builder roleName(String roleName) {
+			this.roleName = roleName;
+			return this;
+		}
+
+		public OutboundSession build() {
+			return new OutboundSession(this);
+		}
 	}
 }

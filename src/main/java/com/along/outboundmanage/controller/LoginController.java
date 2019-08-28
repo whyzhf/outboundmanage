@@ -5,11 +5,13 @@ package com.along.outboundmanage.controller;
  * @Date: 2018-11-29 19:41
  */
 
+import com.alibaba.fastjson.JSON;
 import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultCode;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.model.OutboundSession;
 import com.along.outboundmanage.model.OutboundUser;
+import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.LoginService;
 
 import com.github.pagehelper.PageHelper;
@@ -56,6 +58,12 @@ public class LoginController {
     public String login(HttpServletRequest request) {
         String agent = request.getHeader("user-agent");
         HttpSession session = request.getSession();
+
+       /* if (session != null ){
+            //设置session
+            session.setAttribute("user",new OutboundSession.Builder().userName("www").build() );
+            return "login";
+        }*/
         if (agent.contains("Windows NT") && session.getAttribute("user") == null) {
             return "login";
         } else if (session.getAttribute("user") != null) {
@@ -82,6 +90,8 @@ public class LoginController {
                 //设置session
                 session.setAttribute("user", loginService.getSession(returnUser.getId()));
                 map.put("url", "/index");
+            }else{
+                return  ResultGenerator.setFailResult(ResultCode.LOGIN_FILE.code(),ResultCode.LOGIN_FILE.message());
             }
         }else {
             return  ResultGenerator.setFailResult(ResultCode.LOGIN_FILE.code(),ResultCode.LOGIN_FILE.message());
@@ -97,11 +107,11 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping("/userList")
-    public Result userList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId, HttpServletRequest request) {
+    public Result userList(@RequestBody PubParam pubParam, HttpServletRequest request) {
       /*  HttpSession session = request.getSession();
         OutboundSession outboundSession= (OutboundSession) session.getAttribute("user");*/
-        PageHelper.startPage(pageNum,pageSize);
-        List<OutboundSession> userList = loginService.userList(areaId);
+        PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+        List<OutboundSession> userList = loginService.userList(pubParam.getAreaId());
         PageInfo<OutboundSession> pageInfo = new PageInfo<>(userList);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
@@ -159,9 +169,9 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping("/delUser")
-    public Result delUser(String ids,HttpServletRequest request) {
-        if(loginService.delUser(ids)){
-            loginService.delUserRole(ids);
+    public Result delUser(@RequestBody PubParam pubParam,HttpServletRequest request) {
+        if(loginService.delUser(pubParam.getIds())){
+            loginService.delUserRole(pubParam.getIds());
             return ResultGenerator.setCustomResult(200,"删除成功");
         }else{
             return ResultGenerator.setCustomResult(4000,"删除失败");
@@ -226,8 +236,8 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping("/getMenu")
-    public Result getMenu(int roleId,HttpServletRequest request) throws IOException {
-        return ResultGenerator.genSuccessResult(loginService.getMenu(roleId));
+    public Result getMenu(@RequestBody PubParam pubParam,HttpServletRequest request) throws IOException {
+        return ResultGenerator.genSuccessResult(loginService.getMenu(pubParam.getRoleId()));
     }
 
 

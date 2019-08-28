@@ -9,7 +9,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/manage")
@@ -30,14 +32,24 @@ public class ManageController {
 		return ResultGenerator.genSuccessResult(areaService.getAllArea());
 	}
 	/*****************************警察管理**********************************************/
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping("/getPoliceList")
 	public Result getPoliceList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
 		PageHelper.startPage(pageNum,pageSize);
 		List<OutboundPoliceForSel> allPolice = policeService.getAllPolice(areaId);
 		PageInfo<OutboundPoliceForSel> pageInfo = new PageInfo<>(allPolice);
 		return ResultGenerator.genSuccessResult(pageInfo);
+	}*/
+
+	@ResponseBody
+	@RequestMapping("/getPoliceList")
+	public Result getPoliceList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundPoliceForSel> allPolice = policeService.getAllPolice(pubParam.getAreaId());
+		PageInfo<OutboundPoliceForSel> pageInfo = new PageInfo<>(allPolice);
+		return ResultGenerator.genSuccessResult(pageInfo);
 	}
+
 	@ResponseBody
 	@RequestMapping("/addPolice")
 	public Result addPolice(@RequestBody OutboundPolice outboundPolice){
@@ -62,8 +74,8 @@ public class ManageController {
 
 	@ResponseBody
 	@RequestMapping("/delPolice")
-	public Result delPolice(String id){
-		boolean flag=policeService.delPolice(id);
+	public Result delPolice(@RequestBody PubParam pubParam){
+		boolean flag=policeService.delPolice(pubParam.getIds());
 		if(!flag){
 			return ResultGenerator.setCustomResult(4000,"删除失败");
 		}else{
@@ -73,9 +85,9 @@ public class ManageController {
 	/*****************************设备管理**********************************************/
 	@ResponseBody
 	@RequestMapping("/getEquipmentList")
-	public Result getEquipmentList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
-		List<OutboundEquipment> allList = equipmentService.getAllEquipment(areaId);
+	public Result getEquipmentList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundEquipment> allList = equipmentService.getAllEquipment(pubParam.getAreaId());
 		PageInfo<OutboundEquipment> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
@@ -103,8 +115,8 @@ public class ManageController {
 
 	@ResponseBody
 	@RequestMapping("/delEquipment")
-	public Result delEquipment(String id){
-		boolean flag=equipmentService.delEquipment(id);
+	public Result delEquipment(@RequestBody PubParam pubParam){
+		boolean flag=equipmentService.delEquipment(pubParam.getIds());
 		if(!flag){
 			return ResultGenerator.setCustomResult(4000,"删除失败");
 		}else{
@@ -113,8 +125,8 @@ public class ManageController {
 	}
 	@ResponseBody
 	@RequestMapping("/getEquipmentForPolice")
-	public Result getEquipmentForPolice(int areaId){
-		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(areaId, "1,2");
+	public Result getEquipmentForPolice(@RequestBody PubParam pubParam){
+		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "1,2");
 		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
 
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
@@ -125,8 +137,8 @@ public class ManageController {
 
 	@ResponseBody
 	@RequestMapping("/getEquipmentForPrisoner")
-	public Result getEquipmentForPrisoner(int areaId){
-		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(areaId, "0");
+	public Result getEquipmentForPrisoner(@RequestBody PubParam pubParam){
+		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "0");
 		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
 		}else{
@@ -136,9 +148,9 @@ public class ManageController {
 	/*****************************犯人管理**********************************************/
 	@ResponseBody
 	@RequestMapping("/getPrisonerList")
-	public Result getPrisonerList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
-		List<OutboundPrisoner> allList = prisonerService.getAllPrisoner(areaId);
+	public Result getPrisonerList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundPrisoner> allList = prisonerService.getAllPrisoner(pubParam.getAreaId());
 		PageInfo<OutboundPrisoner> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
@@ -167,8 +179,8 @@ public class ManageController {
 
 	@ResponseBody
 	@RequestMapping("/delPrisoner")
-	public Result delPrisoner(String id){
-		boolean flag=prisonerService.delPrisoner(id);
+	public Result delPrisoner(@RequestBody PubParam pubParam){
+		boolean flag=prisonerService.delPrisoner(pubParam.getIds());
 		if(!flag){
 			return ResultGenerator.setCustomResult(4000,"删除失败");
 		}else{
@@ -180,9 +192,9 @@ public class ManageController {
 	/*****************************车辆管理**********************************************/
 	@ResponseBody
 	@RequestMapping("/getCarList")
-	public Result geCarList(@RequestParam(defaultValue = "1",value = "pageNum") Integer pageNum, Integer pageSize, int areaId){
-		PageHelper.startPage(pageNum,pageSize);
-		List<OutboundCar> allList = carService.getAllCar(areaId);
+	public Result geCarList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundCar> allList = carService.getAllCar(pubParam.getAreaId());
 		PageInfo<OutboundCar> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
@@ -210,8 +222,8 @@ public class ManageController {
 
 	@ResponseBody
 	@RequestMapping("/delCar")
-	public Result delCar(String id){
-		boolean flag=carService.delCar(id);
+	public Result delCar(@RequestBody PubParam pubParam){
+		boolean flag=carService.delCar(pubParam.getIds());
 		if(!flag){
 			return ResultGenerator.setCustomResult(4000,"删除失败");
 		}else{
