@@ -43,9 +43,11 @@ public class ManageController {
 
 	@ResponseBody
 	@RequestMapping("/getPoliceList")
-	public Result getPoliceList(@RequestBody PubParam pubParam){
-		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
-		List<OutboundPoliceForSel> allPolice = policeService.getAllPolice(pubParam.getAreaId());
+	public Result getPoliceList(@RequestBody Map<String, Integer> pubParam){
+		//pubParam.forEach((K,V)-> System.out.println(K+" : "+V));
+
+		PageHelper.startPage(pubParam.get("pageNum"),pubParam.get("pageSize"));
+		List<OutboundPoliceForSel> allPolice = policeService.getAllPolice(pubParam.get("areaId"));
 		PageInfo<OutboundPoliceForSel> pageInfo = new PageInfo<>(allPolice);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
