@@ -75,12 +75,13 @@ public class OrderUtil {
 	 * 	 * 	               50: 获取系统电压,系统硬件版本、软件版本,获取系统状态
 	 * 	         设置命令   80：设置防破拆电击启动参数
 	 * 	         日志命令   90：发送了获取日志命令
+	 * 	                    91：发送了获取某条日志命令
 	 */
-	public static String send(String equip,String userId,int flag){
+	public static String send(String equip,String userId,int flag,String...param){
 		if(flag<20){
 			CreatePubOrder(flag%10);
 		}else if (flag<30){
-			CreateGroupOrder(flag%10);
+			CreateGroupOrder(flag%10,param[0]);
 		}else if (flag==30){
 			SelectOrder(0);
 		}else if (flag==40){
@@ -91,6 +92,8 @@ public class OrderUtil {
 			setPreventOrder(0);
 		}else if (flag==90){
 			getLogOrder();
+		}else if (flag==91){
+			getLogOrder2(param[0]);
 		}
 		return sendOrder(equip,userId,CMD1,CMD2,CMD3);
 	}
@@ -186,7 +189,7 @@ public class OrderUtil {
 	 *                6: 撤销分组布防。指定遥控器ID下发的分组编号相同的所有脚扣，定点电击、分组电击、广播电击、防破拆电击均无效
 	 *                7: 启动分组布防。指定遥控器ID下发的分组编号相同的所有脚扣，定点电击、分组电击、广播电击、防破拆电击均有效
 	 */
-	public static  void CreateGroupOrder(int param){
+	public static  void CreateGroupOrder(int param,String groupId){
 		CMD1="02";
 		/**
 		 * 命令说明 0000 0000
@@ -356,7 +359,15 @@ public class OrderUtil {
 		CMD2 = "00";
 		CMD3 = "00";
 	}
-
+	/**
+	 * 发送了获取日志命令
+	 *
+	 */
+	public static  void getLogOrder2(String str){
+		CMD1 = "09";
+		CMD2 = "00";
+		CMD3 = str;
+	}
 	/**
 	 * 设置防破拆命令反馈
 	 * @param order

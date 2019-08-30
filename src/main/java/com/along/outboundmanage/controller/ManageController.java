@@ -177,6 +177,7 @@ public class ManageController {
 	public Result getPrisonerList(@RequestBody PubParam pubParam){
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
 		List<OutboundPrisoner> allList = prisonerService.getAllPrisoner(pubParam.getAreaId());
+		
 		PageInfo<OutboundPrisoner> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}

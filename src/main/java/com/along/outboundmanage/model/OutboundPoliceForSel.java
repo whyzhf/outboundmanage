@@ -6,8 +6,8 @@ public class OutboundPoliceForSel {
   private int id;
   private String card;
   private String name;
-  private int equipmentId;//遥控器
-  private int equipmentId2;//手表
+  private Integer equipmentId;//遥控器
+  private Integer equipmentId2;//手表
   private String equipmentCard;//遥控器编号
   private String equipmentCard2;//手表编号
   private int areaId;
@@ -81,20 +81,20 @@ public class OutboundPoliceForSel {
   }
 
 
-  public int getEquipmentId() {
+  public Integer getEquipmentId() {
     return equipmentId;
   }
 
-  public void setEquipmentId(int equipmentId) {
+  public void setEquipmentId(Integer equipmentId) {
     this.equipmentId = equipmentId;
   }
 
 
-  public int getEquipmentId2() {
+  public Integer getEquipmentId2() {
     return equipmentId2;
   }
 
-  public void setEquipmentId2(int equipmentId2) {
+  public void setEquipmentId2(Integer equipmentId2) {
     this.equipmentId2 = equipmentId2;
   }
 

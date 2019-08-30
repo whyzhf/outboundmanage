@@ -64,36 +64,124 @@ public class RXTXUtil{
 	 * 	         日志命令   90：发送了获取日志命令
 	 */
 	public static void main(String[] args){
+		//普通命令测试
+		//pubDemo();
 
-		//for (int i = 0; i < 2002; i++) {
-			//System.out.println("-----------第"+i+"条日志申请-----------------");
+		groupDemo();
 
-			String order=send("00000090","800001",90);
-			//String order="AA140000005A0000000009000000000000000021";
-			System.out.println(order);
+		//selectDemo();
+		//日志测试
+		//logDemo();
+
+		//防破
+		//String order="AA140000005A000C350108C06006000000000088";
+		//广播
+		//String order2="AA140000005A000C350188806000000000000068";
+
+	}
+
+	/**
+	 * 普通命令测试
+	 * 1.单指令发送： 关闭脚扣主锁，设置脚扣的当前时间，关闭定点电击 $返回 CMD3：00 # 启动定点电击  $返回A5140000005A0000000000000000000000000013
+	 * 2.组合指令发送：1??? ??? 均能成功
+	 */
+	public static void  pubDemo() {
+		String[] arr = {"00", "02", "04", "08", "10", "20", "40", "80"};
+		String[] arr2 = {"无处理", "关闭脚扣主锁", "打开脚扣主锁", "设置脚扣的当前时间", "关闭定点电击", "启动定点电击", "设备撤防", "设备布防"};
+		//for (int i = 0; i < 8; i++) {
+			long startTime = System.currentTimeMillis();
 			try {
-				System.out.println("reve:" + executeLogOrder(order, "COM3", 115200));
+				System.out.println("-----------普通命令" + arr2[7] + "-----------------");
+				//String order=send("00000090","800001","01",arr[7],"00");
+				String order = send("00000090", "800001", "01", arr[5], "00");
+				long endTime2 = System.currentTimeMillis();
+				System.out.println("生成命令耗时：" + (endTime2 - startTime));
+				//String order=send("00000090","800001",40);
+				System.out.println(order);
+
+				System.out.println("reve:" + executeOrder(order, "COM3", 115200));
+				long endTime3 = System.currentTimeMillis();
+				System.out.println("返回命令耗时：" + (endTime3 - endTime2));
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
-		//}
+			long endTime = System.currentTimeMillis();
+			System.out.println("总耗时：" + (endTime - startTime));
+	   // }
+	}
 
-		/*String[] arr={"00","02","04","08","10","20","40","80"};
-		String[] arr2={"无处理","关闭脚扣主锁","打开脚扣主锁","设置脚扣的当前时间","关闭定点电击","启动定点电击","设备撤防","设备布防"};
+	/**
+	 * 分组命令测试
+	 * 1.单指令发送： 关闭脚扣主锁，添加到该遥控器的指定分组，结束电击 $返回 CMD3：00 # 启动电击  $返回A5140000005A0000000000000000000000000013
+	 * 2.组合指令发送：1??? ??? 先抛异常再成功
+	 *
+	 */
+	public static void  groupDemo() {
+		String[] arr = {"00", "02", "04", "08", "10", "20", "40", "80"};
+		String[] arr2 = {"无处理", "将整个分组删除", "设备从指定分组中删除", "添加到该遥控器的指定分组", "结束电击", "启动电击", "撤销分组布防", "启动分组布防"};
 		//for (int i = 0; i < 8; i++) {
 		long startTime = System.currentTimeMillis();
-			try {
-				//System.out.println("-----------普通命令"+arr2[i]+"-----------------");
-				String order=send("00000090","800001","01",arr[5],"00");
-				System.out.println(order);
-				System.out.println("reve:"+	executeOrder(order,"COM3",115200));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+		try {
+			System.out.println("-----------命令" + arr2[7] + "-----------------");
+			//String order=send("00000090","800001","01",arr[7],"00");
+			String order = send("00000090", "800001", "02",arr[7], "01");
+			long endTime2 = System.currentTimeMillis();
+			System.out.println("生成命令耗时：" + (endTime2 - startTime));
+			System.out.println(order);
+			System.out.println("reve:" + executeOrder(order, "COM3", 115200));
+			long endTime3 = System.currentTimeMillis();
+			System.out.println("返回命令耗时：" + (endTime3 - endTime2));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		long endTime = System.currentTimeMillis();
-		System.out.println(endTime-startTime);*/
-	//	}
+		System.out.println("总耗时：" + (endTime - startTime));
+		// }
 	}
+	/**
+	 * 查询命令测试
+	 * 1.单指令发送： 关闭脚扣主锁，添加到该遥控器的指定分组，结束电击 $返回 CMD3：00 # 启动电击  $返回A5140000005A0000000000000000000000000013
+	 * 2.组合指令发送：1??? ??? 先抛异常再成功
+	 *
+	 */
+	public static void selectDemo() {
+		int[] arr = {30,40,50};
+		String[] arr2 = {"查询ID", "查询系统时间和组号", "获取系统电压,系统硬件版本、软件版本,获取系统状态"};
+		//for (int i = 0; i < 8; i++) {
+		long startTime = System.currentTimeMillis();
+		try {
+			System.out.println("-----------命令" + arr2[1] + "-----------------");
+			String order=send("00000090","800001",arr[2]);
+			long endTime2 = System.currentTimeMillis();
+			System.out.println("生成命令耗时：" + (endTime2 - startTime));
+			System.out.println(order);
+			System.out.println("reve:" + executeOrder(order, "COM3", 115200));
+			long endTime3 = System.currentTimeMillis();
+			System.out.println("返回命令耗时：" + (endTime3 - endTime2));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("总耗时：" + (endTime - startTime));
+		// }
+	}
+	/**
+	 * 日志测试
+	 * 1.Parameter1 部分返回00 ，AA
+	 */
+	public static void  logDemo() {
+		String order=send("00000090","800001",91,"3E");
+		//String order="AA140000005A000C350109003F000000000000A2";
+		System.out.println(order);
+		try {
+			System.out.println("reve:" + executeLogOrder(order, "COM3", 115200));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	/******************************************************************************************************************/
+
+
 	/**
 	 * 串口命令日志执行
 	 * @param order 命令
@@ -121,14 +209,14 @@ public class RXTXUtil{
 				//剔除空格换行符
 				str=replaceSpecialStr(str).toUpperCase();
 			//str.replaceAll(" ","").toUpperCase();
-				System.out.println(i+" 秒： "+order);
-				System.out.println(i+" 秒： "+str);
+			//	System.out.println(i+" 秒： "+order);
+				System.out.println(i*50/1000+" 秒： "+str);
 				String[] arr2 = str.split("(?<=\\G.{2})");
 				if("09".equals(arr2[10])&&!"00".equals(arr2[11])){
 					retuenLogOrder(str);
 					str = arr2[0] + arr2[1] + "#" + arr2[2] + " " + arr2[3] + " " + arr2[4] + " " + arr2[5] + "#" + arr2[6] + " " + arr2[7] + " " + arr2[8] + " " + arr2[9]
 							+ "#" + arr2[10] + " " + arr2[11] + " " + arr2[12] + "#" + arr2[13] + " " + arr2[14] + " " + arr2[15] + " " + arr2[16] + " " + arr2[17] + " " + arr2[18] + "$" + arr2[19];
-					System.out.println(i + ":" + str);
+					System.out.println(i*50/1000 + ":" + str);
 					//return str;
 				}
 			}else{
@@ -159,12 +247,16 @@ public class RXTXUtil{
 		//getSystemPort();
 		//开启端口COM3，波特率115200
 		//openSerialPort("COM3",115200);
+
+
 		if (serialPort==null) {
 			openSerialPort(portName, baudRate);
 		}else{
 			/*closeSerialPort();
 			openSerialPort(portName, baudRate);*/
 		}
+
+
 		//发送消息
 		//order=send("00000090","800001","03","80","00");
 
@@ -178,13 +270,13 @@ public class RXTXUtil{
 				//System.out.println(i+" 秒： "+str);
 				str=str.substring(str.indexOf("a5"),str.indexOf("a5")+80);
 				str=str.replaceAll(" ","").toUpperCase();
-				System.out.println(i+" 秒： "+order);
-				System.out.println(i+" 秒： "+str);
+			//	System.out.println(i+" 秒： "+order);
+				System.out.println(i*50/1000+" 秒： "+str);
 				if(order.substring(2,20).equals(str.substring(2,20))) {
 					String[] arr2 = str.split("(?<=\\G.{2})");
 					str = arr2[0] + arr2[1] + "#" + arr2[2] + " " + arr2[3] + " " + arr2[4] + " " + arr2[5] + "#" + arr2[6] + " " + arr2[7] + " " + arr2[8] + " " + arr2[9]
 							+ "#" + arr2[10] + " " + arr2[11] + " " + arr2[12] + "#" + arr2[13] + " " + arr2[14] + " " + arr2[15] + " " + arr2[16] + " " + arr2[17] + " " + arr2[18] + "$" + arr2[19];
-					System.out.println(i + ":" + str);
+					System.out.println(i*50/1000 + ":" + str);
 
 					return str;
 				}

@@ -68,7 +68,7 @@ public class PoliceServiceImpl implements PoliceService {
     public boolean upPolice(OutboundPolice outboundPolice) {
         String equipId=getEquipmentID(outboundPolice.getId()+"");
         String newEquipId=(outboundPolice.getEquipmentId()!=null?outboundPolice.getEquipmentId():"0")+","+(outboundPolice.getEquipmentId2()!=null?outboundPolice.getEquipmentId2():"0");
-
+        System.out.println(outboundPolice);
         if(policeDao.upPolice(outboundPolice)){
             if (equipId.equals(newEquipId)){
 
