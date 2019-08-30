@@ -3,6 +3,9 @@ package com.along.outboundmanage.utill;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @Auther: why
  * @Data:2019/4/29
@@ -66,4 +69,20 @@ public class GeneralUtils {
 	public static String[] getSplitStr(String str,int param){
 		return  str.split("(?<=\\G.{"+param+"})");
 	}
+
+	/**
+	 * 去除字符串中的空格、回车、换行符、制表符等
+	 * @param str
+	 * @return
+	 */
+	public static String replaceSpecialStr(String str) {
+		String repl = "";
+		if (str!=null) {
+			Pattern p = Pattern.compile("\\s*|\t|\r|\n");
+			Matcher m = p.matcher(str);
+			repl = m.replaceAll("");
+		}
+		return repl;
+	}
+
 }

@@ -9,8 +9,8 @@ import static com.along.outboundmanage.utill.DataUtil.getNowData;
  * */
 public class HexadecimalUtil {
 	public static void main(String[] args) {
-		System.out.println(low8("15e"));
-
+		System.out.println(low8("01"));
+		System.out.println( (byte)26);
 	}
 	/**
 	 * 十六进制转十进制

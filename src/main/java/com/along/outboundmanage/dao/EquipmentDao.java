@@ -35,4 +35,6 @@ public interface EquipmentDao {
 			" FROM outbound_equipment " +
 			" where area_id =#{areaId} and `type`=0 and status=1 and form in (${form})")
 	List<OutboundEquipment> getAllEquipmentByForm(@Param("areaId") int areaId,@Param("form") String form);
+
+
 }

@@ -2,13 +2,13 @@ package com.along.outboundmanage.service;
 
 import com.along.outboundmanage.model.OutboundPolice;
 import com.along.outboundmanage.model.OutboundPoliceForSel;
-import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface PoliceService {
 
 	//新增
-	OutboundPolice addPolice(OutboundPolice outboundPolice);
+	OutboundPoliceForSel addPolice(OutboundPolice outboundPolice);
 	//修改
 	boolean upPolice( OutboundPolice outboundPolice);
 	//删除

@@ -10,7 +10,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.TooManyListenersException;
 
-import static com.along.outboundmanage.utill.EquipUtil.send;
+import static com.along.outboundmanage.utill.OrderUtil.send;
 import static com.along.outboundmanage.utill.HexadecimalUtil.*;
 
 public class FirdayUtil implements SerialPortEventListener{

@@ -18,7 +18,7 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
 
-import static com.along.outboundmanage.utill.EquipUtil.send;
+import static com.along.outboundmanage.utill.OrderUtil.send;
 
 public class RXTXtest {
 	/**
@@ -69,7 +69,22 @@ public class RXTXtest {
 			@Override
 			public void serialEvent(SerialPortEvent arg0) {
 				if(arg0.getEventType() == SerialPortEvent.DATA_AVAILABLE) {//数据通知
+
 					byte[] bytes = RXTXtest.readData(serialPort);
+					String str= null;
+					try {
+						str = new String( bytes, "UTF-8");
+
+						if(str!=null&&str.contains("a5")&&str.indexOf("a5")+80==str.length()){
+							str=str.substring(str.indexOf("a5"),str.indexOf("a5")+80);
+							str=str.replaceAll(" ","").toUpperCase();
+							//System.exit(0);
+
+
+						}
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 					//readData2(serialPort);
 					System.out.println("收到的数据长度："+bytes.length);
 					try {

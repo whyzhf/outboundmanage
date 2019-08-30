@@ -25,7 +25,7 @@ public class PoliceServiceImpl implements PoliceService {
     @Resource
     private EquipmentDao equipmentDao;
     @Override
-    public OutboundPolice addPolice(OutboundPolice outboundPolice) {
+    public OutboundPoliceForSel addPolice(OutboundPolice outboundPolice) {
          int id= 0;
          String card=outboundPolice.getCard();
          Integer userId= userDao.checkCard(card);
@@ -60,7 +60,8 @@ public class PoliceServiceImpl implements PoliceService {
              outboundPolice=null;
 
          }
-        return outboundPolice;
+       // policeDao.getAllPoliceById(outboundPolice.getId()+"");
+        return  policeDao.getAllPoliceById(outboundPolice.getId()+"").get(0);
     }
 
     @Override

@@ -31,6 +31,7 @@ public class EquipUtil {
 		System.out.println(sum+" = "+get16Num(sum));
 		System.out.println(coun+" = "+get16Num(coun));
 		System.out.println("low8 "+get16Num(low8(sum)));*/
+		System.out.println(check("A5141D0E051C000C350109001C005A1807130800"));
 	}
 	/**
 	 * 机器连接
@@ -46,7 +47,7 @@ public class EquipUtil {
 	 * 4.时间get16NumByTime()（00 00 00 00 00 00）
 	 * 5,校验位（00）
 	 * */
-	public static String send(String equip,String equip02,String CMD1,String CMD2,String CMD3){
+	public static String sendOrder(String equip,String equip02,String CMD1,String CMD2,String CMD3){
 		StringBuffer sb=new StringBuffer(40);
 		int sum=190;
 		//添加head,len
@@ -75,11 +76,15 @@ public class EquipUtil {
 		//CMD3
 		sum+=get10HexNum(CMD3);
 		sb.append(CMD3);
-		//添加时间
-		String time=get16NumByTime("yy-MM-dd-HH-mm-ss");
-		//time="1208020A3121-118";
-		sum+=Integer.parseInt(time.split("-")[1]);
-		sb.append(time.split("-")[0]);
+		if("09".equals(CMD1)){
+			sb.append("000000000000");
+		}else {
+			//添加时间
+			String time = get16NumByTime("yy-MM-dd-HH-mm-ss");
+			//time="1208020A3121-118";
+			sum += Integer.parseInt(time.split("-")[1]);
+			sb.append(time.split("-")[0]);
+		}
 		//添加校验位
 		//System.out.println(sum+"::"+get16Num(sum));
 		sb.append(get16NumAdd0(low8(sum)+"",2).toUpperCase());
@@ -123,15 +128,15 @@ public class EquipUtil {
 		//拆分字符串
 		String[]arr = string.split("(?<=\\G.{2})");
 		int sum=0;
-
+	//	System.out.println(string+":"+arr.length);
 		//求和
 		for (int i =0; i < arr.length-1; i++) {
 			//System.out.println(arr[i]+" "+get10HexNum(arr[i]));
 			sum+=get10HexNum(arr[i]);
 		}
-
+		System.out.println(get16Num((low8(sum)+"")));
 		//校验
-		if(get16Num((low8(sum)+"")).equals(arr[arr.length - 1])){
+		if(get16NumAdd0((low8(sum)+""),2).equalsIgnoreCase(arr[arr.length - 1])){
 			return arr;
 		}else{//失败
 			return null;

@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.along.outboundmanage.utill.EquipUtil.check;
+import static com.along.outboundmanage.utill.EquipUtil.sendOrder;
 import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
-import static com.along.outboundmanage.utill.HexadecimalUtil.get10HexNum;
+import static com.along.outboundmanage.utill.HexadecimalUtil.*;
 
 /**
  * 发送命令
@@ -15,7 +16,9 @@ import static com.along.outboundmanage.utill.HexadecimalUtil.get10HexNum;
 public class OrderUtil {
 
 	public static void main(String[] args) {
-		System.out.println(retuenCreatePubOrder("A5140000005A000C35010104FF00000000000059"));
+		//System.out.println(retuenCreatePubOrder("A5140000005A000C35010104FF00000000000059"));
+		System.out.println(15%10);
+		System.out.println(27%10);
 	}
 
 	/**
@@ -34,7 +37,7 @@ public class OrderUtil {
 
 
 	/**
-	 *  发送命令
+	 *  发送命令(自定义命令)
 	 * @param equip :接收命令的设备ID 脚扣：0-799999   遥控器：800000-899999  手环：900000-949999
 	 * @param userId ：命令发送人ID 950000-999999
 	 * @param CMD1 ：命令1
@@ -43,9 +46,54 @@ public class OrderUtil {
 	 * @return
 	 */
 	public static String send(String equip,String userId,String CMD1,String CMD2,String CMD3){
-		return "";
+		return sendOrder(equip,userId,CMD1,CMD2,CMD3);
 	}
-
+	/**
+	 *  发送命令(自定义命令)
+	 * @param equip :接收命令的设备ID 脚扣：0-799999   遥控器：800000-899999  手环：900000-949999
+	 * @param userId ：命令发送人ID 950000-999999
+	 * @param flag ：命令
+	 *          普通命令   0:无处理
+	 * 	 *                11: 关闭脚扣主锁
+	 * 	 *                12: 打开脚扣主锁
+	 * 	 *                13: 根据遥控器下发的时间设置脚扣的当前时间
+	 * 	 *                14: 关闭定点电击
+	 * 	 *                15: 启动定点电击
+	 * 	 *                16: 设备撤防
+	 * 	 *                17: 设备布防
+	 *          群组命令   20:无处理
+	 * 	 *                21: 根据遥控器下发的分组信息将整个分组删除
+	 * 	 *                22: 根据遥控器下发的分组信息将设备从指定分组中删除。
+	 * 	 *                23: 根据遥控器下发的分组信息将设备添加到该遥控器的指定分组。
+	 * 	 *                24: 结束分组电击。指定遥控器ID下发的分组编号相同的所有脚扣，结束电击。
+	 * 	 *                25: 启动分组电击。指定遥控器ID下发的分组编号相同的所有脚扣，启动电击。
+	 * 	 *                26: 撤销分组布防。指定遥控器ID下发的分组编号相同的所有脚扣，定点电击、分组电击、广播电击、防破拆电击均无效
+	 * 	 *                27: 启动分组布防。指定遥控器ID下发的分组编号相同的所有脚扣，定点电击、分组电击、广播电击、防破拆电击均有效
+	 * 	        查询命令
+	 * 	 * 	               30: 查询id
+	 * 	 * 	               40: 获取系统时间和组号
+	 * 	 * 	               50: 获取系统电压,系统硬件版本、软件版本,获取系统状态
+	 * 	         设置命令   80：设置防破拆电击启动参数
+	 * 	         日志命令   90：发送了获取日志命令
+	 */
+	public static String send(String equip,String userId,int flag){
+		if(flag<20){
+			CreatePubOrder(flag%10);
+		}else if (flag<30){
+			CreateGroupOrder(flag%10);
+		}else if (flag==30){
+			SelectOrder(0);
+		}else if (flag==40){
+			SelectOrder(1);
+		}else if (flag==50){
+			SelectOrder(2);
+		}else if (flag==80){
+			setPreventOrder(0);
+		}else if (flag==90){
+			getLogOrder();
+		}
+		return sendOrder(equip,userId,CMD1,CMD2,CMD3);
+	}
 	/**
 	 * 接收命令
 	 * @param str ：返回命令串
@@ -318,12 +366,17 @@ public class OrderUtil {
 		//命令校验
 		String[] arr=check(order);
 		if(arr==null){
+			System.out.println("11111");
 			return "4440";//命令校验码出错
 		}else{
 			//命令解析
 			EquipLog el=new EquipLog.Builder()
 					.equipId(get10HexNum(arr[2]+arr[3]+arr[4]+arr[5]))
-					.equipId02(get10HexNum(arr[6]+arr[7]+arr[8]+arr[9])).build();
+					.equipId02(get10HexNum(arr[6]+arr[7]+arr[8]+arr[9]))
+					.logId(low8(get10HexNum(arr[12]))+getHeight4((byte)get10HexNum(arr[14]).intValue()))
+					.order(arr[11])
+					.build();
+			System.out.println("res:"+el);
 		}
 
 		return "-1";

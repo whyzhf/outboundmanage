@@ -55,7 +55,7 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/addPolice")
 	public Result addPolice(@RequestBody OutboundPolice outboundPolice){
-		OutboundPolice returnPolice=policeService.addPolice(outboundPolice);
+		OutboundPoliceForSel returnPolice=policeService.addPolice(outboundPolice);
 		if(returnPolice==null){
 			return ResultGenerator.setCustomResult(4000,"新增失败");
 		}else{
@@ -125,10 +125,22 @@ public class ManageController {
 			return ResultGenerator.setCustomResult(200,"删除成功");
 		}
 	}
+	//遥控器和手表
 	@ResponseBody
 	@RequestMapping("/getEquipmentForPolice")
 	public Result getEquipmentForPolice(@RequestBody PubParam pubParam){
 		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "1,2");
+		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
+			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
+		}else{
+			return ResultGenerator.setCustomResult(4000,"暂无可用设备");
+		}
+	}
+	//遥控器
+	@ResponseBody
+	@RequestMapping("/getHandsetForPolice")
+	public Result getHandsetForPolice(@RequestBody PubParam pubParam){
+		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "1");
 		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
 
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
@@ -137,6 +149,18 @@ public class ManageController {
 		}
 	}
 
+	//手表
+	@ResponseBody
+	@RequestMapping("/getWatchForPolice")
+	public Result getWatchForPolice(@RequestBody PubParam pubParam){
+		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "2");
+		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
+
+			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
+		}else{
+			return ResultGenerator.setCustomResult(4000,"暂无可用设备");
+		}
+	}
 	@ResponseBody
 	@RequestMapping("/getEquipmentForPrisoner")
 	public Result getEquipmentForPrisoner(@RequestBody PubParam pubParam){
