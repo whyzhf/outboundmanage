@@ -55,6 +55,12 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/addPolice")
 	public Result addPolice(@RequestBody OutboundPolice outboundPolice){
+		if (outboundPolice.getEquipmentId() == 0) {
+			outboundPolice.setEquipmentId(null);
+		}
+		if (outboundPolice.getEquipmentId2() == 0) {
+			outboundPolice.setEquipmentId2(null);
+		}
 		OutboundPoliceForSel returnPolice=policeService.addPolice(outboundPolice);
 		if(returnPolice==null){
 			return ResultGenerator.setCustomResult(4000,"新增失败");
@@ -66,6 +72,12 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/upPolice")
 	public Result upPolice(@RequestBody OutboundPolice outboundPolice){
+		if (outboundPolice.getEquipmentId() == 0) {
+			outboundPolice.setEquipmentId(null);
+		}
+		if (outboundPolice.getEquipmentId2() == 0) {
+			outboundPolice.setEquipmentId2(null);
+		}
 		boolean flag=policeService.upPolice(outboundPolice);
 		if(!flag){
 			return ResultGenerator.setCustomResult(4000,"修改失败");
@@ -141,6 +153,7 @@ public class ManageController {
 	@RequestMapping("/getHandsetForPolice")
 	public Result getHandsetForPolice(@RequestBody PubParam pubParam){
 		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "1");
+		allEquipmentByForm.add(0,new OutboundEquipment.Builder().card(" ").build());
 		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
 
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
@@ -154,6 +167,7 @@ public class ManageController {
 	@RequestMapping("/getWatchForPolice")
 	public Result getWatchForPolice(@RequestBody PubParam pubParam){
 		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "2");
+		allEquipmentByForm.add(0,new OutboundEquipment.Builder().card(" ").build());
 		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
 
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
@@ -165,6 +179,7 @@ public class ManageController {
 	@RequestMapping("/getEquipmentForPrisoner")
 	public Result getEquipmentForPrisoner(@RequestBody PubParam pubParam){
 		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "0");
+		allEquipmentByForm.add(0,new OutboundEquipment.Builder().card(" ").build());
 		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
 		}else{
@@ -177,13 +192,16 @@ public class ManageController {
 	public Result getPrisonerList(@RequestBody PubParam pubParam){
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
 		List<OutboundPrisoner> allList = prisonerService.getAllPrisoner(pubParam.getAreaId());
-		
+
 		PageInfo<OutboundPrisoner> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
 	@ResponseBody
 	@RequestMapping("/addPrisoner")
 	public Result addPrisoner(@RequestBody OutboundPrisoner outboundPrisoner){
+		if (outboundPrisoner.getEquipmentId()==0){
+			outboundPrisoner.setEquipmentId(null);
+		}
 		OutboundPrisoner returnPrisoner=prisonerService.addPrisoner(outboundPrisoner);
 		if(returnPrisoner==null){
 

@@ -67,11 +67,11 @@ public class RXTXUtil{
 		//普通命令测试
 		//pubDemo();
 
-		groupDemo();
+		//groupDemo();
 
 		//selectDemo();
 		//日志测试
-		//logDemo();
+		logDemo();
 
 		//防破
 		//String order="AA140000005A000C350108C06006000000000088";
@@ -124,7 +124,7 @@ public class RXTXUtil{
 		try {
 			System.out.println("-----------命令" + arr2[7] + "-----------------");
 			//String order=send("00000090","800001","01",arr[7],"00");
-			String order = send("00000090", "800001", "02",arr[7], "01");
+			String order = send("00000090", "800001", "02",arr[6], "01");
 			long endTime2 = System.currentTimeMillis();
 			System.out.println("生成命令耗时：" + (endTime2 - startTime));
 			System.out.println(order);
@@ -150,7 +150,7 @@ public class RXTXUtil{
 		//for (int i = 0; i < 8; i++) {
 		long startTime = System.currentTimeMillis();
 		try {
-			System.out.println("-----------命令" + arr2[1] + "-----------------");
+			System.out.println("-----------命令" + arr2[2] + "-----------------");
 			String order=send("00000090","800001",arr[2]);
 			long endTime2 = System.currentTimeMillis();
 			System.out.println("生成命令耗时：" + (endTime2 - startTime));
@@ -170,8 +170,9 @@ public class RXTXUtil{
 	 * 1.Parameter1 部分返回00 ，AA
 	 */
 	public static void  logDemo() {
-		String order=send("00000090","800001",91,"3E");
-		//String order="AA140000005A000C350109003F000000000000A2";
+		String order=send("00000090","800001",90);
+		//String order=send("00000090","800001",91,"3C");
+		//String order=send("00000090","800001",91,"13");
 		System.out.println(order);
 		try {
 			System.out.println("reve:" + executeLogOrder(order, "COM3", 115200));

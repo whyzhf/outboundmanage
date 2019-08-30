@@ -12,6 +12,19 @@ public class OutboundEquipment {
   private int areaId;//区域ID
 
 
+  public OutboundEquipment() {
+  }
+
+  private OutboundEquipment(Builder builder) {
+    setId(builder.id);
+    setCard(builder.card);
+    setName(builder.name);
+    setType(builder.type);
+    setStatus(builder.status);
+    setForm(builder.form);
+    setAreaId(builder.areaId);
+  }
+
 
   public int getId() {
     return id;
@@ -75,4 +88,55 @@ public class OutboundEquipment {
     this.areaId = areaId;
   }
 
+  public static final class Builder {
+    private int id;
+    private String card;
+    private String name;
+    private int type;
+    private int status;
+    private int form;
+    private int areaId;
+
+    public Builder() {
+    }
+
+    public Builder id(int id) {
+      this.id = id;
+      return this;
+    }
+
+    public Builder card(String card) {
+      this.card = card;
+      return this;
+    }
+
+    public Builder name(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public Builder type(int type) {
+      this.type = type;
+      return this;
+    }
+
+    public Builder status(int status) {
+      this.status = status;
+      return this;
+    }
+
+    public Builder form(int form) {
+      this.form = form;
+      return this;
+    }
+
+    public Builder areaId(int areaId) {
+      this.areaId = areaId;
+      return this;
+    }
+
+    public OutboundEquipment build() {
+      return new OutboundEquipment(this);
+    }
+  }
 }
