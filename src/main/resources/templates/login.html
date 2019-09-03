@@ -1,72 +1,90 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="utf-8">
+    <title>map系统</title>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.1.0/echarts.min.js"></script>
 
-   <!--<script inline="javascript">
-        window.getSession = (
-            function(){
-                const session = {
-                    getPath:[[@{/}]],
-                };
-                return function(key){
-                    return session[key]
-                }
-            }
-            )();
-
-    </script>-->
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script> -->
 </head>
 <body>
-    <input type="button" value="login" onclick="Clicked()"/>
+<div id="map-wrap" style="height: 500px;">
+
+</div>
 
 </body>
-<script type="text/javascript" inline="javascript">
-    function Clicked(){
-        var user={ "userName":"A0004",
-            "password":"F59BD65F7EDAFB087A81D4DCA06C4910"}
-        $.ajax({
-            url: 'login/logVal',
-            type: 'post',
-            data: JSON.stringify(user),
-            contentType: 'application/json',//发送给服务器的格式
-            dataType: 'json',//接收服务器数据的格式
-            success: function (res) {
-               /* var users = [[${session}]];
-                console.log(users)*/
-                add()
-            }
+</html>
 
-        })
 
-    }
-
-    function add(){
-        // 存储值：将对象转换为Json字符串
-        var userEntity={ "userName":"A0004",
-            "password":"F59BD65F7EDAFB087A81D4DCA06C4910"}
-        sessionStorage.setItem('user', JSON.stringify(userEntity));
-
-       // 取值时：把获取到的Json字符串转换回对象
-        var userJsonStr = sessionStorage.getItem('user');
-        userEntity = JSON.parse(userJsonStr);
-     //   console.log(session); // => tom
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript"  >
+    function g(){
+        var mapChart;
+        var option;
 
         $.ajax({
-            url: 'login/userList',
+            url: 'login/log',
             type: 'post',
-            data:{"areaId":1800,"pageNum":1,"pageSize":10},
-          //  contentType: 'application/json',//发送给服务器的格式
             dataType: 'json',//接收服务器数据的格式
             success: function (res) {
-                /* var users = [[${session}]];
-                 console.log(users)*/
-            }
 
+
+            echarts.registerMap('山东',res);
+            mapChart = echarts.init(document.getElementById('map-wrap'));
+            option = {
+                title:{
+                    text: '山东分布图',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}<br/>{c} (个)'
+                },
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    left: 'right',
+                    top: 'center',
+                    feature: {
+                        dataView: {readOnly: false},
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                visualMap: {
+                    min: 0,
+                    max: 2000,
+                    text:['高','低'],
+                    realtime: false,
+                    calculable: true,
+                    inRange: {
+                        color: ['lightskyblue','yellow', 'orangered']
+                    }
+                },
+                series:[
+                    {
+                        name: '山东统计图',
+                        type: 'map',
+                        map: '山东', // 自定义扩展图表类型
+                        aspectScale: 1.0, //地图长宽比. default: 0.75
+                        zoom: 1.1, //控制地图的zoom，动手自己更改下 看看什么效果吧
+                        roam: true,
+                        itemStyle:{
+                            normal:{label:{show:true}},
+                            emphasis:{label:{show:true}}
+                        }
+                    }
+                ]
+            }
+            mapChart.setOption(option);
+
+            }
         })
-    }
+
+
+    }g();
+
 </script>
+</body>
 </html>

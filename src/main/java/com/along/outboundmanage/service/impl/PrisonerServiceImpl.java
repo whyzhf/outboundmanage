@@ -34,7 +34,8 @@ public class PrisonerServiceImpl implements PrisonerService {
              outboundPrisoner=null;
 
          }
-        return outboundPrisoner;
+        List<OutboundPrisoner> allPrisonerById = PrisonerDao.getAllPrisonerById(outboundPrisoner.getId() + "");
+        return allPrisonerById.get(0);
     }
 
     @Override

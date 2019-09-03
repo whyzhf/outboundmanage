@@ -28,4 +28,9 @@ public interface CarDao {
 			" FROM outbound_car " +
 			" where id in (${ids})")
 	List<OutboundCar> getAllCarByIds(@Param("ids") String ids);
+
+	@Select("SELECT id, card, `type`, status, area_id" +
+			" FROM outbound_car " +
+			" where area_id =#{areaId} and `type`=0 and status=1 ")
+	List<OutboundCar> getCarAble(@Param("areaId") int areaId);
 }

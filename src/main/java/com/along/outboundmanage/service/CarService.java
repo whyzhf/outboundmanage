@@ -14,4 +14,6 @@ public interface CarService {
 	boolean delCar(String id);
 	//查询
 	List<OutboundCar> getAllCar(int areaId);
+	//可用车辆
+	List<OutboundCar> getCarAble(int areaId);
 }

@@ -17,4 +17,6 @@ public interface PrisonerService {
 	List<OutboundPrisoner> getAllPrisoner(int areaId);
 	//根据id查询
 	List<OutboundPrisoner> getPrisonerByIds( String id);
+
+
 }

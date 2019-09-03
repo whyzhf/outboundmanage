@@ -42,6 +42,8 @@ public class CarServiceImpl implements CarService {
     public List<OutboundCar> getAllCar(int areaId) {
         return CarDao.getAllCar(areaId);
     }
-
-
+    @Override
+    public List<OutboundCar> getCarAble(int areaId) {
+        return CarDao.getCarAble(areaId);
+    }
 }

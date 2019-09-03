@@ -177,16 +177,16 @@ public class HttpClientUtils {
 	 * @return String
 	 * @description 带map参数的post请求方法
 	 */
-	public static String doPost(String uri, Map<String, String> params) {
+	public static String doPost(String uri, Map<String, Object> params) {
 
 		String responseBody;
 		HttpPost httpPost = new HttpPost(uri);
 		try {
 			List<NameValuePair> nvps = Lists.newArrayList();
-			for (Map.Entry<String, String> entry : params.entrySet()) {
+			for (Map.Entry<String, Object> entry : params.entrySet()) {
 				String key = entry.getKey();
-				String value = entry.getValue();
-				nvps.add(new BasicNameValuePair(key, value));
+				Object value = entry.getValue();
+				nvps.add(new BasicNameValuePair(key, value+""));
 			}
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, Consts.UTF_8));
 			httpPost.setConfig(getRequestConfig());

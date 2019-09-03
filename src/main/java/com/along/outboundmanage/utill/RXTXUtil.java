@@ -65,13 +65,13 @@ public class RXTXUtil{
 	 */
 	public static void main(String[] args){
 		//普通命令测试
-		//pubDemo();
+		pubDemo();
 
 		//groupDemo();
 
 		//selectDemo();
 		//日志测试
-		logDemo();
+		//logDemo();
 
 		//防破
 		//String order="AA140000005A000C350108C06006000000000088";
@@ -91,9 +91,9 @@ public class RXTXUtil{
 		//for (int i = 0; i < 8; i++) {
 			long startTime = System.currentTimeMillis();
 			try {
-				System.out.println("-----------普通命令" + arr2[7] + "-----------------");
+				System.out.println("-----------普通命令" + arr2[6] + "-----------------");
 				//String order=send("00000090","800001","01",arr[7],"00");
-				String order = send("00000090", "800001", "01", arr[5], "00");
+				String order = send("00000090", "800001", "01", arr[6], "00");
 				long endTime2 = System.currentTimeMillis();
 				System.out.println("生成命令耗时：" + (endTime2 - startTime));
 				//String order=send("00000090","800001",40);

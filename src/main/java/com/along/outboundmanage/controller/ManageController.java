@@ -51,6 +51,16 @@ public class ManageController {
 		PageInfo<OutboundPoliceForSel> pageInfo = new PageInfo<>(allPolice);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
+	@ResponseBody
+	@RequestMapping("/getPolice")
+	public Result getPolice(@RequestBody Map<String, Integer> pubParam){
+		//pubParam.forEach((K,V)-> System.out.println(K+" : "+V));
+
+
+		List<OutboundPoliceForSel> allPolice = policeService.getAllPolice(pubParam.get("areaId"));
+
+		return ResultGenerator.genSuccessResult(allPolice);
+	}
 
 	@ResponseBody
 	@RequestMapping("/addPolice")
@@ -196,6 +206,17 @@ public class ManageController {
 		PageInfo<OutboundPrisoner> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
+
+	@ResponseBody
+	@RequestMapping("/getPrisoner")
+	public Result getPrisoner(@RequestBody PubParam pubParam){
+		List<OutboundPrisoner> allList = prisonerService.getAllPrisoner(pubParam.getAreaId());
+		if(allList != null && !allList.isEmpty()){
+			return ResultGenerator.setCustomResult(200,"获取成功",allList);
+		}else{
+			return ResultGenerator.setCustomResult(4000,"暂无可用脚扣");
+		}
+	}
 	@ResponseBody
 	@RequestMapping("/addPrisoner")
 	public Result addPrisoner(@RequestBody OutboundPrisoner outboundPrisoner){
@@ -273,6 +294,19 @@ public class ManageController {
 			return ResultGenerator.setCustomResult(4000,"删除失败");
 		}else{
 			return ResultGenerator.setCustomResult(200,"删除成功");
+		}
+	}
+
+
+	@ResponseBody
+	@RequestMapping("/getCar")
+	public Result getCar(@RequestBody PubParam pubParam){
+		List<OutboundCar> allList = carService.getCarAble(pubParam.getAreaId());
+
+		if(allList != null && !allList.isEmpty()){
+			return ResultGenerator.setCustomResult(200,"获取成功",allList);
+		}else{
+			return ResultGenerator.setCustomResult(4000,"暂无可用脚扣");
 		}
 	}
 }
