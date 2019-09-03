@@ -28,7 +28,14 @@ public class RouteController {
 		PageInfo<OutboundRoute> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
+	@ResponseBody
+	@RequestMapping("/getRoute")
+	public Result getRoute(@RequestBody PubParam pubParam){
 
+		List<OutboundRoute> allList = routeService.getAllRoute(pubParam.getAreaId());
+
+		return ResultGenerator.genSuccessResult(allList);
+	}
 	@ResponseBody
 	@RequestMapping("/upRoute")
 	public Result upRoute(@RequestBody  OutboundRoute outboundRoute){
