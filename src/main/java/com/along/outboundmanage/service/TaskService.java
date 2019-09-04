@@ -13,6 +13,7 @@ public interface TaskService {
 	List<OutboundTask> getAllTask(int areaId);
 	//查询
 	List<OutboundTask> getTaskByStatus(String status,String areaId);
+	Integer getCountTask(String status,String areaId);
 	//修改
 	boolean updateTaskById( OutboundTaskDesc outboundTask);
 	//结束任务

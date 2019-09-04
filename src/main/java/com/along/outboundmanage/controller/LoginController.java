@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
+
 
 /**
    * 功能描述 
@@ -84,8 +86,14 @@ public class LoginController {
     public Result logVal(@RequestBody OutboundUser user, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map=new HashMap<>();
         HttpSession session = request.getSession();
-        if (session.getAttribute("user") == null) {
-            OutboundUser returnUser = loginService.checkLogin(user);
+
+	    OutboundSession outSession=(OutboundSession)session.getAttribute("user");
+        if (outSession != null && user.getUserName().equals(outSession.getUserName())) {
+	        map.put("url", "/index");
+	     //   System.out.println(outSession);
+	        return  ResultGenerator.genSuccessResult(session.getAttribute("user"));
+        }else{
+	        OutboundUser returnUser = loginService.checkLogin(user);
             if (returnUser != null ){
                 //设置session
                 session.setAttribute("user", loginService.getSession(returnUser.getId()));
@@ -93,9 +101,6 @@ public class LoginController {
             }else{
                 return  ResultGenerator.setFailResult(ResultCode.LOGIN_FILE.code(),ResultCode.LOGIN_FILE.message());
             }
-        }else  {
-            map.put("url", "/index");
-            return  ResultGenerator.genSuccessResult(session.getAttribute("user"));
         }
         // System.out.println(session.getAttribute("user"));
         return ResultGenerator.genSuccessResult(session.getAttribute("user"));

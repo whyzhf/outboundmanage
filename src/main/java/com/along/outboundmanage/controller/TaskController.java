@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.along.outboundmanage.utill.DataUtil.getNowData;
@@ -139,6 +136,21 @@ public class TaskController {
 		return ResultGenerator.genSuccessResult(JSON.parseObject(allList));
 	}
 	/*****************************任务审批（地市管理员）**********************************************/
+	//任务清单
+	@ResponseBody
+	@RequestMapping("/getCountTask")
+	public Result getCountTask(@RequestBody PubParam pubParam){
+		String areaIds=String.join(",",areaService.getAreaIdsByPar(pubParam.getAreaId()).stream().map(e->e+"").collect(Collectors.toList()));
+		Map<String,String> data=new HashMap<>();
+		if (areaIds!=null && !areaIds.equals("")) {
+			Integer count = taskService.getCountTask("0", areaIds);
+			data.put("count",count+"");
+		}else{
+			data.put("count","0");
+		}
+
+		return ResultGenerator.genSuccessResult(data);
+	}
 	//任务清单
 	@ResponseBody
 	@RequestMapping("/getTaskAuditList")

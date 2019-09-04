@@ -42,8 +42,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<OutboundTask> getTaskByStatus(String status, String areaId) {
         return taskDao.getAllTaskByStatus(status,areaId);
-    }
 
+    }
+    @Override
+    public Integer getCountTask(String status, String areaId) {
+        return taskDao.getCountTaskByStatus(status,areaId);
+
+    }
     @Override
     public boolean updateTaskById(OutboundTaskDesc outboundTaskDesc) {
         OutboundTask outboundTask =new OutboundTask(outboundTaskDesc.getId(),outboundTaskDesc.getName(),outboundTaskDesc.getOrigin(),outboundTaskDesc.getDestination(),
