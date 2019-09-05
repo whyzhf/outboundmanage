@@ -2,6 +2,7 @@ package com.along.outboundmanage.utill;
 
 import gnu.io.*;
 
+import javax.sound.midi.SoundbankResource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -11,11 +12,22 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.TooManyListenersException;
 
-import static com.along.outboundmanage.utill.GeneralUtils.replaceSpecialStr;
+import static com.along.outboundmanage.utill.HexadecimalUtil.get16NumAdd0;
+import static com.along.outboundmanage.utill.HexadecimalUtil.hexStringToByteArray;
 import static com.along.outboundmanage.utill.OrderUtil.retuenLogOrder;
 import static com.along.outboundmanage.utill.OrderUtil.send;
 
-public class RXTXUtil{
+/**
+ * 使用rxtx连接串口工具类
+ */
+public class RXTXUtil {
+	public static void main(String[] args) {
+		String order = send("00000090", "800001", 90);
+		//String order = send("00000090", "800001", "01", "80", "00");
+
+		System.out.println(executeOrder(order, "COM3", 115200));
+
+	}
 	private static final String DEMONAME = "串口测试";
 
 	/**
@@ -34,206 +46,8 @@ public class RXTXUtil{
 	 * RS-232的串行口
 	 */
 	private static SerialPort serialPort;
-	/**
-	 * 串口返回信息
-	 */
-	 static List<String>resList=new ArrayList<>();
 
-	/**
-	 普通命令   0:无处理
-	 * 	 *                11: 关闭脚扣主锁
-	 * 	 *                12: 打开脚扣主锁
-	 * 	 *                13: 根据遥控器下发的时间设置脚扣的当前时间
-	 * 	 *                14: 关闭定点电击
-	 * 	 *                15: 启动定点电击
-	 * 	 *                16: 设备撤防
-	 * 	 *                17: 设备布防
-	 *          群组命令   20:无处理
-	 * 	 *                21: 根据遥控器下发的分组信息将整个分组删除
-	 * 	 *                22: 根据遥控器下发的分组信息将设备从指定分组中删除。
-	 * 	 *                23: 根据遥控器下发的分组信息将设备添加到该遥控器的指定分组。
-	 * 	 *                24: 结束分组电击。指定遥控器ID下发的分组编号相同的所有脚扣，结束电击。
-	 * 	 *                25: 启动分组电击。指定遥控器ID下发的分组编号相同的所有脚扣，启动电击。
-	 * 	 *                26: 撤销分组布防。指定遥控器ID下发的分组编号相同的所有脚扣，定点电击、分组电击、广播电击、防破拆电击均无效
-	 * 	 *                27: 启动分组布防。指定遥控器ID下发的分组编号相同的所有脚扣，定点电击、分组电击、广播电击、防破拆电击均有效
-	 * 	        查询命令
-	 * 	 * 	               30: 查询id
-	 * 	 * 	               40: 获取系统时间和组号
-	 * 	 * 	               50: 获取系统电压,系统硬件版本、软件版本,获取系统状态
-	 * 	         设置命令   80：设置防破拆电击启动参数
-	 * 	         日志命令   90：发送了获取日志命令
-	 */
-	public static void main(String[] args){
-		//普通命令测试
-		pubDemo();
-
-		//groupDemo();
-
-		//selectDemo();
-		//日志测试
-		//logDemo();
-
-		//防破
-		//String order="AA140000005A000C350108C06006000000000088";
-		//广播
-		//String order2="AA140000005A000C350188806000000000000068";
-
-	}
-
-	/**
-	 * 普通命令测试
-	 * 1.单指令发送： 关闭脚扣主锁，设置脚扣的当前时间，关闭定点电击 $返回 CMD3：00 # 启动定点电击  $返回A5140000005A0000000000000000000000000013
-	 * 2.组合指令发送：1??? ??? 均能成功
-	 */
-	public static void  pubDemo() {
-		String[] arr = {"00", "02", "04", "08", "10", "20", "40", "80"};
-		String[] arr2 = {"无处理", "关闭脚扣主锁", "打开脚扣主锁", "设置脚扣的当前时间", "关闭定点电击", "启动定点电击", "设备撤防", "设备布防"};
-		//for (int i = 0; i < 8; i++) {
-			long startTime = System.currentTimeMillis();
-			try {
-				System.out.println("-----------普通命令" + arr2[6] + "-----------------");
-				//String order=send("00000090","800001","01",arr[7],"00");
-				String order = send("00000090", "800001", "01", arr[6], "00");
-				long endTime2 = System.currentTimeMillis();
-				System.out.println("生成命令耗时：" + (endTime2 - startTime));
-				//String order=send("00000090","800001",40);
-				System.out.println(order);
-
-				System.out.println("reve:" + executeOrder(order, "COM3", 115200));
-				long endTime3 = System.currentTimeMillis();
-				System.out.println("返回命令耗时：" + (endTime3 - endTime2));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			long endTime = System.currentTimeMillis();
-			System.out.println("总耗时：" + (endTime - startTime));
-	   // }
-	}
-
-	/**
-	 * 分组命令测试
-	 * 1.单指令发送： 关闭脚扣主锁，添加到该遥控器的指定分组，结束电击 $返回 CMD3：00 # 启动电击  $返回A5140000005A0000000000000000000000000013
-	 * 2.组合指令发送：1??? ??? 先抛异常再成功
-	 *
-	 */
-	public static void  groupDemo() {
-		String[] arr = {"00", "02", "04", "08", "10", "20", "40", "80"};
-		String[] arr2 = {"无处理", "将整个分组删除", "设备从指定分组中删除", "添加到该遥控器的指定分组", "结束电击", "启动电击", "撤销分组布防", "启动分组布防"};
-		//for (int i = 0; i < 8; i++) {
-		long startTime = System.currentTimeMillis();
-		try {
-			System.out.println("-----------命令" + arr2[7] + "-----------------");
-			//String order=send("00000090","800001","01",arr[7],"00");
-			String order = send("00000090", "800001", "02",arr[6], "01");
-			long endTime2 = System.currentTimeMillis();
-			System.out.println("生成命令耗时：" + (endTime2 - startTime));
-			System.out.println(order);
-			System.out.println("reve:" + executeOrder(order, "COM3", 115200));
-			long endTime3 = System.currentTimeMillis();
-			System.out.println("返回命令耗时：" + (endTime3 - endTime2));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("总耗时：" + (endTime - startTime));
-		// }
-	}
-	/**
-	 * 查询命令测试
-	 * 1.单指令发送： 关闭脚扣主锁，添加到该遥控器的指定分组，结束电击 $返回 CMD3：00 # 启动电击  $返回A5140000005A0000000000000000000000000013
-	 * 2.组合指令发送：1??? ??? 先抛异常再成功
-	 *
-	 */
-	public static void selectDemo() {
-		int[] arr = {30,40,50};
-		String[] arr2 = {"查询ID", "查询系统时间和组号", "获取系统电压,系统硬件版本、软件版本,获取系统状态"};
-		//for (int i = 0; i < 8; i++) {
-		long startTime = System.currentTimeMillis();
-		try {
-			System.out.println("-----------命令" + arr2[2] + "-----------------");
-			String order=send("00000090","800001",arr[2]);
-			long endTime2 = System.currentTimeMillis();
-			System.out.println("生成命令耗时：" + (endTime2 - startTime));
-			System.out.println(order);
-			System.out.println("reve:" + executeOrder(order, "COM3", 115200));
-			long endTime3 = System.currentTimeMillis();
-			System.out.println("返回命令耗时：" + (endTime3 - endTime2));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		long endTime = System.currentTimeMillis();
-		System.out.println("总耗时：" + (endTime - startTime));
-		// }
-	}
-	/**
-	 * 日志测试
-	 * 1.Parameter1 部分返回00 ，AA
-	 */
-	public static void  logDemo() {
-		String order=send("00000090","800001",90);
-		//String order=send("00000090","800001",91,"3C");
-		//String order=send("00000090","800001",91,"13");
-		System.out.println(order);
-		try {
-			System.out.println("reve:" + executeLogOrder(order, "COM3", 115200));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
-	/******************************************************************************************************************/
-
-
-	/**
-	 * 串口命令日志执行
-	 * @param order 命令
-	 * @param portName 端口名
-	 * @param baudRate 波特率
-	 * @return
-	 * @throws UnsupportedEncodingException
-	 */
-	public synchronized  static String executeLogOrder(String order,String portName,int baudRate) throws UnsupportedEncodingException {
-		String str="";
-
-		if (serialPort==null) {
-			openSerialPort(portName, baudRate);
-		}else{
-
-		}
-
-		sendData(order);//发送数据
-		//代替监听
-		for (int i = 0; i <1000000; i++) {
-			str=readData();
-			if(str!=null&&str.contains("a5")&&str.indexOf("a5")+80<=str.length()){
-				//System.out.println(i+" 秒： "+str);
-				str=str.substring(str.indexOf("a5"),str.indexOf("a5")+80);
-				//剔除空格换行符
-				str=replaceSpecialStr(str).toUpperCase();
-			//str.replaceAll(" ","").toUpperCase();
-			//	System.out.println(i+" 秒： "+order);
-				System.out.println(i*50/1000+" 秒： "+str);
-				String[] arr2 = str.split("(?<=\\G.{2})");
-				if("09".equals(arr2[10])&&!"00".equals(arr2[11])){
-					retuenLogOrder(str);
-					str = arr2[0] + arr2[1] + "#" + arr2[2] + " " + arr2[3] + " " + arr2[4] + " " + arr2[5] + "#" + arr2[6] + " " + arr2[7] + " " + arr2[8] + " " + arr2[9]
-							+ "#" + arr2[10] + " " + arr2[11] + " " + arr2[12] + "#" + arr2[13] + " " + arr2[14] + " " + arr2[15] + " " + arr2[16] + " " + arr2[17] + " " + arr2[18] + "$" + arr2[19];
-					System.out.println(i*50/1000 + ":" + str);
-					//return str;
-				}
-			}else{
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
-
-
-		return str;
-	}
-
+	private static String res=null;
 	/**
 	 * 串口命令执行
 	 * @param order 命令
@@ -242,77 +56,83 @@ public class RXTXUtil{
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public synchronized  static String executeOrder(String order,String portName,int baudRate) throws UnsupportedEncodingException {
+	public synchronized  static String executeOrder(String order,String portName,int baudRate)  {
 		String str="";
-		//获得系统端口列表
-		//getSystemPort();
-		//开启端口COM3，波特率115200
-		//openSerialPort("COM3",115200);
-
-
 		if (serialPort==null) {
 			openSerialPort(portName, baudRate);
-		}else{
-			/*closeSerialPort();
-			openSerialPort(portName, baudRate);*/
 		}
-
-
 		//发送消息
-		//order=send("00000090","800001","03","80","00");
-
-		sendData(order);//发送数据
+		sendData(order);
 		//代替监听
-
-		for (int i = 0; i <1000; i++) {
-			 str=readData();
-			//System.out.println(str);
-			if(str!=null&&str.contains("a5")&&str.indexOf("a5")+80<=str.length()){
-				//System.out.println(i+" 秒： "+str);
-				str=str.substring(str.indexOf("a5"),str.indexOf("a5")+80);
-				str=str.replaceAll(" ","").toUpperCase();
-			//	System.out.println(i+" 秒： "+order);
-				System.out.println(i*50/1000+" 秒： "+str);
-				if(order.substring(2,20).equals(str.substring(2,20))) {
-					String[] arr2 = str.split("(?<=\\G.{2})");
-					str = arr2[0] + arr2[1] + "#" + arr2[2] + " " + arr2[3] + " " + arr2[4] + " " + arr2[5] + "#" + arr2[6] + " " + arr2[7] + " " + arr2[8] + " " + arr2[9]
-							+ "#" + arr2[10] + " " + arr2[11] + " " + arr2[12] + "#" + arr2[13] + " " + arr2[14] + " " + arr2[15] + " " + arr2[16] + " " + arr2[17] + " " + arr2[18] + "$" + arr2[19];
-					System.out.println(i*50/1000 + ":" + str);
-
-					return str;
-				}
-			}else{
+		/*for (int i = 0; i <1000; i++) {
+			str=readData();
+			str=returnCheck(order,str);
+			if (str!=null){
+				return str;
+			}else {
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-
-
-			//System.out.println(i+"::"+str);
-		}
-		/*//设置监听
+		}*/
+		//设置监听
 		setListenerToSerialPort( new SerialPortEventListener(){
 			@Override
 			public void serialEvent(SerialPortEvent serialPortEvent) {
 				if(serialPortEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {//数据通知
 						String str=readData();
-						if(str!=null&&str.contains("a5")&&str.indexOf("a5")+80==str.length()){
-							str=str.substring(str.indexOf("a5"),str.indexOf("a5")+80);
-							str=str.replaceAll(" ","").toUpperCase();
-							//System.exit(0);
-							closeSerialPort();
-
-						}
+					    res=returnCheck(order,str);
 				}
-
-
 			}
-		});*/
+		});
 
-		return str;
+		//监听是异步请求，如果要获取监听里的内容做返回值，
+		// 可以通过循环去延迟来获取返回值，
+		// 设置最大延迟防止死循环
+		long startTime = System.currentTimeMillis();
+		while (res==null){
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			long endTime = System.currentTimeMillis();
+			if ((endTime-startTime)/1000.0>20){//最长20s返回
+				return res;
+			}
+		}
+		return res;
 	}
+
+	/**
+	 * 返回命令校验
+	 * @return
+	 */
+	public static String returnCheck(String order,String str){
+		if(str!=null&&str.contains("A5")&&str.indexOf("A5")+40<=str.length()){
+			String res=str;
+			str=str.substring(str.indexOf("A5"),str.indexOf("A5")+40);
+			str=str.replaceAll(" ","").toUpperCase();
+			String[] arr2 = str.split("(?<=\\G.{2})");
+			if("09".equals(arr2[10])&&!"00".equals(arr2[11])){//日志命令
+				//日志存储
+				retuenLogOrder(str);
+				if("FF".equals(arr2[12])||(res.length()>40 && res.contains("FF"))){//日志传输结束
+					closeSerialPort();
+					return str;
+				}
+			}else if(order.substring(2,20).equals(str.substring(2,20))) {
+				closeSerialPort();
+				return str;
+			}
+		}else{
+			return null;
+		}
+		return null;
+	}
+
 
 	/**
 	 * 获得系统可用的端口名称列表
@@ -329,6 +149,7 @@ public class RXTXUtil{
 		}
 
 	}
+
 	/**
 	 * 开启串口
 	 * @param serialPortName 串口名称
@@ -337,20 +158,20 @@ public class RXTXUtil{
 	 */
 	public static void openSerialPort(String serialPortName,int baudRate) {
 		try {
-				//通过端口名称得到端口
-				CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(serialPortName);
-				//打开端口，（自定义名字，打开超时时间）
-				CommPort commPort = portIdentifier.open(serialPortName, 5000);
-				//判断是不是串口
-				if (commPort instanceof SerialPort) {
-					serialPort = (SerialPort) commPort;
-			    	//设置串口参数（波特率，数据位8，停止位1，校验位无）
-			    	serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
-			    //	System.out.println("开启串口成功，串口名称："+serialPortName);
-				}else {
-					//是其他类型的端口
-					throw new NoSuchPortException();
-				}
+			//通过端口名称得到端口
+			CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(serialPortName);
+			//打开端口，（自定义名字，打开超时时间）
+			CommPort commPort = portIdentifier.open(serialPortName, 5000);
+			//判断是不是串口
+			if (commPort instanceof SerialPort) {
+				serialPort = (SerialPort) commPort;
+				//设置串口参数（波特率，数据位8，停止位1，校验位无）
+				serialPort.setSerialPortParams(baudRate, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+				//	System.out.println("开启串口成功，串口名称："+serialPortName);
+			}else {
+				//是其他类型的端口
+				throw new NoSuchPortException();
+			}
 		} catch (NoSuchPortException e) {
 			e.printStackTrace();
 		} catch (PortInUseException e) {
@@ -360,17 +181,7 @@ public class RXTXUtil{
 		}
 
 	}
-	/**
-	 * 关闭串口
-	 *
-	 */
-	public static void closeSerialPort() {
-		if(serialPort != null) {
-			serialPort.close();
-			System.out.println("关闭了串口："+serialPort.getName());
-			serialPort = null;
-		}
-	}
+
 	/**
 	 * 向串口发送数据
 	 * @param order 发送的命令
@@ -403,7 +214,8 @@ public class RXTXUtil{
 	 * @return 读取的数据
 	 */
 	public static String  readData() {
-		String res="";
+		//保存串口返回信息
+		StringBuffer res=new StringBuffer(40);
 		InputStream is = null;
 		byte[] bytes = null;
 		try {
@@ -414,14 +226,13 @@ public class RXTXUtil{
 				is.read(bytes);
 				bufflenth = is.available();
 			}
-			try {
-				if(bytes!=null) {
-					res = new String(bytes, "UTF-8");
+			if(bytes!=null) {
+				for (int i = 0; i < bytes.length; i++) {
+					//转换成16进制数（FF）
+					res.append(get16NumAdd0((bytes[i]&0xff)+"",2));
 				}
-				//System.out.println(res);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
 			}
+			System.out.println("res: "+res.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -435,31 +246,26 @@ public class RXTXUtil{
 			}
 		}
 
-		return res;
+		return res.toString();
 	}
+
+	/**
+	 * 关闭串口
+	 *
+	 */
+	public static void closeSerialPort() {
+		if(serialPort != null) {
+			serialPort.close();
+			//System.out.println("关闭了串口："+serialPort.getName());
+			serialPort = null;
+		}
+	}
+
 	/**
 	 * 给串口设置监听
 	 * @param listener
 	 */
 	public static void setListenerToSerialPort( SerialPortEventListener listener) {
-		/*//设置监听
-		setListenerToSerialPort( new SerialPortEventListener(){
-			@Override
-			public void serialEvent(SerialPortEvent serialPortEvent) {
-				if(serialPortEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {//数据通知
-						String str=readData();
-						if(str.contains("a5")){
-							str=str.substring(str.indexOf("a5"),str.indexOf("a5")+80);
-							str=str.replaceAll(" ","").toUpperCase();
-							//System.exit(0);
-							closeSerialPort();
-
-						}
-				}
-
-
-			}
-		});*/
 		try {
 			//给串口添加事件监听
 			serialPort.addEventListener(listener);
@@ -470,24 +276,4 @@ public class RXTXUtil{
 		serialPort.notifyOnBreakInterrupt(true);//中断事件监听
 
 	}
-
-	/**
-	 * 16进制表示的字符串转换为字节数组
-	 *
-	 * @param hexString 16进制表示的字符串
-	 * @return byte[] 字节数组
-	 */
-	public static byte[] hexStringToByteArray(String hexString) {
-		hexString = hexString.replaceAll(" ", "");
-		int len = hexString.length();
-		byte[] bytes = new byte[len / 2];
-		for (int i = 0; i < len; i += 2) {
-			// 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个字节
-			bytes[i / 2] = (byte) ((Character.digit(hexString.charAt(i), 16) << 4) + Character
-					.digit(hexString.charAt(i + 1), 16));
-		}
-		return bytes;
-	}
-
-
 }

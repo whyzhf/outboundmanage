@@ -134,7 +134,6 @@ public class EquipUtil {
 			//System.out.println(arr[i]+" "+get10HexNum(arr[i]));
 			sum+=get10HexNum(arr[i]);
 		}
-		System.out.println(get16Num((low8(sum)+"")));
 		//校验
 		if(get16NumAdd0((low8(sum)+""),2).equalsIgnoreCase(arr[arr.length - 1])){
 			return arr;

@@ -369,7 +369,7 @@ public class OrderUtil {
 		CMD3 = str;
 	}
 	/**
-	 * 设置防破拆命令反馈
+	 * 设置日志命令反馈
 	 * @param order
 	 * @return
 	 */
