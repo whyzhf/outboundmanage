@@ -265,7 +265,19 @@ public class LoginController {
     public Result getMenu(@RequestBody PubParam pubParam,HttpServletRequest request) throws IOException {
         return ResultGenerator.genSuccessResult(loginService.getMenu(pubParam.getRoleId()));
     }
+    @ResponseBody
+    @RequestMapping("/getSession")
+    public Result getSession(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        OutboundSession outboundSession = (OutboundSession) session.getAttribute("user");
+        if (outboundSession!=null) {
 
+            return ResultGenerator.genSuccessResult(outboundSession);
+        }else{
+            return ResultGenerator.setCustomResult(4000,"请先登录",null);
+        }
+
+    }
 
     /**
      * 登出 清除Session

@@ -7,6 +7,7 @@ server:
     context-path: /outboundmanage
     session:
       timeout: 1800S
+  ##  error: whitelabel: enabled: false
 spring:
   profiles:
     active: dev #设置开发环境

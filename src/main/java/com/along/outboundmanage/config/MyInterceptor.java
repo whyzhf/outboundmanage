@@ -17,7 +17,7 @@ public class MyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //获取session
-       /* OutboundSession outboundSession = (OutboundSession)request.getSession().getAttribute("user");
+        OutboundSession outboundSession = (OutboundSession)request.getSession().getAttribute("user");
 
         if (outboundSession == null){
             response.sendRedirect(request.getContextPath()+"/login");
@@ -30,7 +30,7 @@ public class MyInterceptor implements HandlerInterceptor {
             return false;
         }else {
             return true;
-        }*/
-        return true;
+        }
+       // return true;
     }
 }

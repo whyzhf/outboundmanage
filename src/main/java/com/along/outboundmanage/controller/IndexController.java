@@ -1,5 +1,6 @@
 package com.along.outboundmanage.controller;
 
+import com.along.outboundmanage.model.ExceptionEntity.CustomException;
 import com.along.outboundmanage.model.OutboundSession;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ public class IndexController {
             int roleId = outboundSession.getRoleId();
 
         }
+
         modelAndView.addObject("roleId",role_id);
         modelAndView.setViewName("index");
         return  modelAndView;
@@ -45,6 +47,7 @@ public class IndexController {
 
     @RequestMapping(value = "/index")
     public String getIndex() {
+
         return "index";
     }
 

@@ -2,6 +2,7 @@ package com.along.outboundmanage.config;
 
 
 import com.alibaba.fastjson.JSON;
+import com.along.outboundmanage.model.ExceptionEntity.CustomException;
 import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultCode;
 import com.along.outboundmanage.model.ExceptionEntity.ServiceException;
@@ -71,7 +72,8 @@ public class WebConfig  implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**","/login/**");
+
+        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**").excludePathPatterns("/static/**","/login","/login/logVal");
     }
 
     //统一异常处理
@@ -87,7 +89,9 @@ public class WebConfig  implements WebMvcConfigurer {
                     logger.info(e.getMessage());
                 } else if (e instanceof NoHandlerFoundException) {
                     result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
-                } else if (e instanceof ServletException) {
+                } else if (e instanceof CustomException) {
+                    result.setCode(ResultCode.NOT_FOUND).setMessage("页面 [" + request.getRequestURI() + "] 不存在，页面请求失败，该页面不存在或页面非法访问");
+                }else if (e instanceof ServletException) {
                     result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
                 } else {
                     result.setCode(ResultCode.INTERNAL_SERVER_ERROR).setMessage("接口 [" + request.getRequestURI() + "] 内部错误，请联系管理员");
@@ -105,7 +109,11 @@ public class WebConfig  implements WebMvcConfigurer {
                     logger.error(message, e);
                 }
                 responseResult(response, result);
-                return new ModelAndView();
+               /* ModelAndView  modelAndView=new ModelAndView();
+                 modelAndView.addObject("msg", e.getMessage());
+                 modelAndView.setViewName("error");
+                 return  modelAndView;*/
+               return new ModelAndView();
             }
 
         });
@@ -122,7 +130,7 @@ public class WebConfig  implements WebMvcConfigurer {
         }
     }
 
-    /*跨域*/
+   // 跨域
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
