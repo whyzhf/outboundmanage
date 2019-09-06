@@ -46,7 +46,9 @@ public class RXTXUtil {
 	 * RS-232的串行口
 	 */
 	private static SerialPort serialPort;
-
+	/**
+	 * 返回结果
+	 */
 	private static String res=null;
 	/**
 	 * 串口命令执行
@@ -82,8 +84,8 @@ public class RXTXUtil {
 			@Override
 			public void serialEvent(SerialPortEvent serialPortEvent) {
 				if(serialPortEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {//数据通知
-						String str=readData();
-					    res=returnCheck(order,str);
+					String str=readData();
+					res=returnCheck(order,str);
 				}
 			}
 		});

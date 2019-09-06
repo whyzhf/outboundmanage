@@ -159,7 +159,7 @@ public class TaskController {
 		String areaIds=String.join(",",areaService.getAreaIdsByPar(pubParam.getAreaId()).stream().map(e->e+"").collect(Collectors.toList()));
 		List<OutboundTask> allList =new ArrayList<>();
 		if (areaIds!=null && !areaIds.equals("")) {
-			allList = taskService.getTaskByStatus("0,1,2", areaIds);
+			allList = taskService.getTaskByStatus("0,1,2,4", areaIds);
 		}else{
 			allList =null;
 		}

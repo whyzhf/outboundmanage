@@ -45,6 +45,8 @@ public class LoginServiceImpl implements LoginService {
         return userDao.getAllUserByAreaId(areaId);
     }
 
+
+
     @Override
     public OutboundUser addUser(OutboundUser user) {
         int id= 0;

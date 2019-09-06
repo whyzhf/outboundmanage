@@ -1,5 +1,6 @@
 package com.along.outboundmanage.dao;
 
+import com.along.outboundmanage.model.OutboundRole;
 import com.along.outboundmanage.model.OutboundSession;
 import com.along.outboundmanage.model.OutboundUser;
 import org.apache.ibatis.annotations.*;
@@ -55,4 +56,6 @@ public interface UserDao {
 	@Delete("DELETE FROM  outbound_user_role_rel" +
 			" WHERE user_id in(${userId})")
 	boolean delUserRole(@Param("userId") String userId);
+
+
 }
