@@ -22,7 +22,7 @@ public interface LoginService {
 	List<OutboundSession> userList(int areaId);
 
 	OutboundUser addUser(OutboundUser user);
-
+	OutboundSession getAllUserById(int userId);
 	boolean delUser(String ids);
 	//修改用户信息
 	boolean updateUserById(OutboundUser user);

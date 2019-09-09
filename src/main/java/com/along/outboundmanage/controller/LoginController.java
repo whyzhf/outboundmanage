@@ -18,10 +18,7 @@ import com.along.outboundmanage.service.LoginService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +41,7 @@ import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
    * @description  ${description}
  */
 
- 
+
 @Controller
 @RequestMapping(value = "/login")
 public class LoginController {
@@ -123,6 +120,7 @@ public class LoginController {
         PageInfo<OutboundSession> pageInfo = new PageInfo<>(userList);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
 	/**
 	 * 可选角色
 	 * @param request
@@ -151,18 +149,29 @@ public class LoginController {
     @RequestMapping("/addUser")
     public Result addUser(@RequestBody OutboundUser user,HttpServletRequest request) {
         Integer roleId=user.getRoleId();
+        Map<String,Object> map=new HashMap<>();
         if(roleId==null||roleId==0){
             roleId=5;
         }else{
             user.setRoleId(null);
         }
-        OutboundUser returnUser=loginService.addUser(user);
+        OutboundUser returnUser = loginService.addUser(user);
         if(returnUser==null){
             return ResultGenerator.setCustomResult(4000,"新增失败");
         }else{
             loginService.addUserRole(returnUser.getId(),roleId);
-            returnUser.setRoleId(roleId);
-            return ResultGenerator.genSuccessResult(returnUser);
+           // returnUser.setRoleId(roleId);
+            OutboundSession resuser = loginService.getAllUserById(returnUser.getId());
+            map.put("id",user.getId());
+            map.put("userName",resuser.getUserName());
+            map.put("password",user.getPassword());
+            map.put("trueName",resuser.getTrueName());
+            map.put("card",resuser.getCard());
+            map.put("areaId",resuser.getAreaId());
+            map.put("areaName",resuser.getAreaName());
+            map.put("roleId",resuser.getRoleId());
+            map.put("roleName",resuser.getRoleName());
+            return ResultGenerator.genSuccessResult(map);
         }
 
     }
@@ -213,10 +222,13 @@ public class LoginController {
     @RequestMapping("/checkPassword")
     public Result checkPasswork(@RequestBody OutboundUser user,HttpServletRequest request) {
         List<OutboundUser> userList = loginService.checkPassword(user);
+        Map<String,String > map=new HashMap<>();
         if(null!=userList && !userList.isEmpty()){
-            return ResultGenerator.setCustomResult(200,"密码输入正确");
+            map.put("msg","Success");
+            return ResultGenerator.setCustomResult(200,"密码输入正确",map);
         }else{
-            return ResultGenerator.setCustomResult(4000,"密码输入错误");
+            map.put("msg","Error");
+            return ResultGenerator.setCustomResult(4000,"密码输入错误",map);
         }
 
     }
@@ -229,12 +241,14 @@ public class LoginController {
     @ResponseBody
     @RequestMapping("/checkUserName")
     public Result checkUserName(@RequestBody OutboundUser user,HttpServletRequest request)throws IOException {
-
+        Map<String,String > map=new HashMap<>();
         List<OutboundUser> userList = loginService.checkUserName(user.getUserName());
         if(null!=userList && !userList.isEmpty()){
-            return ResultGenerator.setCustomResult(4000,"该用户名已存在本市数据库，建议使用警员编号作为用户名");
+            map.put("msg","Error");
+            return ResultGenerator.setCustomResult(4000,"该用户名已存在本市数据库，建议使用警员编号作为用户名",map);
         }else{
-            return ResultGenerator.setCustomResult(200,"该用户名可以使用");
+            map.put("msg","Success");
+            return ResultGenerator.setCustomResult(200,"该用户名可以使用",map);
         }
 
     }
@@ -248,10 +262,13 @@ public class LoginController {
     @RequestMapping("/checkCard")
     public Result checkCard(@RequestBody OutboundUser user,HttpServletRequest request)throws IOException {
         Integer id = loginService.checkCard(user.getCard());
+        Map<String,String > map=new HashMap<>();
         if(id!=null){
-            return ResultGenerator.setCustomResult(4000,"该警员编号已存在本市数据库，请核实编号");
+            map.put("msg","Error");
+            return ResultGenerator.setCustomResult(4000,"该警员编号已存在本市数据库，请核实编号",map);
         }else{
-            return ResultGenerator.setCustomResult(200,"该警员编号未被使用");
+            map.put("msg","Success");
+            return ResultGenerator.setCustomResult(200,"该警员编号未被使用",map);
         }
 
     }
@@ -265,6 +282,7 @@ public class LoginController {
     public Result getMenu(@RequestBody PubParam pubParam,HttpServletRequest request) throws IOException {
         return ResultGenerator.genSuccessResult(loginService.getMenu(pubParam.getRoleId()));
     }
+
     @ResponseBody
     @RequestMapping("/getSession")
     public Result getSession(HttpServletRequest request){

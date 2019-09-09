@@ -65,12 +65,19 @@ public class LoginServiceImpl implements LoginService {
                                                 .userId(user.getId())
                                                 .build();
                 policeDao.addPolice(outboundPolice);
+            userDao.getAllUserById(user.getId());
         }else{
             user=null;
 
         }
+
         return user;
 
+    }
+
+    @Override
+    public OutboundSession getAllUserById(int userId) {
+        return userDao.getAllUserById(userId);
     }
 
     @Override

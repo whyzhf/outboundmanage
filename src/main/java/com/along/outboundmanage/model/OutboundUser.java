@@ -8,7 +8,7 @@ public class OutboundUser {
   private String password;//用户密码
   private String trueName;//用户真实名
   private String card;//用户编号
-  private int areaId;//地域ID
+  private Integer areaId;//地域ID
   private Integer roleId;//角色ID
 
   @Override
@@ -77,11 +77,11 @@ public class OutboundUser {
   }
 
 
-  public int getAreaId() {
+  public Integer getAreaId() {
     return areaId;
   }
 
-  public void setAreaId(int areaId) {
+  public void setAreaId(Integer areaId) {
     this.areaId = areaId;
   }
 

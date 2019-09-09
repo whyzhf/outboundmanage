@@ -129,8 +129,7 @@ public class WebConfig  implements WebMvcConfigurer {
            // logger.error(ex.getMessage());
         }
     }
-
-   // 跨域
+    // 跨域
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
@@ -139,6 +138,7 @@ public class WebConfig  implements WebMvcConfigurer {
         corsConfiguration.addAllowedOrigin("http://192.168.100.164:8080");
         corsConfiguration.addAllowedOrigin("http://localhost:8080");
         corsConfiguration.addAllowedOrigin("http://localhost:8081");
+        corsConfiguration.addAllowedOrigin("http://localhost:63342");
         // 允许任何头
         corsConfiguration.addAllowedHeader("*");
         // 允许任何方法（post、get等）
