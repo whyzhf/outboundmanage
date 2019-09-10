@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class LoginServiceImpl implements LoginService {
     @Resource
-    private LoginDao loginDao;
+    private PLoginDao PLoginDao;
     @Resource
     private UserDao userDao;
     @Resource
@@ -27,7 +27,7 @@ public class LoginServiceImpl implements LoginService {
     private PoliceDao policeDao;
     @Override
     public OutboundUser checkLogin(OutboundUser user) {
-        return loginDao.checkLogin(user);
+        return PLoginDao.checkLogin(user);
     }
 
     @Override

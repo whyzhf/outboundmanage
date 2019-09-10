@@ -17,6 +17,8 @@ public enum ResultCode {
     PAGE_FOUND(1504,"页面请求失败，该页面不存在或页面非法访问"),
     //接口不存在
     NOT_FOUND(1404,"接口不存在"),
+    //未登录
+    UNLOGIN(1401,"未登录"),
     //服务器内部错误
     INTERNAL_SERVER_ERROR(500,"服务器内部错误");
 

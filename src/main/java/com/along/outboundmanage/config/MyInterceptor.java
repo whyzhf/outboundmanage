@@ -1,6 +1,7 @@
 package com.along.outboundmanage.config;
 
 //import  com.along.outboundmanage.model.LoginInfo;
+import com.along.outboundmanage.model.ExceptionEntity.UnLoginException;
 import com.along.outboundmanage.model.OutboundSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -27,14 +28,16 @@ public class MyInterceptor implements HandlerInterceptor {
         OutboundSession outboundSession = (OutboundSession)request.getSession().getAttribute("user");
        // System.out.println("outboundSession:"+outboundSession);
         if (outboundSession == null){
-            response.sendRedirect("/login");
+	        throw  new UnLoginException();
+        	/*response.sendRedirect("/login");
             PrintWriter out = response.getWriter();
             out.println("<html>");
             out.println("<script>");
             out.println("window.open ('/login','_top')");
             out.println("</script>");
             out.println("</html>");
-            return false;
+			*/
+          //  return false;
         }else {
             return true;
         }

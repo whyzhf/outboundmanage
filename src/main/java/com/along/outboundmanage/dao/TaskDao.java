@@ -24,7 +24,13 @@ public interface TaskDao {
 			" WHERE id in(${ids})" )
 	boolean upTaskStatusById(@Param("ids") String ids,@Param("status") String status,@Param("time") String time);
 
-	@UpdateProvider(type = SqlProvider.class, method = "updataTask")
+	/*@UpdateProvider(type = SqlProvider.class, method = "updataTask")
+	boolean updateTaskById(@Param("OutboundTask") OutboundTask outboundTask);*/
+	@Update("UPDATE outboundmanage.outbound_task\n" +
+			"SET name=#{OutboundTask.name}, origin=#{OutboundTask.origin}, destination=#{OutboundTask.destination}," +
+			" start_time=#{OutboundTask.startTime}, end_time=#{OutboundTask.endTime}, status=#{OutboundTask.status}," +
+			" `describe`=#{OutboundTask.describe}, route_id=#{OutboundTask.routeId}, `type`=#{OutboundTask.type}, remarks=#{OutboundTask.remarks}, area_id=#{OutboundTask.areaId}" +
+			" WHERE id=#{OutboundTask.id}")
 	boolean updateTaskById(@Param("OutboundTask") OutboundTask outboundTask);
 
 	@Insert("INSERT INTO outbound_task" +
@@ -54,14 +60,14 @@ public interface TaskDao {
 	Integer getCountTaskByStatus(@Param("status")String status,@Param("areaId") String areaId);
 	//任务详情
 	@Select("SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.`describe`, t.route_id,r.name as route_name, t.`type`, t.area_id,\n" +
-			" tp.police_id  ,tc.car_id ,tpr.prisoner_id \n" +
+			" tp.police_id as police  ,tc.car_id  as car ,tpr.prisoner_id as prisoner \n" +
 			" FROM outbound_task t\n" +
 			" left join outbound_route r on r.id =t.route_id" +
 			" left join (select task_id,group_concat(police_id Separator ',') as police_id from  outbound_task_police_rel where task_id=#{id}) tp on t.id =tp.task_id \n" +
 			" left join  (select task_id,group_concat(car_id Separator ',') as car_id from  outbound_task_car_rel where task_id=#{id}) tc on t.id =tc.task_id\n" +
 			" left join  (select task_id,group_concat(prisoner_id Separator ',') as prisoner_id from outbound_task_prisoner_rel where task_id=#{id}) tpr on t.id =tpr.task_id\n" +
 			" where t.id=#{id}")
-	OutboundTaskDesc getTaskDesc( @Param("id") int id);
+	OutboundTaskV2 getTaskDesc( @Param("id") int id);
 
 	//我的当前任务（一级）
 	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name\n" +

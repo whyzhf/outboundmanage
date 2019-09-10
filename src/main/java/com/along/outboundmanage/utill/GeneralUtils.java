@@ -3,6 +3,8 @@ package com.along.outboundmanage.utill;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,7 +14,11 @@ import java.util.regex.Pattern;
  * @Deacription:
  */
 public class GeneralUtils {
+	public static void main(String[] args) {
 
+
+
+	}
     /**
      * 判断对象是否为null , 为null返回true,否则返回false
      * @param obj 被判断的对象
@@ -48,11 +54,18 @@ public class GeneralUtils {
             return (new StringBuilder()).append(Character.toUpperCase(s.charAt(0))).append(s.substring(1)).toString();
     }
     /**
-     * json字符串转 Json格式
+     * json字符串转 Json对象格式
      * */
     public static JSON getJson(String jsonStr){
        return JSON.parseObject(jsonStr);
     }
+	/**
+	 * json字符串转 Json数组格式
+	 * */
+	public static JSON getJsonArr(String jsonStr){
+		return JSONObject.parseArray(jsonStr);
+	}
+
     /**
      * 对象转json字符串
      * */

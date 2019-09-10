@@ -2,15 +2,8 @@ package com.along.outboundmanage.service.impl;
 
 
 import com.along.outboundmanage.dao.AreaDao;
-import com.along.outboundmanage.dao.LoginDao;
-import com.along.outboundmanage.dao.MenuDao;
-import com.along.outboundmanage.dao.SessionDao;
 import com.along.outboundmanage.model.OutboundArea;
-import com.along.outboundmanage.model.OutboundMenu;
-import com.along.outboundmanage.model.OutboundSession;
-import com.along.outboundmanage.model.OutboundUser;
 import com.along.outboundmanage.service.AreaService;
-import com.along.outboundmanage.service.LoginService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

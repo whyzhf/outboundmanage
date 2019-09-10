@@ -9,6 +9,7 @@ import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.model.OutboundTask;
 import com.along.outboundmanage.model.OutboundTaskDesc;
+import com.along.outboundmanage.model.OutboundTaskV2;
 import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.AreaService;
 import com.along.outboundmanage.service.TaskService;
@@ -49,7 +50,8 @@ public class TaskController {
 	}
 	@ResponseBody
 	@RequestMapping("/upTask")
-	public Result upTask(@RequestBody OutboundTaskDesc outboundTask){
+	public Result upTask(@RequestBody OutboundTaskV2 outboundTask){
+		System.out.println(outboundTask);
 		if(taskService.updateTaskById(outboundTask)){
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}else{
@@ -67,7 +69,7 @@ public class TaskController {
 		}
 	}
 
-	@ResponseBody
+	/*@ResponseBody
 	@RequestMapping("/addTask")
 	public Result addTask(@RequestBody  OutboundTaskDesc outboundTask, HttpServletRequest request){
 		Map<String, Object> returnTask=taskService.insertTask(outboundTask);
@@ -77,6 +79,41 @@ public class TaskController {
 			return ResultGenerator.genSuccessResult(returnTask);
 		}
 	}
+*/
+	@RequestMapping("/addTask")
+	public Result addTask(@RequestBody OutboundTaskV2 outboundTask, HttpServletRequest request){
+		OutboundTaskV2 returnTask=taskService.addTask(outboundTask);
+		if(returnTask==null){
+			return ResultGenerator.setCustomResult(4000,"新增失败");
+		}else{
+			return ResultGenerator.genSuccessResult(returnTask);
+		}
+	}
+
+	//重新分配干警和设备
+	@ResponseBody
+	@RequestMapping("/addPoliceEquip")
+	public Result addPoliceEquip(@RequestBody Map<String,Integer[]> map, HttpServletRequest request){
+		Map<String, Object> returnTask=taskService.addpoliceEquip(map);
+		if(returnTask==null){
+			return ResultGenerator.setCustomResult(4000,"新增失败");
+		}else{
+			return ResultGenerator.genSuccessResult(returnTask);
+		}
+	}
+
+	//重新分配犯人和设备
+	@ResponseBody
+	@RequestMapping("/addPrisonerEquip")
+	public Result addPrisonerEquip(@RequestBody Map<String,Integer[]> map, HttpServletRequest request){
+		Map<String, Object> returnTask=taskService.addPrisonerEquip(map);
+		if(returnTask==null){
+			return ResultGenerator.setCustomResult(4000,"新增失败");
+		}else{
+			return ResultGenerator.genSuccessResult(returnTask);
+		}
+	}
+
 	//开始任务
 	@ResponseBody
 	@RequestMapping("/startTask")
@@ -86,10 +123,13 @@ public class TaskController {
 		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		String status="3";
 		String time= " start_time='"+(dateFormat.format(calendar.getTime()))+"' ";
+		Map<String, String> map=new HashMap<>();
 		if(taskService.startTask(pubParam.getIds(),status,time)){
-			return ResultGenerator.setCustomResult(200,"修改成功");
+			map.put("data","Success");
+			return ResultGenerator.setCustomResult(200,"修改成功",map);
 		}else{
-			return ResultGenerator.setCustomResult(4000,"修改失败");
+			map.put("data","Error");
+			return ResultGenerator.setCustomResult(4000,"修改失败",map);
 		}
 	}
 	//结束任务(备份历史数据,关系表清空  未测)
@@ -99,10 +139,13 @@ public class TaskController {
 		//  0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
 		String status="4";
 		String time= " start_time='"+(getNowData("yyyy-MM-dd hh:mm:ss"))+"' ";
+		Map<String, String> map=new HashMap<>();
 		if(taskService.endTask(pubParam.getIds(),status,time)){
-			return ResultGenerator.setCustomResult(200,"修改成功");
+			map.put("data","Success");
+			return ResultGenerator.setCustomResult(200,"修改成功",map);
 		}else{
-			return ResultGenerator.setCustomResult(4000,"修改失败");
+			map.put("data","Error");
+			return ResultGenerator.setCustomResult(4000,"修改失败",map);
 		}
 	}
 

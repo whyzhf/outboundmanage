@@ -279,7 +279,7 @@ public class ViewsServiceImpl implements ViewsService {
 		Map<String,Integer> typeMap=null;
 		for (int i = 0; i < areaList.size(); i++) {
 			emd=new EchartsMapData();
-			emd.setName(areaList.get(i).getName()+"监所信息");
+			emd.setName(areaList.get(i).getName());
 			typeMap=new HashMap<>();
 			typeMap.put("在押人员总数",0);
 			typeMap.put("外出就医",0);

@@ -2,10 +2,7 @@ package com.along.outboundmanage.config;
 
 
 import com.alibaba.fastjson.JSON;
-import com.along.outboundmanage.model.ExceptionEntity.CustomException;
-import com.along.outboundmanage.model.ExceptionEntity.Result;
-import com.along.outboundmanage.model.ExceptionEntity.ResultCode;
-import com.along.outboundmanage.model.ExceptionEntity.ServiceException;
+import com.along.outboundmanage.model.ExceptionEntity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -87,7 +84,9 @@ public class WebConfig  implements WebMvcConfigurer {
                     //业务失败的异常，如“账号或密码错误”
                     result.setCode(ResultCode.FAIL).setMessage(e.getMessage());
                     logger.info(e.getMessage());
-                } else if (e instanceof NoHandlerFoundException) {
+                }else if (e instanceof UnLoginException) {
+	                result.setCode(ResultCode.UNLOGIN).setMessage("请登录");
+                }  else if (e instanceof NoHandlerFoundException) {
                     result.setCode(ResultCode.NOT_FOUND).setMessage("接口 [" + request.getRequestURI() + "] 不存在");
                 } else if (e instanceof CustomException) {
                     result.setCode(ResultCode.NOT_FOUND).setMessage("页面 [" + request.getRequestURI() + "] 不存在，页面请求失败，该页面不存在或页面非法访问");

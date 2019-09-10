@@ -23,7 +23,18 @@ public class OutboundTask {
   private Integer areaId;
   private String areaName;//地域名
 
-  public OutboundTask(int id, String name, String origin, String destination, Object o, Object o1, String describe, Integer routeId, Integer type, Integer areaId) {
+  public OutboundTask(int id, String name, String origin, String destination, Object o, Object o1,
+                      String describe, Integer routeId, Integer type, Integer areaId) {
+      this.id=id;
+      this.name=name;
+      this.origin=origin;
+      this.destination=destination;
+      this.startTime= (Timestamp) o;
+      this.endTime= (Timestamp) o1;
+      this.describe=describe;
+      this.routeId=routeId;
+      this.type=type;
+      this.areaId=areaId;
   }
 
   @Override

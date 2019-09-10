@@ -3,10 +3,7 @@ package com.along.outboundmanage.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.along.outboundmanage.dao.CarDao;
-import com.along.outboundmanage.dao.PoliceDao;
-import com.along.outboundmanage.dao.PrisonerDao;
-import com.along.outboundmanage.dao.TaskDao;
+import com.along.outboundmanage.dao.*;
 import com.along.outboundmanage.model.*;
 import com.along.outboundmanage.service.TaskService;
 import com.along.outboundmanage.utill.GeneralUtils;
@@ -33,7 +30,10 @@ public class TaskServiceImpl implements TaskService {
     private PoliceDao policeDao;
     @Resource
     private PrisonerDao prisonerDao;
-
+    @Resource
+    private EquipRelManageDao equipRelManageDao;
+    @Resource
+    private EquipmentDao equipmentDao;
     @Override
     public List<OutboundTask> getAllTask(int areaId) {
         return taskDao.getAllTaskByAreaId(areaId);
@@ -49,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
         return taskDao.getCountTaskByStatus(status,areaId);
 
     }
-    @Override
+  /*  @Override
     public boolean updateTaskById(OutboundTaskDesc outboundTaskDesc) {
         OutboundTask outboundTask =new OutboundTask(outboundTaskDesc.getId(),outboundTaskDesc.getName(),outboundTaskDesc.getOrigin(),outboundTaskDesc.getDestination(),
                 outboundTaskDesc.getStartTime()==null?null:strToSqlDate(  outboundTaskDesc.getStartTime(),"yyyy-MM-dd HH:mm:ss")   ,
@@ -101,7 +101,54 @@ public class TaskServiceImpl implements TaskService {
         }
 
     }
-    /**
+   */
+  @Override
+  public boolean updateTaskById(OutboundTaskV2 outboundTaskDesc) {
+      OutboundTask outboundTask =new OutboundTask(outboundTaskDesc.getId(),outboundTaskDesc.getName(),outboundTaskDesc.getOrigin(),outboundTaskDesc.getDestination(),
+              outboundTaskDesc.getStartTime()==null?null:strToSqlDate(  outboundTaskDesc.getStartTime(),"yyyy-MM-dd HH:mm:ss")   ,
+              outboundTaskDesc.getEndTime()==null?null:strToSqlDate(  outboundTaskDesc.getEndTime(),"yyyy-MM-dd HH:mm:ss")   ,
+              outboundTaskDesc.getDescribe(),
+              outboundTaskDesc.getRouteId(),outboundTaskDesc.getType(),outboundTaskDesc.getAreaId());
+
+      int taskId = outboundTaskDesc.getId();
+      if(taskDao.updateTaskById(outboundTask)){
+          //清空关系表
+          taskDao.delTaskPolic(taskId+"");
+          taskDao.delTaskPrisoner(taskId+"");
+          taskDao.delTaskCar(taskId+"");
+              //添加关系表 Task - polic
+          Integer[] pids=outboundTaskDesc.getPoliceIds();
+          List<KandV> tpIds=new ArrayList<>();
+          for (int i = 0; i < pids.length; i++) {
+              tpIds.add(new KandV(taskId,Integer.valueOf(pids[i])));
+          }
+          taskDao.addTaskPolic(tpIds);
+
+          //添加关系表 Task - Prisoner
+          Integer[] priids=outboundTaskDesc.getPrisonerIds();
+          List<KandV> tprIds=new ArrayList<>();
+          for (int i = 0; i < priids.length; i++) {
+              tprIds.add(new KandV(taskId,Integer.valueOf(priids[i])));
+          }
+
+          taskDao.addTaskPrisoner(tprIds);
+
+          //添加关系表 Task - Car
+          Integer[] cids=outboundTaskDesc.getCarIds();
+          List<KandV> tcIds=new ArrayList<>();
+          for (int i = 0; i < cids.length; i++) {
+              tcIds.add(new KandV(taskId,Integer.valueOf(cids[i])));
+          }
+          taskDao.addTaskCar(tcIds);
+          outboundTaskDesc.setId(taskId);
+          return true;
+      }else{
+          outboundTaskDesc=null;
+          return false;
+      }
+
+  }
+  /**
      * 任务结束：
      *      1.修改任务状态
      *      2.备份任务数据
@@ -252,6 +299,124 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public OutboundTaskV2 addTask(OutboundTaskV2 outboundTaskDesc) {
+        OutboundTask outboundTask =new OutboundTask(outboundTaskDesc.getId(),outboundTaskDesc.getName(),outboundTaskDesc.getOrigin(),outboundTaskDesc.getDestination(),
+                outboundTaskDesc.getStartTime()==null?null:strToSqlDate(  outboundTaskDesc.getStartTime(),"yyyy-MM-dd HH:mm:ss")   ,
+                outboundTaskDesc.getEndTime()==null?null:strToSqlDate(  outboundTaskDesc.getEndTime(),"yyyy-MM-dd HH:mm:ss")   ,
+                outboundTaskDesc.getDescribe(),
+                outboundTaskDesc.getRouteId(),outboundTaskDesc.getType(),outboundTaskDesc.getAreaId());
+        int id= 0;
+        id= taskDao.insertTask(outboundTask);
+        int taskId = outboundTask.getId();
+        outboundTaskDesc.setId(taskId);
+        if(id>0){//新增成功
+            //清空关系表
+            taskDao.delTaskPolic(taskId+"");
+            taskDao.delTaskPrisoner(taskId+"");
+            taskDao.delTaskCar(taskId+"");
+            //添加关系表 Task - polic
+            Integer[] pids=outboundTaskDesc.getPoliceIds();
+            List<KandV> tpIds=new ArrayList<>();
+            for (int i = 0; i < pids.length; i++) {
+                tpIds.add(new KandV(taskId,Integer.valueOf(pids[i])));
+            }
+            taskDao.addTaskPolic(tpIds);
+
+            //添加关系表 Task - Prisoner
+            Integer[] priids=outboundTaskDesc.getPrisonerIds();
+                List<KandV> tprIds=new ArrayList<>();
+                for (int i = 0; i < priids.length; i++) {
+                    tprIds.add(new KandV(taskId,Integer.valueOf(priids[i])));
+                }
+                taskDao.addTaskPrisoner(tprIds);
+
+            //添加关系表 Task - Car
+            Integer[] cids=outboundTaskDesc.getCarIds();
+            List<KandV> tcIds=new ArrayList<>();
+            for (int i = 0; i < cids.length; i++) {
+                tcIds.add(new KandV(taskId,Integer.valueOf(cids[i])));
+            }
+                taskDao.addTaskCar(tcIds);
+            outboundTaskDesc.setId(taskId);
+            return outboundTaskDesc;
+        }else{
+            outboundTaskDesc=null;
+            return null;
+        }
+    }
+
+    //重新分配干警和设备
+    @Override
+    public Map<String, Object> addpoliceEquip(Map<String, Integer[]> map) {
+        Integer[] policeIds= (Integer[]) map.get("policeIds");
+        Integer[] watchIds= (Integer[]) map.get("watchIds");
+        Integer[] watchId= new Integer[policeIds.length];
+        if (policeIds.length>=watchIds.length){
+            System.arraycopy(watchIds, 0, watchId, 0, watchId.length);
+        }else {
+            System.arraycopy(watchIds, 0, watchId, 0, policeIds.length);
+        }
+        Integer[] handsetIds= (Integer[]) map.get("handsetIds");
+        Integer[] handsetId= new Integer[policeIds.length];
+        if (policeIds.length>=handsetId.length){
+            System.arraycopy(handsetIds, 0, handsetId, 0, handsetIds.length);
+        }else {
+            System.arraycopy(handsetIds, 0, handsetId, 0, policeIds.length);
+        }
+        List<OutboundPolice> list=new ArrayList<>();
+        String pids="",eids="";
+        for (int i = 0; i < policeIds.length; i++) {
+            list.add(new OutboundPolice.Builder().id(policeIds[i]).equipmentId(watchId[i]).equipmentId2(handsetId[i]).build());
+            pids+=policeIds[i]+",";
+            eids+=watchId[i]+","+handsetId[i]+",";
+        }
+        //修改原来设备为可用
+        pids=pids.substring(0,pids.length()-1);
+            equipRelManageDao.updataEquip(pids);
+        //添加干警设备关系
+            equipRelManageDao.updataPoliceEquip(list);
+        //修改设备状态
+        eids=eids.substring(0,eids.length()-1);
+        equipmentDao.upEquipmentTypeAndStatus(0,0,eids);
+         //返回拼接字符串
+        Map<String, Object> res=new HashMap<>();
+        res.put("data",equipRelManageDao.getreturn(pids));
+        return res;
+    }
+
+   @Override
+    public Map<String, Object> addPrisonerEquip(Map<String, Integer[]> map) {
+       Integer[] prisonerIds = (Integer[]) map.get("prisonerIds");
+       Integer[] grapplersIds = (Integer[]) map.get("grapplersIds");
+       Integer[] grapplersId = new Integer[prisonerIds.length];
+       if (prisonerIds.length >= grapplersIds.length) {
+           System.arraycopy(grapplersIds, 0, grapplersId, 0, grapplersIds.length);
+       } else {
+           System.arraycopy(grapplersIds, 0, grapplersId, 0, prisonerIds.length);
+       }
+
+       List<OutboundPrisoner> list = new ArrayList<>();
+       String pids = "",eids="";
+       for (int i = 0; i < prisonerIds.length; i++) {
+           list.add(new OutboundPrisoner.Builder().id(prisonerIds[i]).equipmentId(grapplersIds[i]).build());
+           pids += prisonerIds[i] + ",";
+           eids+=grapplersId[i]+",";
+       }
+       //修改原来设备为可用
+       pids = pids.substring(0, pids.length() - 1);
+       equipRelManageDao.updatapriEquip(pids);
+       //添加犯人设备关系
+       equipRelManageDao.updataPrisonerEquip(list);
+       //修改设备状态
+       eids=eids.substring(0,eids.length()-1);
+       equipmentDao.upEquipmentTypeAndStatus(0,0,eids);
+       //返回拼接字符串
+       Map<String, Object> res = new HashMap<>();
+       res.put("data", equipRelManageDao.getPrireturn(pids));
+       return res;
+   }
+
+    @Override
     public List<OutboundTask>  getMyCurrTaskByStatus(String status,String areaId,int userId){
         return taskDao.getMyCurrTaskByStatus(status, areaId, userId);
     }
@@ -269,34 +434,46 @@ public class TaskServiceImpl implements TaskService {
     public Map<String, Object> getTaskDesc(int id) {
         Map<String, Object> resMap=new HashMap<>();
         //获取任务信息
-        OutboundTaskDesc taskDesc = taskDao.getTaskDesc(id);
+        OutboundTaskV2 taskDesc = taskDao.getTaskDesc(id);
         resMap.put("task",taskDesc);
         //获取警察信息
-        String tP=taskDesc.getPoliceId();
+        String tP=taskDesc.getPolice();
         if(tP!=null&& !tP.isEmpty()){
             List<OutboundPoliceForSel> allPoliceById = policeDao.getAllPoliceById(tP);
-            taskDesc.setPoliceId( allPoliceById.stream().map(e->e.getName()+"("+e.getCard()+")").collect(Collectors.joining(",")));
+            taskDesc.setPolice( equipRelManageDao.getreturn(tP));
+            String[] arr=tP.split(",");
+            Integer[] arrd=new Integer[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                arrd[i]=Integer.valueOf(arr[i]);
+            }
             resMap.put("Police",allPoliceById);
-        }else{
-            resMap.put("Police",null);
+            taskDesc.setPoliceIds(arrd);
         }
         //获取犯人信息
-        String tPr=taskDesc.getPrisonerId();
+        String tPr=taskDesc.getPrisoner();
         if(tPr!=null&& !tPr.isEmpty()){
             List<OutboundPrisoner> allPrisonerById = prisonerDao.getAllPrisonerById(tPr);
-            taskDesc.setPrisonerId( allPrisonerById.stream().map(e->e.getName()+"("+e.getCard()+")").collect(Collectors.joining(",")));
-            resMap.put("prisoner", allPrisonerById);
-        }else{
-            resMap.put("prisoner",null);
+            taskDesc.setPrisoner( equipRelManageDao.getPrireturn(tPr));
+            String[] arr=tPr.split(",");
+            Integer[] arrd=new Integer[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                arrd[i]=Integer.valueOf(arr[i]);
+            }
+            resMap.put("prisoner",allPrisonerById);
+            taskDesc.setPrisonerIds(arrd);
         }
         //获取车辆信息
-        String tC=taskDesc.getCarId();
+        String tC=taskDesc.getCar();
         if(tC!=null&& !tC.isEmpty()){
             List<OutboundCar> allCarByIds = carDao.getAllCarByIds(tC);
-            taskDesc.setCarId( allCarByIds.stream().map(e->e.getCard()).collect(Collectors.joining(",")));
+            taskDesc.setCar( allCarByIds.stream().map(e->e.getCard()).collect(Collectors.joining(",")));
+            String[] arr=tC.split(",");
+            Integer[] arrd=new Integer[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                arrd[i]=Integer.valueOf(arr[i]);
+            }
+            taskDesc.setCarIds(arrd);
             resMap.put("car",allCarByIds);
-        }else{
-            resMap.put("car",null);
         }
         return resMap;
     }

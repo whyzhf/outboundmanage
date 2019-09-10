@@ -6,6 +6,7 @@ import com.along.outboundmanage.dao.RouteDao;
 import com.along.outboundmanage.dao.TaskDao;
 import com.along.outboundmanage.model.OutboundRoadlog;
 import com.along.outboundmanage.model.OutboundRoute;
+import com.along.outboundmanage.model.OutboundRouteJson;
 import com.along.outboundmanage.model.OutboundTask;
 import com.along.outboundmanage.service.RouteService;
 import com.along.outboundmanage.service.TaskService;
@@ -22,7 +23,7 @@ public class RouteServiceImpl implements RouteService {
 
 
     @Override
-    public List<OutboundRoute> getAllRoute(int areaId) {
+    public List<OutboundRouteJson> getAllRoute(int areaId) {
         return routeDao.getAllRouteByAreaId(areaId);
     }
 

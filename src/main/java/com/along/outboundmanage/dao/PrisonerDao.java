@@ -25,17 +25,17 @@ public interface PrisonerDao {
 	@Select("SELECT p.id, p.card, p.name, p.equipment_id as equipmentId, p.area_id as areaId,e.card as equipmentCard" +
 			" FROM outbound_prisoner p " +
 			" left join outbound_equipment e on e.id=p.equipment_id" +
-			" where p.area_id =#{areaId}  and p.ifdel=0")
+			" where p.area_id =#{areaId}  ")
 	List<OutboundPrisoner> getAllPrisoner(@Param("areaId") int areaId);
 
 	@Select("SELECT id, card, name, equipment_id, area_id\n" +
-			" FROM outboundmanage.outbound_prisoner\n" +
-			" WHERE id in (${id})   and ifdel=0")
+			" FROM outbound_prisoner\n" +
+			" WHERE id in (${id}) ")
 	List<OutboundPrisoner> getPrisonerByIds(@Param("id") String id);
 
 	@Select("SELECT p.id, p.card, p.name, p.equipment_id as equipmentId, p.area_id as areaId,e.card as equipmentCard" +
 			" FROM outbound_prisoner p " +
 			" left join outbound_equipment e on e.id=p.equipment_id" +
-			" where p.id in (${ids})  and p.ifdel=0")
+			" where p.id in (${ids})")
 	List<OutboundPrisoner> getAllPrisonerById(@Param("ids") String ids);
 }

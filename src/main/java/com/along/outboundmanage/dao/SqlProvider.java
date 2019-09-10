@@ -104,6 +104,22 @@ public class SqlProvider extends SQL {
         return sql;
     }
 
+    public String addPolicEquip(Map map){
+        List<KandV> students = (List<KandV>) map.get("tpIds");
+        StringBuilder sb = new StringBuilder();
+        sb.append("INSERT INTO outbound_task_police_rel (task_id, police_id) VALUES ");
+        MessageFormat mf = new MessageFormat(
+                "(#'{'tpIds[{0}].id}, #'{'tpIds[{0}].id2})"
+        );
+        for (int i = 0; i < students.size(); i++) {
+            sb.append(mf.format(new Object[] {i}));
+            if (i < students.size() - 1)
+                sb.append(",");
+        }
+        return sb.toString();
+
+    }
+
     public String addTaskPolic(Map map){
         List<KandV> students = (List<KandV>) map.get("tpIds");
         StringBuilder sb = new StringBuilder();
@@ -207,5 +223,38 @@ public class SqlProvider extends SQL {
         String sql=sb.toString();
 
         return sql;
+    }
+
+    public  String updataPoliceEquip(Map map){
+        StringBuffer sb=new StringBuffer();
+        StringBuffer sb2=new StringBuffer();
+        StringBuffer ids=new StringBuffer();
+        List<OutboundPolice> dataList= (List<OutboundPolice>) map.get("list");
+        sb.append("UPDATE outbound_police SET equipment_id = (CASE ");
+        for (int i = 0; i < dataList.size(); i++) {
+            sb.append( "  WHEN id=").append(dataList.get(i).getId()).append(" THEN ").append(dataList.get(i).getEquipmentId());
+            sb2.append( "  WHEN id=").append(dataList.get(i).getId()).append(" THEN ").append(dataList.get(i).getEquipmentId2());
+            ids.append(dataList.get(i).getId()).append(",");
+        }
+        String id=ids.toString();
+        id=id.substring(0,id.length()-1);
+        sb.append(" END) ,equipment_id2 = (CASE ").append(sb2).append(" END) WHERE id IN (").append(id).append(")");
+        return sb.toString();
+    }
+
+    public  String updataPrisonerEquip(Map map){
+        StringBuffer sb=new StringBuffer();
+
+        StringBuffer ids=new StringBuffer();
+        List<OutboundPrisoner> dataList= (List<OutboundPrisoner>) map.get("list");
+        sb.append("UPDATE outbound_prisoner SET equipment_id = (CASE ");
+        for (int i = 0; i < dataList.size(); i++) {
+            sb.append( "  WHEN id=").append(dataList.get(i).getId()).append(" THEN ").append(dataList.get(i).getEquipmentId());
+            ids.append(dataList.get(i).getId()).append(",");
+        }
+        String id=ids.toString();
+        id=id.substring(0,id.length()-1);
+        sb.append(" END) WHERE id IN (").append(id).append(")");
+        return sb.toString();
     }
 }

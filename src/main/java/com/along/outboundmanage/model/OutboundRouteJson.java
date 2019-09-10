@@ -1,11 +1,12 @@
-package  com.along.outboundmanage.model;
+package com.along.outboundmanage.model;
 
 
 import static com.along.outboundmanage.utill.DataUtil.dateToStr;
 import static com.along.outboundmanage.utill.DataUtil.strToSqlDate;
+import static com.along.outboundmanage.utill.GeneralUtils.getJsonArr;
 import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
 
-public class OutboundRoute {
+public class OutboundRouteJson {
 
   private int id;
   private String name; //路线名
@@ -13,7 +14,7 @@ public class OutboundRoute {
   private String distance;//距离
   private String origin;//出发地
   private String destination;//目的地
-  private String rail;//围栏
+  private Object rail;//围栏
   private int areaId;
 
   @Override
@@ -30,12 +31,12 @@ public class OutboundRoute {
             '}';
   }
 
-  public String getRail() {
+  public Object getRail() {
     return rail;
   }
 
   public void setRail(Object rail) {
-    this.rail = getJsonStr(rail);
+    this.rail = getJsonArr(rail+"");
   }
 
   public int getId() {
