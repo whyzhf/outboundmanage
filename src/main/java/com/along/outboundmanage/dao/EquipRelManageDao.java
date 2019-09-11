@@ -1,11 +1,13 @@
 package com.along.outboundmanage.dao;
 
+import com.along.outboundmanage.model.OutboundEquipment;
 import com.along.outboundmanage.model.OutboundPolice;
 import com.along.outboundmanage.model.OutboundPrisoner;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -50,4 +52,32 @@ public interface EquipRelManageDao {
 			" left join outbound_equipment e1 on e1.id=p.equipment_id\n" +
 			" where p.id in (${ids})")
 	String getPrireturn(@Param("ids") String ids);
+
+	@Cacheable(value = "policeList")
+	@Select("select id,name,card,equipment_id,equipment_id2 from outbound_police  \n" +
+			" where id not in \n" +
+			" (SELECT ifnull(police_id,0)\n" +
+			" FROM outbound_task  t\n" +
+			" left join outbound_task_police_rel r on t.id=r.task_id \n" +
+			" where start_time like \"${time}%\" and area_id=${areaId}\n" +
+			" )\n" +
+			" and area_id=${areaId}")
+	List<OutboundPolice> getPolices(@Param("time") String time,@Param("areaId")String areaId);
+
+	//查询可使用的设备
+	@Select("SELECT id, card, name, `type`, status, form, area_id" +
+			" FROM outbound_equipment " +
+			" where area_id =#{areaId} and `type`=0 and status=1 and form = #{form} or id in(${id})")
+	List<OutboundEquipment> getAllEquipment(@Param("areaId") int areaId, @Param("form") int form, @Param("id") String id);
+
+	@Cacheable(value = "prisonerList")
+	@Select("select id,name,card,equipment_id from outbound_prisoner  \n" +
+			" where id not in \n" +
+			" (SELECT ifnull(prisoner_id,0)\n" +
+			" FROM outbound_task  t\n" +
+			" left join outbound_task_prisoner_rel r on t.id=r.task_id \n" +
+			" where start_time like \"${time}%\" and area_id=${areaId}\n" +
+			" )\n" +
+			" and area_id=${areaId}")
+	List<OutboundPrisoner> getPrisoners(@Param("time") String time,@Param("areaId")String areaId);
 }
