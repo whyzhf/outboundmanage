@@ -49,6 +49,10 @@ public class RouteServiceImpl implements RouteService {
         return outboundRoute;
     }
 
+    @Override
+    public String getOd(int id) {
+        return routeDao.getOd(id);
+    }
 
 
 }

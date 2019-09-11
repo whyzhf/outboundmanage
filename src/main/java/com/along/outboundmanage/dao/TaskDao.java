@@ -28,7 +28,7 @@ public interface TaskDao {
 	boolean updateTaskById(@Param("OutboundTask") OutboundTask outboundTask);*/
 	@Update("UPDATE outboundmanage.outbound_task\n" +
 			"SET name=#{OutboundTask.name}, origin=#{OutboundTask.origin}, destination=#{OutboundTask.destination}," +
-			" start_time=#{OutboundTask.startTime}, end_time=#{OutboundTask.endTime}, status=#{OutboundTask.status}," +
+			" start_time=#{OutboundTask.startTime}, end_time=#{OutboundTask.endTime}," +
 			" `describe`=#{OutboundTask.describe}, route_id=#{OutboundTask.routeId}, `type`=#{OutboundTask.type}, remarks=#{OutboundTask.remarks}, area_id=#{OutboundTask.areaId}" +
 			" WHERE id=#{OutboundTask.id}")
 	boolean updateTaskById(@Param("OutboundTask") OutboundTask outboundTask);
@@ -36,7 +36,7 @@ public interface TaskDao {
 	@Insert("INSERT INTO outbound_task" +
 			" ( name, origin, destination, start_time, end_time, status, `describe`, route_id, `type`, remarks, area_id)" +
 			" VALUES(#{OutboundTask.name},#{OutboundTask.origin},#{OutboundTask.destination}, " +
-			"#{OutboundTask.startTime},#{OutboundTask.endTime}, #{OutboundTask.status}," +
+			"#{OutboundTask.startTime},#{OutboundTask.endTime},0," +
 			" #{OutboundTask.describe},#{OutboundTask.routeId}, #{OutboundTask.type}, " +
 			"#{OutboundTask.remarks},#{OutboundTask.areaId})")
 	@Options(useGeneratedKeys = true, keyProperty = "OutboundTask.id", keyColumn = "id")

@@ -17,5 +17,5 @@ public interface RouteService {
 	boolean delRoute(String ids);
 	//新增
 	OutboundRoute insertRoute(OutboundRoute outboundRoute);
-
+	String getOd( int id);
 }

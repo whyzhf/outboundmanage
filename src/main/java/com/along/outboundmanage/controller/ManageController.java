@@ -179,7 +179,6 @@ public class ManageController {
 		List<OutboundEquipment> allEquipmentByForm = equipmentService.getAllEquipmentByForm(pubParam.getAreaId(), "2");
 		allEquipmentByForm.add(0,new OutboundEquipment.Builder().card(" ").build());
 		if(allEquipmentByForm != null && !allEquipmentByForm.isEmpty()){
-
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
 		}else{
 			return ResultGenerator.setCustomResult(4000,"暂无可用设备");

@@ -12,6 +12,7 @@ import com.along.outboundmanage.model.OutboundTaskDesc;
 import com.along.outboundmanage.model.OutboundTaskV2;
 import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.AreaService;
+import com.along.outboundmanage.service.RouteService;
 import com.along.outboundmanage.service.TaskService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -33,6 +34,8 @@ public class TaskController {
 	TaskService taskService;
 	@Resource
 	AreaService areaService;
+	@Resource
+	RouteService routeService;
 	/*****************************任务管理**********************************************/
 	@ResponseBody
 	@RequestMapping("/getTaskList")
@@ -51,7 +54,11 @@ public class TaskController {
 	@ResponseBody
 	@RequestMapping("/upTask")
 	public Result upTask(@RequestBody OutboundTaskV2 outboundTask){
-		System.out.println(outboundTask);
+		//System.out.println(outboundTask);
+		String[]arr=routeService.getOd(outboundTask.getRouteId()).split(",");
+		outboundTask.setOrigin(arr[0]);
+		outboundTask.setDestination(arr[1]);
+
 		if(taskService.updateTaskById(outboundTask)){
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}else{
@@ -82,6 +89,10 @@ public class TaskController {
 */
 	@RequestMapping("/addTask")
 	public Result addTask(@RequestBody OutboundTaskV2 outboundTask, HttpServletRequest request){
+		String[]arr=routeService.getOd(outboundTask.getRouteId()).split(",");
+		outboundTask.setOrigin(arr[0]);
+		outboundTask.setDestination(arr[1]);
+		outboundTask.setStatus(0);
 		OutboundTaskV2 returnTask=taskService.addTask(outboundTask);
 		if(returnTask==null){
 			return ResultGenerator.setCustomResult(4000,"新增失败");
