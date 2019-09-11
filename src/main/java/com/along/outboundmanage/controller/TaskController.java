@@ -58,7 +58,7 @@ public class TaskController {
 		String[]arr=routeService.getOd(outboundTask.getRouteId()).split(",");
 		outboundTask.setOrigin(arr[0]);
 		outboundTask.setDestination(arr[1]);
-
+		outboundTask.setRouteName(arr[2]);
 		if(taskService.updateTaskById(outboundTask)){
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}else{
@@ -92,6 +92,7 @@ public class TaskController {
 		String[]arr=routeService.getOd(outboundTask.getRouteId()).split(",");
 		outboundTask.setOrigin(arr[0]);
 		outboundTask.setDestination(arr[1]);
+		outboundTask.setRouteName(arr[2]);
 		outboundTask.setStatus(0);
 		OutboundTaskV2 returnTask=taskService.addTask(outboundTask);
 		if(returnTask==null){

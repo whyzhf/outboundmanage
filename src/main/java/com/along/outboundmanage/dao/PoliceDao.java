@@ -3,6 +3,7 @@ package com.along.outboundmanage.dao;
 import com.along.outboundmanage.model.OutboundPolice;
 import com.along.outboundmanage.model.OutboundPoliceForSel;
 import org.apache.ibatis.annotations.*;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public interface PoliceDao {
 	@Select("SELECT id, card, name, equipment_id, equipment_id2, user_id,area_id" +
 			" FROM outbound_police where id in (${ids})")
 	List<OutboundPolice> getPoliceByIds(@Param("ids") String ids);
+
 
 	@Select("SELECT p.id,p.user_id, p.card, p.name, p.equipment_id as equipmentId, p.equipment_id2 as equipmentId2, " +
 			" p.area_id as areaId,e1.card as equipmentCard,e2.card as equipmentCard2\n" +

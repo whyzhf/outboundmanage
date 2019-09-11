@@ -27,7 +27,7 @@ public interface RouteDao {
 	@Delete("delete from outbound_route where id in (${ids})")
 	boolean delRoute(@Param("ids") String ids);
 
-	@Select("SELECT concat_ws(\",\", origin, destination) FROM outbound_route where id=#{id}")
+	@Select("SELECT concat_ws(\",\", origin, destination,name) FROM outbound_route where id=#{id}")
 	String getOd(@Param("id") int id);
 
 }
