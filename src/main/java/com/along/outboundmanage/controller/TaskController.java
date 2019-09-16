@@ -211,9 +211,10 @@ public class TaskController {
 	@ResponseBody
 	@RequestMapping("/getTaskAuditList")
 	public Result getTaskAuditList(@RequestBody PubParam pubParam){
-		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+
 		String areaIds=String.join(",",areaService.getAreaIdsByPar(pubParam.getAreaId()).stream().map(e->e+"").collect(Collectors.toList()));
 		List<OutboundTask> allList =new ArrayList<>();
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
 		if (areaIds!=null && !areaIds.equals("")) {
 			allList = taskService.getTaskByStatus("0,1,2,4", areaIds);
 		}else{
@@ -239,7 +240,6 @@ public class TaskController {
 	@RequestMapping("/getTaskCenterList")
 	public Result getTaskCenterList(@RequestBody PubParam pubParam){
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
-
 		List<OutboundTask> allList = taskService.getTaskByStatus("3",pubParam.getAreaId()+"");
 		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
