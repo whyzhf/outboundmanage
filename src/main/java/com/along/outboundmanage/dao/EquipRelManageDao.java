@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.UpdateProvider;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface EquipRelManageDao {
 			"   select concat_ws(\",\",GROUP_CONCAT(equipment_id),GROUP_CONCAT(equipment_id2)) from outbound_police where id in(${ids})\n" +
 			" )")
 	boolean updataEquip(@Param("ids") String ids);
+
 
 	@UpdateProvider(type = SqlProvider.class, method = "updataPoliceEquip")
 	boolean updataPoliceEquip(@Param("list") List<OutboundPolice> list);
@@ -53,16 +55,17 @@ public interface EquipRelManageDao {
 			" where p.id in (${ids})")
 	String getPrireturn(@Param("ids") String ids);
 
-	@Cacheable(value = "policeList")
+
 	@Select("select id,name,card,equipment_id,equipment_id2 from outbound_police  \n" +
 			" where id not in \n" +
 			" (SELECT ifnull(police_id,0)\n" +
-			" FROM outbound_task  t\n" +
+			"  FROM outbound_task  t\n" +
 			" left join outbound_task_police_rel r on t.id=r.task_id \n" +
 			" where start_time like \"${time}%\" and area_id=${areaId}\n" +
+			"    and t.id <> ${taskId}" +
 			" )\n" +
 			" and area_id=${areaId}")
-	List<OutboundPolice> getPolices(@Param("time") String time,@Param("areaId")String areaId);
+	List<OutboundPolice> getPolices(@Param("taskId") String taskId,@Param("time") String time,@Param("areaId")String areaId);
 
 	//查询可使用的设备
 	@Select("SELECT id, card, name, `type`, status, form, area_id" +
@@ -70,14 +73,15 @@ public interface EquipRelManageDao {
 			" where area_id =#{areaId} and `type`=0 and status=1 and form = #{form} or id in(${id})")
 	List<OutboundEquipment> getAllEquipment(@Param("areaId") int areaId, @Param("form") int form, @Param("id") String id);
 
-	@Cacheable(value = "prisonerList")
+
 	@Select("select id,name,card,equipment_id from outbound_prisoner  \n" +
 			" where id not in \n" +
 			" (SELECT ifnull(prisoner_id,0)\n" +
-			" FROM outbound_task  t\n" +
-			" left join outbound_task_prisoner_rel r on t.id=r.task_id \n" +
-			" where start_time like \"${time}%\" and area_id=${areaId}\n" +
+			"    FROM outbound_task  t\n" +
+			"    left join outbound_task_prisoner_rel r on t.id=r.task_id \n" +
+			"   where start_time like \"${time}%\" and area_id=${areaId}" +
+			"    and t.id <> ${taskId}" +
 			" )\n" +
-			" and area_id=${areaId}")
-	List<OutboundPrisoner> getPrisoners(@Param("time") String time,@Param("areaId")String areaId);
+			"  and area_id=${areaId}")
+	List<OutboundPrisoner> getPrisoners(@Param("taskId") String taskId,@Param("time") String time,@Param("areaId")String areaId);
 }

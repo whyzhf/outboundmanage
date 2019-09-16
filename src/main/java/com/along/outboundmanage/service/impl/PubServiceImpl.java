@@ -5,8 +5,7 @@ import com.along.outboundmanage.model.OutboundEquipment;
 import com.along.outboundmanage.model.OutboundPolice;
 import com.along.outboundmanage.model.OutboundPrisoner;
 import com.along.outboundmanage.service.PubService;
-import net.sf.jsqlparser.statement.select.Join;
-import org.springframework.cache.annotation.Cacheable;
+
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,24 +19,23 @@ public class PubServiceImpl implements PubService {
 	private EquipRelManageDao equipRelManageDao;
 
 	@Override
-	public List<OutboundPolice> getPolices(String time, String areaId) {
+	public List<OutboundPolice> getPolices(String time, String areaId,String taskId) {
 		time=time.substring(0,10);
-		return equipRelManageDao.getPolices(time,areaId);
+		return equipRelManageDao.getPolices(taskId,time,areaId);
 	}
 
 	@Override
-	public List<OutboundEquipment> getWatchs(String time, String areaId) {
-		return getEquips(time,areaId,2);
+	public List<OutboundEquipment> getWatchs(String time, String areaId,String taskId) {
+		return getEquips(time,areaId,2,taskId);
 	}
 
-	public List<OutboundEquipment> getHandsetIds(String time, String areaId) {
-		return getEquips(time,areaId,1);
+	public List<OutboundEquipment> getHandsetIds(String time, String areaId,String taskId) {
+		return getEquips(time,areaId,1,taskId);
 	}
-	public List<OutboundEquipment> getEquips(String time, String areaId,int form) {
-
+	public List<OutboundEquipment> getEquips(String time, String areaId,int form,String taskId) {
 		String id="0";
 		if (form==3) {
-			List<OutboundPrisoner> prisoners = equipRelManageDao.getPrisoners(time, areaId);
+			List<OutboundPrisoner> prisoners = equipRelManageDao.getPrisoners(taskId,time, areaId);
 			if (prisoners!=null && !prisoners.isEmpty()){
 				List<String> list =new ArrayList<>();
 				list = prisoners.stream().map(e -> e.getEquipmentId() + "").collect(Collectors.toList());
@@ -48,7 +46,7 @@ public class PubServiceImpl implements PubService {
 			return equipRelManageDao.getAllEquipment(Integer.valueOf(areaId),form, id);
 		}
 
-		List<OutboundPolice> polices = equipRelManageDao.getPolices(time, areaId);
+		List<OutboundPolice> polices = equipRelManageDao.getPolices(taskId,time, areaId);
 
 		if (polices!=null && !polices.isEmpty()){
 			List<String> list =new ArrayList<>();
@@ -64,12 +62,12 @@ public class PubServiceImpl implements PubService {
 		return equipRelManageDao.getAllEquipment(Integer.valueOf(areaId),form, id);
 	}
 	@Override
-	public List<OutboundPrisoner> getPrisoners(String time, String areaId) {
-		return equipRelManageDao.getPrisoners(time, areaId);
+	public List<OutboundPrisoner> getPrisoners(String time, String areaId,String taskId) {
+		return equipRelManageDao.getPrisoners(taskId,time, areaId);
 	}
 
 	@Override
-	public List<OutboundEquipment> getGrapplersIds(String time, String areaId) {
-		return getEquips(time,areaId,3);
+	public List<OutboundEquipment> getGrapplersIds(String time, String areaId,String taskId) {
+		return getEquips(time,areaId,3,taskId);
 	}
 }

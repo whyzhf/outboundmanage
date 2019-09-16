@@ -36,10 +36,10 @@ public interface TaskService {
 	OutboundTaskV2 addTask(OutboundTaskV2 outboundTask);
 
 	@Transactional(rollbackFor = Exception.class)
-	Map<String, Object> addpoliceEquip(Map<String, Integer[]> map);
+	Map<String, Object> addpoliceEquip(Map<String, Object> map);
 
 	@Transactional(rollbackFor = Exception.class)
-	Map<String, Object> addPrisonerEquip(Map<String, Integer[]> map);
+	Map<String, Object> addPrisonerEquip(Map<String, Object> map);
 
 	//我的任务（未完成的任务）
 	List<OutboundTask>  getMyCurrTaskByStatus(String status,String areaId,int userId);

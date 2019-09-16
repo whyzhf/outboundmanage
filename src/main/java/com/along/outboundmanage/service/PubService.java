@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface PubService {
 
-	List<OutboundPolice> getPolices(String time, String areaId);
-	List<OutboundEquipment> getWatchs(String time, String areaId);
-	List<OutboundEquipment> getHandsetIds(String time, String areaId);
-	List<OutboundPrisoner> getPrisoners(String time, String areaId);
-	List<OutboundEquipment> getGrapplersIds(String time, String areaId);
+	List<OutboundPolice> getPolices(String time, String areaId,String taskId);
+	List<OutboundEquipment> getWatchs(String time, String areaId,String taskId);
+	List<OutboundEquipment> getHandsetIds(String time, String areaId,String taskId);
+	List<OutboundPrisoner> getPrisoners(String time, String areaId,String taskId);
+	List<OutboundEquipment> getGrapplersIds(String time, String areaId,String taskId);
 }

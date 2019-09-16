@@ -26,15 +26,22 @@ public class PubController {
 	public Result getPolices(@RequestBody Map<String, String> pubParam){
 		String time =  pubParam.get("time");
 		String areaId =  pubParam.get("areaId");
-
-		return ResultGenerator.genSuccessResult(pubService.getPolices(time,areaId));
+		String taskId =  pubParam.get("taskId");
+		if (taskId==null) {
+			taskId="-1";
+		}
+		return ResultGenerator.genSuccessResult(pubService.getPolices(time,areaId,taskId));
 	}
 	@ResponseBody
 	@RequestMapping("/getWatchs")
 	public Result getWatchs(@RequestBody Map<String, String> pubParam){
 		String time =  pubParam.get("time");
 		String areaId =  pubParam.get("areaId");
-		List<OutboundEquipment> allEquipmentByForm = pubService.getWatchs(time,areaId);
+		String taskId =  pubParam.get("taskId");
+		if (taskId==null) {
+			taskId="-1";
+		}
+		List<OutboundEquipment> allEquipmentByForm = pubService.getWatchs(time,areaId,taskId);
 		allEquipmentByForm.add(0,new OutboundEquipment.Builder().card(" ").build());
 		if(allEquipmentByForm.size()>1){
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
@@ -45,7 +52,11 @@ public class PubController {
 	@ResponseBody
 	@RequestMapping("/getHandsetIds")
 	public Result getHandsetIds(@RequestBody Map<String, String> pubParam){
-		List<OutboundEquipment> allEquipmentByForm = pubService.getHandsetIds(pubParam.get("time"),pubParam.get("areaId"));
+		String taskId =  pubParam.get("taskId");
+		if (taskId==null) {
+			taskId="-1";
+		}
+		List<OutboundEquipment> allEquipmentByForm = pubService.getHandsetIds(pubParam.get("time"),pubParam.get("areaId"),taskId);
 		allEquipmentByForm.add(0,new OutboundEquipment.Builder().card(" ").build());
 		if(allEquipmentByForm.size()>1){
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);
@@ -57,14 +68,22 @@ public class PubController {
 	@ResponseBody
 	@RequestMapping("/getPrisoners")
 	public Result getPrisoners(@RequestBody Map<String, String> pubParam){
+		String taskId =  pubParam.get("taskId");
+		if (taskId==null) {
+			taskId="-1";
+		}
 		String time =  pubParam.get("time");
 		String areaId =  pubParam.get("areaId");
-		return ResultGenerator.genSuccessResult(pubService.getPrisoners(time,areaId));
+		return ResultGenerator.genSuccessResult(pubService.getPrisoners(time,areaId,taskId));
 	}
 	@ResponseBody
 	@RequestMapping("/getGrapplersIds")
 	public Result getGrapplersIds(@RequestBody Map<String, String> pubParam){
-		List<OutboundEquipment> allEquipmentByForm = pubService.getGrapplersIds(pubParam.get("time"),pubParam.get("areaId"));
+		String taskId =  pubParam.get("taskId");
+		if (taskId==null) {
+			taskId="-1";
+		}
+		List<OutboundEquipment> allEquipmentByForm = pubService.getGrapplersIds(pubParam.get("time"),pubParam.get("areaId"),taskId);
 		allEquipmentByForm.add(0,new OutboundEquipment.Builder().card(" ").build());
 		if(allEquipmentByForm.size()>1){
 			return ResultGenerator.setCustomResult(200,"获取成功",allEquipmentByForm);

@@ -1,12 +1,12 @@
 package com.along.outboundmanage.service.impl;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
 import com.along.outboundmanage.dao.*;
 import com.along.outboundmanage.model.*;
 import com.along.outboundmanage.service.TaskService;
 import com.along.outboundmanage.utill.GeneralUtils;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.along.outboundmanage.utill.DataUtil.strToSqlDate;
-
+import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
 
 
 @Service
@@ -173,8 +173,8 @@ public class TaskServiceImpl implements TaskService {
                         th.setUserId(allPolice.get(i).getUserId());
                         th.setTaskId(Integer.parseInt(idarr[i]));
                         th.setAreaId(allPolice.get(i).getAreaId());
-                        th.setFirjson(JSONObject.toJSONString(firmap.get(Integer.parseInt(idarr[i]))));
-                        th.setSecjson(JSONObject.toJSONString(map));
+                        th.setFirjson(getJsonStr(firmap.get(Integer.parseInt(idarr[i]))));
+                        th.setSecjson(getJsonStr(map));
                         res.add(th);
 
                         policIds = policIds + allPolice.get(i).getId() + ",";
@@ -346,9 +346,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     //重新分配干警和设备
-    @Override
-    public Map<String, Object> addpoliceEquip(Map<String, Integer[]> map) {
+    /*@Override
+    public Map<String, Object> addpoliceEquip(Map<String, Object> map) {
         Integer[] policeIds= (Integer[]) map.get("policeIds");
+        Integer[] handsetIds= (Integer[]) map.get("handsetIds");
         Integer[] watchIds= (Integer[]) map.get("watchIds");
         Integer[] watchId= new Integer[policeIds.length];
         if (policeIds.length>=watchIds.length){
@@ -356,7 +357,7 @@ public class TaskServiceImpl implements TaskService {
         }else {
             System.arraycopy(watchIds, 0, watchId, 0, policeIds.length);
         }
-        Integer[] handsetIds= (Integer[]) map.get("handsetIds");
+      //  Integer[] handsetIds= (Integer[]) map.get("handsetIds");
         Integer[] handsetId= new Integer[policeIds.length];
         if (policeIds.length>=handsetId.length){
             System.arraycopy(handsetIds, 0, handsetId, 0, handsetIds.length);
@@ -378,13 +379,60 @@ public class TaskServiceImpl implements TaskService {
         //修改设备状态
         eids=eids.substring(0,eids.length()-1);
         equipmentDao.upEquipmentTypeAndStatus(0,0,eids);
-         //返回拼接字符串
+        //返回拼接字符串
         Map<String, Object> res=new HashMap<>();
         res.put("data",equipRelManageDao.getreturn(pids));
         return res;
     }
+*/
 
-   @Override
+    //重新分配干警和设备
+    @Override
+    public Map<String, Object> addpoliceEquip(Map<String, Object> map){
+        List<OutboundPolice> policeList2=   (List<OutboundPolice>) map.get("policeIds");
+        List<OutboundPolice> policeList=  new ArrayList<>();
+        for (int i = 0; i < policeList2.size(); i++) {
+            JSONObject jsonObject=JSONObject.fromObject(policeList2.get(i)); // 将数据转成json字符串
+            //  OutboundPolice per = (OutboundPolice)JSONObject.toBean(jsonObject, OutboundPolice.class); //将json转成需要的对象
+            policeList.add((OutboundPolice)JSONObject.toBean(jsonObject, OutboundPolice.class));
+        }
+        List<Integer>wList=(List<Integer>)map.get("watchIds");
+        List<Integer>hList=(List<Integer>)map.get("handsetIds");
+        String policeId="0",eids="0";
+       /*  //如果传回的设备id已存在就删除
+        for (int i = 0; i < policeList.size(); i++) {
+            hList.remove( policeList.get(i).getEquipmentId());
+            wList.remove( policeList.get(i).getEquipmentId2());
+        }*/
+
+        for (int i = 0; i < policeList.size(); i++) {//重新匹配设备
+            if(hList!=null){
+                policeList.get(i).setEquipmentId(hList.get(0));
+                hList.remove(0);
+            }
+            if(wList!=null){
+                policeList.get(i).setEquipmentId2(wList.get(0));
+                wList.remove(0);
+            }
+            policeId=policeId+","+policeList.get(i).getId();
+            eids=eids+","+policeList.get(i).getEquipmentId()+","+policeList.get(i).getEquipmentId2();
+        }
+       /* policeId=policeId.substring(0,policeId.length()-1);
+        eids=eids.substring(0,eids.length()-1);*/
+        //修改原来设备为可用
+        equipRelManageDao.updataEquip(policeId);
+        //添加干警设备关系
+        equipRelManageDao.updataPoliceEquip(policeList);
+        //修改设备状态
+       // eids=eids.substring(0,eids.length()-1);
+        equipmentDao.upEquipmentTypeAndStatus(0,0,eids);
+      //返回拼接字符串
+        Map<String, Object> res=new HashMap<>();
+        res.put("data",equipRelManageDao.getreturn(policeId));
+        return res;
+    }
+
+   /*@Override
     public Map<String, Object> addPrisonerEquip(Map<String, Integer[]> map) {
        Integer[] prisonerIds = (Integer[]) map.get("prisonerIds");
        Integer[] grapplersIds = (Integer[]) map.get("grapplersIds");
@@ -415,6 +463,41 @@ public class TaskServiceImpl implements TaskService {
        res.put("data", equipRelManageDao.getPrireturn(pids));
        return res;
    }
+*/
+   @Override
+   public Map<String, Object> addPrisonerEquip(Map<String, Object> map){
+       List<OutboundPrisoner> prisonerList2=   (List<OutboundPrisoner>) map.get("prisonerIds");
+       List<OutboundPrisoner> prisonerList=  new ArrayList<>();
+       for (int i = 0; i < prisonerList2.size(); i++) {
+           JSONObject jsonObject=JSONObject.fromObject(prisonerList2.get(i)); // 将数据转成json字符串
+           //  OutboundPolice per = (OutboundPolice)JSONObject.toBean(jsonObject, OutboundPolice.class); //将json转成需要的对象
+           prisonerList.add((OutboundPrisoner)JSONObject.toBean(jsonObject, OutboundPrisoner.class));
+       }
+       List<Integer>wList=(List<Integer>)map.get("grapplersIds");
+       String policeId="0",eids="0";
+       for (int i = 0; i < prisonerList.size(); i++) {//重新匹配设备
+           if(wList!=null){
+               prisonerList.get(i).setEquipmentId(wList.get(0));
+               wList.remove(0);
+           }
+           policeId=policeId+","+prisonerList.get(i).getId();
+           eids=eids+","+prisonerList.get(i).getEquipmentId();
+       }
+       /* policeId=policeId.substring(0,policeId.length()-1);
+        eids=eids.substring(0,eids.length()-1);*/
+       //修改原来设备为可用
+       equipRelManageDao.updataEquip(policeId);
+       //添加干警设备关系
+       equipRelManageDao.updataPrisonerEquip(prisonerList);
+       //修改设备状态
+       // eids=eids.substring(0,eids.length()-1);
+       equipmentDao.upEquipmentTypeAndStatus(0,0,eids);
+       //返回拼接字符串
+       Map<String, Object> res=new HashMap<>();
+       res.put("data",equipRelManageDao.getreturn(policeId));
+       return res;
+   }
+
 
     @Override
     public List<OutboundTask>  getMyCurrTaskByStatus(String status,String areaId,int userId){
@@ -440,6 +523,7 @@ public class TaskServiceImpl implements TaskService {
         String tP=taskDesc.getPolice();
         if(tP!=null&& !tP.isEmpty()){
             List<OutboundPoliceForSel> allPoliceById = policeDao.getAllPoliceById(tP);
+
             taskDesc.setPolice( equipRelManageDao.getreturn(tP));
             String[] arr=tP.split(",");
             Integer[] arrd=new Integer[arr.length];
@@ -448,6 +532,15 @@ public class TaskServiceImpl implements TaskService {
             }
             resMap.put("Police",allPoliceById);
             taskDesc.setPoliceIds(arrd);
+            Integer[] harr=new Integer[arrd.length];
+            Integer[] warr=new Integer[arrd.length];
+            for (int i = 0; i < allPoliceById.size(); i++) {
+                harr[i]=allPoliceById.get(i).getEquipmentId();
+                warr[i]=allPoliceById.get(i).getEquipmentId2();
+            }
+            taskDesc.setHandsetIds(harr);
+            taskDesc.setWatchIds(warr);
+
         }
         //获取犯人信息
         String tPr=taskDesc.getPrisoner();
@@ -461,6 +554,13 @@ public class TaskServiceImpl implements TaskService {
             }
             resMap.put("prisoner",allPrisonerById);
             taskDesc.setPrisonerIds(arrd);
+
+            Integer[] garr=new Integer[arrd.length];
+            for (int i = 0; i < allPrisonerById.size(); i++) {
+                garr[i]=allPrisonerById.get(i).getEquipmentId();
+
+            }
+            taskDesc.setGrapplersIds(garr);
         }
         //获取车辆信息
         String tC=taskDesc.getCar();

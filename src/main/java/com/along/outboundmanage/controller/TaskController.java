@@ -105,7 +105,7 @@ public class TaskController {
 	//重新分配干警和设备
 	@ResponseBody
 	@RequestMapping("/addPoliceEquip")
-	public Result addPoliceEquip(@RequestBody Map<String,Integer[]> map, HttpServletRequest request){
+	public Result addPoliceEquip(@RequestBody Map<String,Object> map, HttpServletRequest request){
 		Map<String, Object> returnTask=taskService.addpoliceEquip(map);
 		if(returnTask==null){
 			return ResultGenerator.setCustomResult(4000,"新增失败");
@@ -117,7 +117,7 @@ public class TaskController {
 	//重新分配犯人和设备
 	@ResponseBody
 	@RequestMapping("/addPrisonerEquip")
-	public Result addPrisonerEquip(@RequestBody Map<String,Integer[]> map, HttpServletRequest request){
+	public Result addPrisonerEquip(@RequestBody Map<String,Object> map, HttpServletRequest request){
 		Map<String, Object> returnTask=taskService.addPrisonerEquip(map);
 		if(returnTask==null){
 			return ResultGenerator.setCustomResult(4000,"新增失败");
@@ -132,7 +132,7 @@ public class TaskController {
 	public Result startTask(@RequestBody PubParam pubParam){
 		//  0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
 		Calendar calendar= Calendar.getInstance();
-		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String status="3";
 		String time= " start_time='"+(dateFormat.format(calendar.getTime()))+"' ";
 		Map<String, String> map=new HashMap<>();
@@ -195,6 +195,7 @@ public class TaskController {
 	@ResponseBody
 	@RequestMapping("/getCountTask")
 	public Result getCountTask(@RequestBody PubParam pubParam){
+
 		String areaIds=String.join(",",areaService.getAreaIdsByPar(pubParam.getAreaId()).stream().map(e->e+"").collect(Collectors.toList()));
 		Map<String,String> data=new HashMap<>();
 		if (areaIds!=null && !areaIds.equals("")) {
@@ -227,9 +228,9 @@ public class TaskController {
 	public Result checkTask(@RequestBody  OutboundTask outboundTask){
 		//  0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
 		if(taskService.updateTaskStatusById(outboundTask)){
-			return ResultGenerator.setCustomResult(200,"修改成功");
+			return ResultGenerator.setCustomResult(200,"修改成功","修改成功");
 		}else{
-			return ResultGenerator.setCustomResult(4000,"修改失败");
+			return ResultGenerator.setCustomResult(4000,"修改失败","修改失败");
 		}
 	}
 	/*****************************任务中心**********************************************/
