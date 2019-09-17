@@ -53,6 +53,7 @@ public interface TaskDao {
 			" WHERE t.area_id in (${areaId}) and  t.status in (${status})" +
 			"  order by t.id, t.status,t.area_id" )
 	List<OutboundTask> getAllTaskByStatus(@Param("status")String status,@Param("areaId") String areaId);
+
 	@Select(" SELECT count(id)" +
 			" FROM outbound_task " +
 			" WHERE area_id in (${areaId}) and  status in (${status})"

@@ -537,6 +537,7 @@ public class TaskServiceImpl implements TaskService {
             for (int i = 0; i < allPoliceById.size(); i++) {
                 harr[i]=allPoliceById.get(i).getEquipmentId();
                 warr[i]=allPoliceById.get(i).getEquipmentId2();
+                allPoliceById.get(i).setUserId(0);
             }
             taskDesc.setHandsetIds(harr);
             taskDesc.setWatchIds(warr);

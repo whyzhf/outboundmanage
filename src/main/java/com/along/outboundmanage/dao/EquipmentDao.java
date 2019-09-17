@@ -23,7 +23,7 @@ public interface EquipmentDao {
 
 	@Select("SELECT id, card, name, `type`, status, form, area_id" +
 			" FROM outbound_equipment " +
-			" where area_id =#{areaId}")
+			" where area_id =#{areaId} order by id desc")
 	List<OutboundEquipment> getAllEquipment(@Param("areaId") int areaId);
 
 	@Update("UPDATE outbound_equipment " +

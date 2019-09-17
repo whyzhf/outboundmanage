@@ -25,7 +25,7 @@ public interface PrisonerDao {
 	@Select("SELECT p.id, p.card, p.name, p.equipment_id as equipmentId, p.area_id as areaId,e.card as equipmentCard" +
 			" FROM outbound_prisoner p " +
 			" left join outbound_equipment e on e.id=p.equipment_id" +
-			" where p.area_id =#{areaId}  ")
+			" where p.area_id =#{areaId} order by p.id desc ")
 	List<OutboundPrisoner> getAllPrisoner(@Param("areaId") int areaId);
 
 	@Select("SELECT id, card, name, equipment_id, area_id\n" +

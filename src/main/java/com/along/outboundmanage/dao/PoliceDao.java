@@ -34,7 +34,7 @@ public interface PoliceDao {
 			" FROM outbound_police p\n" +
 			" left join outbound_equipment e1 on e1.id=p.equipment_id\n" +
 			" left join outbound_equipment e2 on e2.id=p.equipment_id2" +
-			" where p.area_id =#{areaId}")
+			" where p.area_id =#{areaId} order by p.id desc")
 	List<OutboundPoliceForSel> getAllPolice(@Param("areaId") int areaId);
 
 	@Select("SELECT id, card, name, equipment_id, equipment_id2, user_id,area_id" +
