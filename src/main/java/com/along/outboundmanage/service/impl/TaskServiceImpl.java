@@ -389,15 +389,17 @@ public class TaskServiceImpl implements TaskService {
     //重新分配干警和设备
     @Override
     public Map<String, Object> addpoliceEquip(Map<String, Object> map){
-        List<OutboundPolice> policeList2=   (List<OutboundPolice>) map.get("policeIds");
-        List<OutboundPolice> policeList=  new ArrayList<>();
+        List<OutboundPoliceForSel> policeList2=   (List<OutboundPoliceForSel>) map.get("policeIds");
+        List<OutboundPoliceForSel> policeList=  new ArrayList<>();
         for (int i = 0; i < policeList2.size(); i++) {
             JSONObject jsonObject=JSONObject.fromObject(policeList2.get(i)); // 将数据转成json字符串
             //  OutboundPolice per = (OutboundPolice)JSONObject.toBean(jsonObject, OutboundPolice.class); //将json转成需要的对象
-            policeList.add((OutboundPolice)JSONObject.toBean(jsonObject, OutboundPolice.class));
+            policeList.add((OutboundPoliceForSel)JSONObject.toBean(jsonObject, OutboundPoliceForSel.class));
         }
         List<Integer>wList=(List<Integer>)map.get("watchIds");
+        wList=wList.stream().distinct().collect(Collectors.toList());
         List<Integer>hList=(List<Integer>)map.get("handsetIds");
+        hList=hList.stream().distinct().collect(Collectors.toList());
         String policeId="0",eids="0";
        /*  //如果传回的设备id已存在就删除
         for (int i = 0; i < policeList.size(); i++) {
@@ -406,13 +408,18 @@ public class TaskServiceImpl implements TaskService {
         }*/
 
         for (int i = 0; i < policeList.size(); i++) {//重新匹配设备
-            if(hList!=null){
+
+            if(hList!=null && !hList.isEmpty() ){
                 policeList.get(i).setEquipmentId(hList.get(0));
                 hList.remove(0);
+            }else{
+                policeList.get(i).setEquipmentId(null);
             }
-            if(wList!=null){
+            if(wList!=null && !wList.isEmpty() ){
                 policeList.get(i).setEquipmentId2(wList.get(0));
                 wList.remove(0);
+            }else{
+                policeList.get(i).setEquipmentId2(null);
             }
             policeId=policeId+","+policeList.get(i).getId();
             eids=eids+","+policeList.get(i).getEquipmentId()+","+policeList.get(i).getEquipmentId2();
@@ -474,11 +481,14 @@ public class TaskServiceImpl implements TaskService {
            prisonerList.add((OutboundPrisoner)JSONObject.toBean(jsonObject, OutboundPrisoner.class));
        }
        List<Integer>wList=(List<Integer>)map.get("grapplersIds");
+       wList=wList.stream().distinct().collect(Collectors.toList());
        String policeId="0",eids="0";
        for (int i = 0; i < prisonerList.size(); i++) {//重新匹配设备
-           if(wList!=null){
+           if(wList!=null  && !wList.isEmpty() ){
                prisonerList.get(i).setEquipmentId(wList.get(0));
                wList.remove(0);
+           }else{
+               prisonerList.get(i).setEquipmentId(null);
            }
            policeId=policeId+","+prisonerList.get(i).getId();
            eids=eids+","+prisonerList.get(i).getEquipmentId();
@@ -494,7 +504,7 @@ public class TaskServiceImpl implements TaskService {
        equipmentDao.upEquipmentTypeAndStatus(0,0,eids);
        //返回拼接字符串
        Map<String, Object> res=new HashMap<>();
-       res.put("data",equipRelManageDao.getreturn(policeId));
+       res.put("data",equipRelManageDao.getPrireturn(policeId));
        return res;
    }
 

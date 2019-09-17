@@ -229,7 +229,7 @@ public class SqlProvider extends SQL {
         StringBuffer sb=new StringBuffer();
         StringBuffer sb2=new StringBuffer();
         StringBuffer ids=new StringBuffer();
-        List<OutboundPolice> dataList= (List<OutboundPolice>) map.get("list");
+        List<OutboundPoliceForSel> dataList= (List<OutboundPoliceForSel>) map.get("list");
         sb.append("UPDATE outbound_police SET equipment_id = (CASE ");
         for (int i = 0; i < dataList.size(); i++) {
             sb.append( "  WHEN id=").append(dataList.get(i).getId()).append(" THEN ").append(dataList.get(i).getEquipmentId());

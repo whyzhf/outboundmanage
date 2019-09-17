@@ -150,7 +150,7 @@ public class TaskController {
 	public Result endTask(@RequestBody PubParam pubParam){
 		//  0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
 		String status="4";
-		String time= " start_time='"+(getNowData("yyyy-MM-dd hh:mm:ss"))+"' ";
+		String time= " end_time='"+(getNowData("yyyy-MM-dd HH:mm:ss"))+"' ";
 		Map<String, String> map=new HashMap<>();
 		if(taskService.endTask(pubParam.getIds(),status,time)){
 			map.put("data","Success");

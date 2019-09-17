@@ -67,5 +67,7 @@ public interface UserDao {
 			" WHERE user_id in(${userId})")
 	boolean delUserRole(@Param("userId") String userId);
 
-
+	@Select("SELECT id, user_name, password, true_name, card, area_id\n" +
+			" FROM outbound_user where id=#{id} order by id")
+	OutboundUser getUser(@Param("id") Integer id);
 }

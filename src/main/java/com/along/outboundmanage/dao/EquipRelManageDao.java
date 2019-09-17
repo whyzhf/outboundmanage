@@ -23,7 +23,7 @@ public interface EquipRelManageDao {
 
 
 	@UpdateProvider(type = SqlProvider.class, method = "updataPoliceEquip")
-	boolean updataPoliceEquip(@Param("list") List<OutboundPolice> list);
+	boolean updataPoliceEquip(@Param("list") List<OutboundPoliceForSel> list);
 
 	@Select("SELECT GROUP_CONCAT(" +
 			" concat_ws(\"\", concat_ws(\"(\",p.name,concat(p.card,\")\")) ,\n" +
@@ -56,7 +56,7 @@ public interface EquipRelManageDao {
 			" where p.id in (${ids})")
 	String getPrireturn(@Param("ids") String ids);
 
-	@Select("SELECT p.id,p.user_id, p.card, p.name, p.equipment_id as equipmentId, p.equipment_id2 as equipmentId2, " +
+	@Select("SELECT p.id,0 as userId, p.card, p.name, p.equipment_id as equipmentId, p.equipment_id2 as equipmentId2, " +
 			" p.area_id as areaId,e1.card as equipmentCard,e2.card as equipmentCard2\n" +
 			" FROM outbound_police p\n" +
 			" left join outbound_equipment e1 on e1.id=p.equipment_id\n" +

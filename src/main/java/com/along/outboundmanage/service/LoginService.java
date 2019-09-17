@@ -13,6 +13,8 @@ public interface LoginService {
 	//判断是否可以登录
 	OutboundUser checkLogin(OutboundUser user);
 
+	OutboundUser getUser(int id);
+
 	//登录成功创建session
 	OutboundSession getSession(int userId);
 
@@ -24,6 +26,7 @@ public interface LoginService {
 	OutboundUser addUser(OutboundUser user);
 	OutboundSession getAllUserById(int userId);
 	boolean delUser(String ids);
+
 	//修改用户信息
 	boolean updateUserById(OutboundUser user);
 

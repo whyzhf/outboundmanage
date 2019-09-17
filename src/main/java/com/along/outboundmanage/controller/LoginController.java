@@ -221,6 +221,7 @@ public class LoginController {
     @ResponseBody
     @RequestMapping("/checkPassword")
     public Result checkPasswork(@RequestBody OutboundUser user,HttpServletRequest request) {
+
         List<OutboundUser> userList = loginService.checkPassword(user);
         Map<String,String > map=new HashMap<>();
         if(null!=userList && !userList.isEmpty()){
@@ -242,6 +243,11 @@ public class LoginController {
     @RequestMapping("/checkUserName")
     public Result checkUserName(@RequestBody OutboundUser user,HttpServletRequest request)throws IOException {
         Map<String,String > map=new HashMap<>();
+        OutboundUser outboundUser=loginService.getUser(user.getId());
+        if(outboundUser!=null && user.getUserName().equals(outboundUser.getUserName())){
+            map.put("msg","Success");
+            return ResultGenerator.setCustomResult(200,"用户名未修改",map);
+        }
         List<OutboundUser> userList = loginService.checkUserName(user.getUserName());
         if(null!=userList && !userList.isEmpty()){
             map.put("msg","Error");
@@ -261,8 +267,14 @@ public class LoginController {
     @ResponseBody
     @RequestMapping("/checkCard")
     public Result checkCard(@RequestBody OutboundUser user,HttpServletRequest request)throws IOException {
-        Integer id = loginService.checkCard(user.getCard());
         Map<String,String > map=new HashMap<>();
+        OutboundUser outboundUser=loginService.getUser(user.getId());
+        if(outboundUser!=null && user.getCard().equals(outboundUser.getCard())){
+            map.put("msg","Success");
+            return ResultGenerator.setCustomResult(200,"用户名未修改",map);
+        }
+        Integer id = loginService.checkCard(user.getCard());
+
         if(id!=null){
             map.put("msg","Error");
             return ResultGenerator.setCustomResult(4000,"该警员编号已存在本市数据库，请核实编号",map);

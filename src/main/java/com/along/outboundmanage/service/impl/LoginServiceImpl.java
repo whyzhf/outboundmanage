@@ -31,6 +31,11 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
+    public OutboundUser getUser(int id) {
+        return userDao.getUser(id);
+    }
+
+    @Override
     public OutboundSession getSession(int userId) {
         return sessionDao.getSession(userId);
     }
