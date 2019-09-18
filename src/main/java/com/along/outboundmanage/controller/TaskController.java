@@ -3,20 +3,17 @@ package com.along.outboundmanage.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 
+import com.along.outboundmanage.model.*;
 import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
-import com.along.outboundmanage.model.OutboundTask;
-import com.along.outboundmanage.model.OutboundTaskDesc;
-import com.along.outboundmanage.model.OutboundTaskV2;
-import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.AreaService;
 import com.along.outboundmanage.service.RouteService;
 import com.along.outboundmanage.service.TaskService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import net.sf.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -53,8 +50,37 @@ public class TaskController {
 	}
 	@ResponseBody
 	@RequestMapping("/upTask")
-	public Result upTask(@RequestBody OutboundTaskV2 outboundTask){
-		//System.out.println(outboundTask);
+	public Result upTask(@RequestBody Map<String, Object> map ){
+		List<Integer> clist = (List<Integer>) map.get("carIds");
+		List<Integer> wlist = (List<Integer>) map.get("watchIds");
+		wlist =wlist.stream().distinct().collect(Collectors.toList());
+		List<Integer> hlist = (List<Integer>) map.get("handsetIds");
+		hlist =hlist.stream().distinct().collect(Collectors.toList());
+		List<Integer> glist = (List<Integer>) map.get("grapplersIds");
+		glist =glist.stream().distinct().collect(Collectors.toList());
+		OutboundTaskV2 outboundTask=new OutboundTaskV2.Builder().id(Integer.valueOf(map.get("id")+""))
+				.name(map.get("name")+"").describe(map.get("describe")+"").routeId(Integer.valueOf(map.get("routeId")+""))
+				.routeName(map.get("routeName")+"").type(Integer.valueOf(map.get("type")+""))
+				.watchIds(wlist.toArray(new Integer[clist.size()])).grapplersIds(glist.toArray(new Integer[clist.size()]))
+				.handsetIds(hlist.toArray(new Integer[clist.size()])).carIds(clist.toArray(new Integer[clist.size()]))
+				.build();
+		List<OutboundPoliceForSel> policeList2=   (List<OutboundPoliceForSel>) map.get("policeIds");
+		Integer[] pids=new Integer[policeList2.size()];
+		for (int i = 0; i < policeList2.size(); i++) {
+			net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(policeList2.get(i)); // 将数据转成json字符串
+			OutboundPoliceForSel per = (OutboundPoliceForSel)JSONObject.toBean(jsonObject, OutboundPoliceForSel.class); //将json转成需要的对象
+			pids[i]=per.getId();
+		}
+		outboundTask.setPoliceIds(pids);
+		List<OutboundPrisoner> prisonerList2=   (List<OutboundPrisoner>) map.get("prisonerIds");
+		Integer[] prids=new Integer[prisonerList2.size()];
+		for (int i = 0; i < prisonerList2.size(); i++) {
+			net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(prisonerList2.get(i)); // 将数据转成json字符串
+			OutboundPrisoner per = (OutboundPrisoner)JSONObject.toBean(jsonObject, OutboundPrisoner.class); //将json转成需要的对象
+			prids[i]=per.getId();
+		}
+		outboundTask.setPrisonerIds(prids);
+		outboundTask.setStartTime(map.get("startTime")+"");
 		String[]arr=routeService.getOd(outboundTask.getRouteId()).split(",");
 		outboundTask.setOrigin(arr[0]);
 		outboundTask.setDestination(arr[1]);
@@ -88,7 +114,38 @@ public class TaskController {
 	}
 */
 	@RequestMapping("/addTask")
-	public Result addTask(@RequestBody OutboundTaskV2 outboundTask, HttpServletRequest request){
+	public Result addTask(@RequestBody Map<String, Object> map, HttpServletRequest request){
+		List<Integer> clist = (List<Integer>) map.get("carIds");
+		List<Integer> wlist = (List<Integer>) map.get("watchIds");
+		wlist =wlist.stream().distinct().collect(Collectors.toList());
+		List<Integer> hlist = (List<Integer>) map.get("handsetIds");
+		hlist =hlist.stream().distinct().collect(Collectors.toList());
+		List<Integer> glist = (List<Integer>) map.get("grapplersIds");
+		glist =glist.stream().distinct().collect(Collectors.toList());
+		OutboundTaskV2 outboundTask=new OutboundTaskV2.Builder()
+				.areaId(Integer.valueOf(map.get("areaId")+""))
+				.name(map.get("name")+"").describe(map.get("describe")+"").routeId(Integer.valueOf(map.get("routeId")+""))
+				.routeName(map.get("routeName")+"").type(Integer.valueOf(map.get("type")+""))
+				.watchIds(wlist.toArray(new Integer[clist.size()])).grapplersIds(glist.toArray(new Integer[clist.size()]))
+				.handsetIds(hlist.toArray(new Integer[clist.size()])).carIds(clist.toArray(new Integer[clist.size()]))
+				.build();
+		List<OutboundPoliceForSel> policeList2=   (List<OutboundPoliceForSel>) map.get("policeIds");
+		Integer[] pids=new Integer[policeList2.size()];
+		for (int i = 0; i < policeList2.size(); i++) {
+			net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(policeList2.get(i)); // 将数据转成json字符串
+			OutboundPoliceForSel per = (OutboundPoliceForSel)JSONObject.toBean(jsonObject, OutboundPoliceForSel.class); //将json转成需要的对象
+			pids[i]=per.getId();
+		}
+		outboundTask.setPoliceIds(pids);
+		List<OutboundPrisoner> prisonerList2=   (List<OutboundPrisoner>) map.get("prisonerIds");
+		Integer[] prids=new Integer[prisonerList2.size()];
+		for (int i = 0; i < prisonerList2.size(); i++) {
+			net.sf.json.JSONObject jsonObject= net.sf.json.JSONObject.fromObject(prisonerList2.get(i)); // 将数据转成json字符串
+			OutboundPrisoner per = (OutboundPrisoner)JSONObject.toBean(jsonObject, OutboundPrisoner.class); //将json转成需要的对象
+			prids[i]=per.getId();
+		}
+		outboundTask.setPrisonerIds(prids);
+		outboundTask.setStartTime(map.get("startTime")+"");
 		String[]arr=routeService.getOd(outboundTask.getRouteId()).split(",");
 		outboundTask.setOrigin(arr[0]);
 		outboundTask.setDestination(arr[1]);

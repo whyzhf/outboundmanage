@@ -1,7 +1,5 @@
 package com.along.outboundmanage.utill;
 
-import com.along.outboundmanage.model.Interval;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -108,42 +106,7 @@ public class DataUtil {
 		return lastDayOfMonth;
 	}
 
-	public static void main(String[] args) {
-		List<Interval> result = new ArrayList<>();
-		result.add(new Interval(1,2));
-		result.add(new Interval(3,6));
-		List<Interval> result2 = merge(result);
-		result2.forEach(e-> System.out.println(e));
-	}
 
-	public static List<Interval> merge(List<Interval> intervals) {
-		List<Interval> result = new ArrayList<>();
-		// 输入为空
-		if (intervals == null || intervals.size() < 1) {
-			return result;
-		}
-		int len = intervals.size();
-		int[] starts = new int[len];
-		int[] ends = new int[len];
-		//将首尾整数分别放置在两个数组中
-		for (int i = 0; i < len; i++) {
-			starts[i] = intervals.get(i).getStart();
-			ends[i] = intervals.get(i).getEnd();
-		}
-		// 对两个数组进行排序
-		Arrays.sort(starts);
-		Arrays.sort(ends);
-		// 合并重叠区间
-		for (int i=0,j=0; i < len; i++) {
-
-			if(i == len - 1 || starts[i + 1] > ends[i]) {
-				result.add(new Interval(starts[j], ends[i]));
-
-				j = i + 1;
-			}
-		}
-		return result;
-	}
 }
 
 

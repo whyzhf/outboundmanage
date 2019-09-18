@@ -65,7 +65,7 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/addPolice")
 	public Result addPolice(@RequestBody OutboundPolice outboundPolice){
-		System.out.println(outboundPolice.getEquipmentId2());
+
 		if ( null == outboundPolice.getEquipmentId()||outboundPolice.getEquipmentId() == 0 ) {
 			outboundPolice.setEquipmentId(null);
 		}
@@ -83,10 +83,10 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/upPolice")
 	public Result upPolice(@RequestBody OutboundPolice outboundPolice){
-		if (outboundPolice.getEquipmentId() == 0) {
+		if ( null == outboundPolice.getEquipmentId()||outboundPolice.getEquipmentId() == 0 ) {
 			outboundPolice.setEquipmentId(null);
 		}
-		if (outboundPolice.getEquipmentId2() == 0) {
+		if ( null == outboundPolice.getEquipmentId2()||outboundPolice.getEquipmentId2() == 0 ) {
 			outboundPolice.setEquipmentId2(null);
 		}
 		boolean flag=policeService.upPolice(outboundPolice);
@@ -219,7 +219,7 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/addPrisoner")
 	public Result addPrisoner(@RequestBody OutboundPrisoner outboundPrisoner){
-		if (outboundPrisoner.getEquipmentId()==0){
+		if (outboundPrisoner.getEquipmentId()==null|| outboundPrisoner.getEquipmentId()==0){
 			outboundPrisoner.setEquipmentId(null);
 		}
 		OutboundPrisoner returnPrisoner=prisonerService.addPrisoner(outboundPrisoner);
@@ -234,6 +234,9 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/upPrisoner")
 	public Result upPrisoner(@RequestBody OutboundPrisoner outboundPrisoner){
+		if (outboundPrisoner.getEquipmentId()==null|| outboundPrisoner.getEquipmentId()==0){
+			outboundPrisoner.setEquipmentId(null);
+		}
 		boolean flag=prisonerService.upPrisoner(outboundPrisoner);
 		if(!flag){
 			return ResultGenerator.setCustomResult(4000,"修改失败");

@@ -10,7 +10,7 @@ import java.util.List;
 public interface RouteDao {
 	@Select(" SELECT id, name, uptime, distance, origin, destination, area_id,rail" +
 			" FROM outbound_route" +
-			" WHERE area_id=#{areaId}" )
+			" WHERE area_id=#{areaId} order by id DESC" )
 	List<OutboundRouteJson> getAllRouteByAreaId(@Param("areaId") int areaId);
 
 	@UpdateProvider(type = SqlProvider.class, method = "updataRoute")
