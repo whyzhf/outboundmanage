@@ -51,7 +51,7 @@ public interface TaskDao {
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" left join outbound_area a on t.area_id=a.id\n" +
 			" WHERE t.area_id in (${areaId}) and  t.status in (${status})" +
-			"  order by t.id, t.status,t.area_id" )
+			"  order by t.status, t.id, t.area_id" )
 	List<OutboundTask> getAllTaskByStatus(@Param("status")String status,@Param("areaId") String areaId);
 
 	@Select(" SELECT count(id)" +

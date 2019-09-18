@@ -65,10 +65,11 @@ public class ManageController {
 	@ResponseBody
 	@RequestMapping("/addPolice")
 	public Result addPolice(@RequestBody OutboundPolice outboundPolice){
-		if (outboundPolice.getEquipmentId() == 0) {
+		System.out.println(outboundPolice.getEquipmentId2());
+		if ( null == outboundPolice.getEquipmentId()||outboundPolice.getEquipmentId() == 0 ) {
 			outboundPolice.setEquipmentId(null);
 		}
-		if (outboundPolice.getEquipmentId2() == 0) {
+		if ( null == outboundPolice.getEquipmentId2()||outboundPolice.getEquipmentId2() == 0 ) {
 			outboundPolice.setEquipmentId2(null);
 		}
 		OutboundPoliceForSel returnPolice=policeService.addPolice(outboundPolice);

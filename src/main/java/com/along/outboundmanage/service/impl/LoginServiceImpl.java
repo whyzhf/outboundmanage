@@ -118,6 +118,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public boolean upUserRole(int userId, int roleId) {
+
         return userDao.upUserRole(userId,roleId);
     }
 

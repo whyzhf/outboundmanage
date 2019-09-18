@@ -190,7 +190,7 @@ public class LoginController {
             user.setRoleId(null);
         }
         if(loginService.updateUserById(user)){
-            loginService.addUserRole(user.getId(),roleId);
+            loginService.upUserRole(user.getId(),roleId);
             return ResultGenerator.setCustomResult(200,"修改成功");
         }else{
             return ResultGenerator.setCustomResult(4000,"修改失败");
