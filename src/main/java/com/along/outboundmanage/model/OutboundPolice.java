@@ -9,7 +9,7 @@ public class OutboundPolice {
   private Integer equipmentId;//遥控器
   private Integer equipmentId2;//手表
   private int areaId;
-  private int userId;
+  private Integer userId;
 
   public OutboundPolice() {
   }
@@ -37,11 +37,11 @@ public class OutboundPolice {
             '}';
   }
 
-  public int getUserId() {
+  public Integer getUserId() {
     return userId;
   }
 
-  public void setUserId(int userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 

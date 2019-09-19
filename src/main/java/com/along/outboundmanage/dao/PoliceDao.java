@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface PoliceDao {
 	@Insert("INSERT INTO outbound_police\n" +
-			" (card, name, equipment_id, equipment_id2, area_id,user_id)\n" +
-			" VALUES( #{OutboundPolice.card}, #{OutboundPolice.name}, #{OutboundPolice.equipmentId}, #{OutboundPolice.equipmentId2}, #{OutboundPolice.areaId}, #{OutboundPolice.userId})")
+			" (card, name, equipment_id, equipment_id2, area_id)\n" +
+			" VALUES( #{OutboundPolice.card}, #{OutboundPolice.name}, #{OutboundPolice.equipmentId}, #{OutboundPolice.equipmentId2}, #{OutboundPolice.areaId})")
 	@Options(useGeneratedKeys = true, keyProperty = "OutboundPolice.id", keyColumn = "id")
 	int addPolice(@Param("OutboundPolice") OutboundPolice outboundPolice);
 

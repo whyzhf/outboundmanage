@@ -34,9 +34,9 @@ public class SqlProvider extends SQL {
         StringBuffer strBf=new StringBuffer();
         strBf.append("UPDATE outbound_police set  ");
         BeanMap.create(OutboundPolice).forEach((K,V)->{
-           // if (!GeneralUtils.isNull(V)){
+            if (!"userId".equals(K+"")){
                 strBf.append(camelToUnderline(K+"")+"=#{OutboundPolice."+K+"},");
-           // }
+            }
         });
         String sql=strBf.toString();
         sql=sql.substring(0,sql.length()-1);
