@@ -60,7 +60,7 @@ public class TaskController {
 		glist =glist.stream().distinct().collect(Collectors.toList());
 		OutboundTaskV2 outboundTask=new OutboundTaskV2.Builder().id(Integer.valueOf(map.get("id")+""))
 				.name(map.get("name")+"").describe(map.get("describe")+"").routeId(Integer.valueOf(map.get("routeId")+""))
-				.routeName(map.get("routeName")+"").type(Integer.valueOf(map.get("type")+""))
+				.routeName(map.get("routeName")+"").type(Integer.valueOf(map.get("type")+"")).areaId(Integer.valueOf(map.get("areaId")+""))
 				.watchIds(wlist.toArray(new Integer[clist.size()])).grapplersIds(glist.toArray(new Integer[clist.size()]))
 				.handsetIds(hlist.toArray(new Integer[clist.size()])).carIds(clist.toArray(new Integer[clist.size()]))
 				.build();
@@ -285,7 +285,7 @@ public class TaskController {
 	@RequestMapping("/checkTask")
 	public Result checkTask(@RequestBody  OutboundTask outboundTask){
 		//  0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
-		if(taskService.updateTaskStatusById(outboundTask)){
+		if(taskService.checkTaskId(outboundTask)){
 			return ResultGenerator.setCustomResult(200,"修改成功","修改成功");
 		}else{
 			return ResultGenerator.setCustomResult(4000,"修改失败","修改失败");

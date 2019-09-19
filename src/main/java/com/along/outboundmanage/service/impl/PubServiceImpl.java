@@ -71,6 +71,6 @@ public class PubServiceImpl implements PubService {
 
 	@Override
 	public List<OutboundEquipment> getGrapplersIds(String time, String areaId,String taskId) {
-		return getEquips(time,areaId,3,taskId);
+		return getEquips(time,areaId,0,taskId);
 	}
 }

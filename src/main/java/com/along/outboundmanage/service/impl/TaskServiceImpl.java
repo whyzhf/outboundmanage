@@ -238,6 +238,11 @@ public class TaskServiceImpl implements TaskService {
     public boolean updateTaskStatusById(OutboundTask outboundTask) {
         return taskDao.updateTaskById(outboundTask);
     }
+
+	@Override
+	public boolean checkTaskId(OutboundTask outboundTask) {
+		return taskDao.checkTaskId(outboundTask);
+	}
     @Override
     public boolean delTask(String ids) {
         if( taskDao.delTask(ids)){

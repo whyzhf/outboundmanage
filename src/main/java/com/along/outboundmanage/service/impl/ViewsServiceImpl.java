@@ -112,9 +112,9 @@ public class ViewsServiceImpl implements ViewsService {
 		List<ViewCount> countList = viewDao.getDateByData(time, type, area);
 		Map<String, ViewCount> collect = countList.stream().collect(Collectors.toMap(ViewCount::getData, Function.identity()));
 		for (int i=firData;i<lasData;i++){
-			if (collect.get(i>9?data+""+i:data+"0"+i)!=null){
+			if (collect.get(i>9?data+"-"+i:data+"-0"+i)!=null){
 				xAxisData[i-1]=i;
-				seriesData[i-1]=collect.get(i>9?data+""+i:data+"0"+i).getCount();
+				seriesData[i-1]=collect.get(i>9?data+"-"+i:data+"-0"+i).getCount();
 			}else{
 				xAxisData[i-1]=i;
 				seriesData[i-1]=0;
@@ -155,9 +155,9 @@ public class ViewsServiceImpl implements ViewsService {
 		int[] seriesData3=new int[lasData-1];
 		int[] seriesData4=new int[lasData-1];
 		List<ViewCount> countList = viewDao.getDateByData(time, type, area);
-		Map<String, ViewCount> collect = countList.stream().collect(Collectors.toMap(e->e.getType()+"#"+e.getType(), Function.identity()));
+		Map<String, ViewCount> collect = countList.stream().collect(Collectors.toMap(e->e.getData()+"#"+e.getType(), Function.identity()));
 		for (int i=firData;i<lasData;i++){
-			String key=i>9?data+""+i:data+"0"+i;
+			String key=i>9?data+"-"+i:data+"-0"+i;
 			if (collect.get(key+"#2")!=null){
 				xAxisData[i-1]=i;
 				seriesData2[i-1]=collect.get(key+"#2").getCount();

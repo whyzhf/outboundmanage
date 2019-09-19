@@ -25,7 +25,7 @@ public interface TaskService {
 	boolean startTask(String ids,String status,String time);
 	//修改状态
 	boolean updateTaskStatusById( OutboundTask outboundTask);
-
+	boolean checkTaskId( OutboundTask outboundTask);
 
 	//删除
 	boolean delTask( String ids);

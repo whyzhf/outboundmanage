@@ -49,7 +49,7 @@ public class SqlProvider extends SQL {
         return updataSql(outboundEquipment);
     }
     public  String upPrisoner(@Param("OutboundPrisoner") OutboundPrisoner outboundPrisoner){
-        return updataSql(outboundPrisoner);
+        return updataSql2(outboundPrisoner);
     }
     public  String upCar(@Param("OutboundCar") OutboundCar outboundCar){
         return updataSql(outboundCar);
@@ -95,6 +95,24 @@ public class SqlProvider extends SQL {
         sqlBf.append("UPDATE ").append(tableName).append(" set ");
         BeanMap.create(clazz).forEach((K,V)->{
             if (!GeneralUtils.isNull(V)){
+                sqlBf.append(camelToUnderline(K+"")+"=#{"+beanBf+"."+K+"},");
+            }
+        });
+        String sql=sqlBf.toString();
+        sql=sql.substring(0,sql.length()-1);
+        sql=sql+" where id=#{"+beanName+".id}";
+        return sql;
+    }
+
+    public  String updataSql2(Object clazz){
+        StringBuffer sqlBf=new StringBuffer();
+        String beanName=clazz.getClass().getName();
+        beanName=beanName.replace("com.along.outboundmanage.model.","");
+        String tableName=camelToUnderline(toLowerCaseFirstOne(beanName));
+        StringBuffer beanBf=new StringBuffer(beanName);
+        sqlBf.append("UPDATE ").append(tableName).append(" set ");
+        BeanMap.create(clazz).forEach((K,V)->{
+            if (!GeneralUtils.isNull(V)|| (K+"").contentEquals("equipmentId")){
                 sqlBf.append(camelToUnderline(K+"")+"=#{"+beanBf+"."+K+"},");
             }
         });

@@ -64,7 +64,6 @@ public class OutboundmanageApplication  extends SpringBootServletInitializer {
 	 }
 	 */
 
-
 	@Bean
 	public WebServerFactoryCustomizer<ConfigurableWebServerFactory> webServerFactoryCustomizer(){
 		return factory -> {

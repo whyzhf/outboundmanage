@@ -15,7 +15,8 @@ public interface UserDao {
 			" left join outbound_user_role_rel rel on u.id=rel.user_id\n" +
 			" left join outbound_role r on r.id=rel.role_id\n" +
 			" left join outbound_area a on u.area_id=a.id\n" +
-			" where u.area_id=#{areaId}")
+			" where u.area_id=#{areaId}" +
+			" order by u.id  desc")
 	List<OutboundSession> getAllUserByAreaId(@Param("areaId") int areaId);
 
 	@Select("SELECT u.id as userId, u.user_name as userName,u.true_name as trueName, u.card as card,\n" +

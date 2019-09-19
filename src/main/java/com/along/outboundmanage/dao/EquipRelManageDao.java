@@ -27,8 +27,8 @@ public interface EquipRelManageDao {
 
 	@Select("SELECT GROUP_CONCAT(" +
 			" concat_ws(\"\", concat_ws(\"(\",p.name,concat(p.card,\")\")) ,\n" +
-			" concat_ws(\"(\",\"手表\",IFNULL(concat(e1.card,\")\"),\"(无)\")),\n" +
-			" concat_ws(\"(\",\"遥控器\",IFNULL(concat(e2.card,\")\"),\"(无)\"))\n" +
+			" concat_ws(\"(\",\"手表\",IFNULL(concat(e1.card,\")\"),\"无)\")),\n" +
+			" concat_ws(\"(\",\"遥控器\",IFNULL(concat(e2.card,\")\"),\"无)\"))\n" +
 			" ))\n" +
 			" FROM outbound_police p\n" +
 			" left join outbound_equipment e1 on e1.id=p.equipment_id\n" +
@@ -49,7 +49,7 @@ public interface EquipRelManageDao {
 
 	@Select("SELECT GROUP_CONCAT(" +
 			" concat_ws(\"\", concat_ws(\"(\",p.name,concat(p.card,\")\")) ,\n" +
-			" concat_ws(\"(\",\"脚扣\",IFNULL(concat(e1.card,\")\"),\"(无)\"))\n" +
+			" concat_ws(\"(\",\"脚扣\",IFNULL(concat(e1.card,\")\"),\"无)\"))\n" +
 			" ))\n" +
 			" FROM outbound_prisoner p\n" +
 			" left join outbound_equipment e1 on e1.id=p.equipment_id\n" +

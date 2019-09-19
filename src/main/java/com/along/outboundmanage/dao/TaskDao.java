@@ -26,12 +26,17 @@ public interface TaskDao {
 
 	/*@UpdateProvider(type = SqlProvider.class, method = "updataTask")
 	boolean updateTaskById(@Param("OutboundTask") OutboundTask outboundTask);*/
-	@Update("UPDATE outboundmanage.outbound_task\n" +
+	@Update("UPDATE outbound_task\n" +
 			"SET name=#{OutboundTask.name}, origin=#{OutboundTask.origin}, destination=#{OutboundTask.destination}," +
 			" start_time=#{OutboundTask.startTime}, end_time=#{OutboundTask.endTime}," +
 			" `describe`=#{OutboundTask.describe}, route_id=#{OutboundTask.routeId}, `type`=#{OutboundTask.type}, remarks=#{OutboundTask.remarks}, area_id=#{OutboundTask.areaId}" +
 			" WHERE id=#{OutboundTask.id}")
 	boolean updateTaskById(@Param("OutboundTask") OutboundTask outboundTask);
+
+	@Update("UPDATE outbound_task\n" +
+			"SET  remarks=#{OutboundTask.remarks},status=#{OutboundTask.status}" +
+			" WHERE id=#{OutboundTask.id}")
+	boolean checkTaskId(@Param("OutboundTask") OutboundTask outboundTask);
 
 	@Insert("INSERT INTO outbound_task" +
 			" ( name, origin, destination, start_time, end_time, status, `describe`, route_id, `type`, remarks, area_id)" +
@@ -71,9 +76,9 @@ public interface TaskDao {
 	OutboundTaskV2 getTaskDesc( @Param("id") int id);
 
 	//我的当前任务（一级）
-	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name\n" +
+	@Select(" SELECT distinct  t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name\n" +
 			" from \n" +
-			" (SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id\n" +
+			" (SELECT distinct t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id\n" +
 			"    FROM outbound_task t\n" +
 			"    left join outbound_task_police_rel pr on pr.task_id=t.id\n" +
 			"    left join outbound_police p on p.id=pr.police_id\n" +
