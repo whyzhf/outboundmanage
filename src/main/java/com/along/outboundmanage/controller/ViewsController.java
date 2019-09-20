@@ -4,12 +4,14 @@ import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.ViewsService;
+import com.along.outboundmanage.utill.SpellHelper;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/views")
@@ -17,6 +19,12 @@ public class ViewsController {
 	@Resource
 	ViewsService viewsService;
 
+	//地域图
+	@ResponseBody
+	@RequestMapping("/translation")
+	public Result translation(@RequestBody Map<String,String> pubParam){
+		return ResultGenerator.genSuccessResult(SpellHelper.toHanyuPinyin(pubParam.get("key")).toUpperCase());
+	}
 	/*****************************省厅视图**********************************************/
 	//地域图
 	@ResponseBody

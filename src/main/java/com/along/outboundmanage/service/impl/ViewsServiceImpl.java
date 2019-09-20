@@ -211,12 +211,17 @@ public class ViewsServiceImpl implements ViewsService {
 	}
 	@Override
 	public EchartsPieData getPie(String area){
+		EchartsPieData result=new EchartsPieData();
 		String type=" and type in (0,1,2,3,4) ";
-		String data = getNowData("yyyy-MM-dd");
-		String time=data+"%";
+		String data = getLastMonth("yyyy-MM");
+		String time=data;
+		String timename=time.replace("-","年");
 		if ("16".equals(area)){
 			area="";
+			//result.setTitleName(timename+"月全省统计");
+			result.setTitleName("全局统计");
 		}else{
+			result.setTitleName(timename+"月全市统计");
 			String id="0";
 			List<Integer> ids = areaDao.getAreaIdsByPar(Integer.valueOf(area));
 			id=ids.stream().map(e->e+"").collect(Collectors.joining(","));
@@ -231,7 +236,7 @@ public class ViewsServiceImpl implements ViewsService {
 		Pie p4=new Pie(0,"审讯");
 
 
-		List<ViewCount> countList = viewDao.getDateByData(time, type, area);
+		List<ViewCount> countList = viewDao.getPreByData(time, type, area);
 		for (int i = 0; i <countList.size() ; i++) {
 			if (countList.get(i).getType()==0){
 				p0.setValue(countList.get(i).getCount());
@@ -245,14 +250,14 @@ public class ViewsServiceImpl implements ViewsService {
 				p4.setValue(countList.get(i).getCount());
 			}
 		}
-		EchartsPieData result=new EchartsPieData();
+
 		List<Pie> list=new ArrayList<>();
 		list.add(p0);
 		list.add(p1);
 		list.add(p2);
 		list.add(p3);
 		list.add(p4);
-		result.setTitleName("全局统计");
+
 		result.setSeries(list);
 		return result;
 	}
@@ -366,7 +371,7 @@ public class ViewsServiceImpl implements ViewsService {
 		Map<String,Integer> typeMap=null;
 		for (int i = 0; i < areaList.size(); i++) {
 			emd=new EchartsMapData();
-			emd.setName(areaList.get(i).getName()+"监所信息");
+			emd.setName(areaList.get(i).getName());
 			typeMap=new HashMap<>();
 			typeMap.put("在押人员总数",0);
 			typeMap.put("外出就医",0);

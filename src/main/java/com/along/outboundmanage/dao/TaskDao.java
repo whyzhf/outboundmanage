@@ -76,7 +76,7 @@ public interface TaskDao {
 	OutboundTaskV2 getTaskDesc( @Param("id") int id);
 
 	//我的当前任务（一级）
-	@Select(" SELECT distinct  t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name\n" +
+	@Select(" SELECT distinct  t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName\n" +
 			" from \n" +
 			" (SELECT distinct t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id\n" +
 			"    FROM outbound_task t\n" +
