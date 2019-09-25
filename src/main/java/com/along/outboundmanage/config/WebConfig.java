@@ -133,8 +133,8 @@ public class WebConfig  implements WebMvcConfigurer {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         // 设置setAllowCredentials = true后就不能设置为*了，要设置具体的
-        corsConfiguration.addAllowedOrigin("http://192.168.100.137:8080");
-        corsConfiguration.addAllowedOrigin("http://192.168.100.164:8080");
+        corsConfiguration.addAllowedOrigin("http://192.168.100.117:8080");
+        corsConfiguration.addAllowedOrigin("http://192.168.100.119:8080");
         corsConfiguration.addAllowedOrigin("http://localhost:8080");
         corsConfiguration.addAllowedOrigin("http://localhost:8081");
         corsConfiguration.addAllowedOrigin("http://localhost:63342");

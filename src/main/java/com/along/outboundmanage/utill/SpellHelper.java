@@ -15,15 +15,18 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 public class SpellHelper {
 	public static void main(String[] args) {
 		SpellHelper hanyuPinyinHelper = new SpellHelper() ;
-		System.out.println(hanyuPinyinHelper.toHanyuPinyin("德州").toUpperCase());
-		System.out.println(getFirstLettersUp("旅查一12"));
+		System.out.println(hanyuPinyinHelper.toHanyuPinyin("德州市德州市德州市德州市德州市德州市德州市德州市").toUpperCase());
+		/*System.out.println(getFirstLettersUp("旅查一12"));
 		System.out.println(getFirstLettersLo("旅查一12"));
-		System.out.println(getPinyinString("旅查一12"));
+		System.out.println(getPinyinString("旅查一12"));*/
 		//专门为名字翻译
 		System.out.println("汉".toUpperCase());
+		System.out.println("07001E57363638422D56312E30303B4D323A31302C3132303B4F4E3A312".length());
 	}
 
+	public static  void print(){
 
+	}
 
 	/**
 	 * 将文字转为汉语拼音
@@ -113,7 +116,7 @@ public class SpellHelper {
 					// 如果字符是数字,取数字
 					hanyupinyin += cl_chars[i];
 				} else if (str.matches("[a-zA-Z]+")) {
-// 如果               //字符是字母,取字母
+                   //字符是字母,取字母
 					hanyupinyin += cl_chars[i];
 				} else {
 					// 否则不转换
@@ -190,20 +193,16 @@ public class SpellHelper {
 		if (strs.length == 2) {
 			newname = toUpCase(getEname(strs[0])) + " "
 					+ toUpCase(getEname(strs[1]));
-		} else if (strs.length == 3)
-		{
+		} else if (strs.length == 3){
 			newname = toUpCase(getEname(strs[0])) + " "
 					+ toUpCase(getEname(strs[1]))
 					+ toLowCase(getEname(strs[2]));
-		}
-		else if (strs.length == 4)
-		{
+		}else if (strs.length == 4){
 			newname = toUpCase(getEname(strs[0]))
 					+ toLowCase(getEname(strs[1])) + " "
 					+ toUpCase(getEname(strs[2]))
 					+ toLowCase(getEname(strs[3]));
-		} else
-		{
+		} else{
 			newname = toUpCase(getEname(strs[0]))+" ";
 			for (int i=1;i<strs.length;i++){
 				newname+=  toLowCase(getEname(strs[i]));

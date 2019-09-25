@@ -75,33 +75,33 @@
         </encoder>
         <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>debug</level>
-           <!-- <level>ERROR</level>-->
+           <!-- <level>debug</level>-->
+            <level>ERROR</level>
         </filter>
     </appender>
     <!-- additivity 避免执行2次 -->
-    <logger name="com.itstyle"  level="INFO"  additivity="false">
+    <logger name="com.itstyle"  level="ERROR"  additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="DEV_ERROR_FILE"/>
         <appender-ref ref="PROD_ERROR_FILE"/>
     </logger>
     <!--开发环境日志处理 -->
     <springProfile name="dev">
-        <root level="INFO">
+        <root level="ERROR">
             <appender-ref ref="STDOUT" />
             <appender-ref ref="DEV_ERROR_FILE" />
         </root>
     </springProfile>
     <!--生产环境日志处理 -->
     <springProfile name="prod">
-        <root level="INFO">
+        <root level="ERROR">
             <appender-ref ref="STDOUT" />
             <appender-ref ref="PROD_ERROR_FILE" />
         </root>
     </springProfile>
     <!--测试环境日志处理 -->
     <springProfile name="test">
-        <root level="INFO">
+        <root level="ERROR">
             <appender-ref ref="STDOUT" />
             <appender-ref ref="DEV_ERROR_FILE" />
         </root>
