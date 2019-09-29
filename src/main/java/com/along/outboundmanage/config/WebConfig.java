@@ -139,6 +139,8 @@ public class WebConfig  implements WebMvcConfigurer {
         corsConfiguration.addAllowedOrigin("http://localhost:8080");
         corsConfiguration.addAllowedOrigin("http://localhost:8081");
         corsConfiguration.addAllowedOrigin("http://localhost:63342");
+        corsConfiguration.addAllowedOrigin("http://120.77.252.208:8080");
+
         // 允许任何头
         corsConfiguration.addAllowedHeader("*");
         // 允许任何方法（post、get等）

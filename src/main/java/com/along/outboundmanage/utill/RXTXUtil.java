@@ -1,7 +1,9 @@
 package com.along.outboundmanage.utill;
 
-import gnu.io.*;
 
+
+
+import gnu.io.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -172,13 +174,9 @@ public class RXTXUtil {
 				//	System.out.println("开启串口成功，串口名称："+serialPortName);
 			}else {
 				//是其他类型的端口
-				throw new NoSuchPortException();
+				//throw new NoSuchPortException();
 			}
-		} catch (NoSuchPortException e) {
-			e.printStackTrace();
-		} catch (PortInUseException e) {
-			e.printStackTrace();
-		} catch (UnsupportedCommOperationException e) {
+		}  catch (Exception e) {
 			e.printStackTrace();
 		}
 
