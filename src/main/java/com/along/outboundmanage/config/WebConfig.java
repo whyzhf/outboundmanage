@@ -18,7 +18,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.yeauty.standard.ServerEndpointExporter;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -50,10 +50,10 @@ public class WebConfig  implements WebMvcConfigurer {
      * @return org.springframework.web.socket.server.standard.ServerEndpointExporter
      * @description 配置ServerEndpointExporter，配置后会自动注册所有“@ServerEndpoint”注解声明的Websocket Endpoint
      */
-   @Bean
+   /*@Bean
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
-    }
+    }*/
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //设置项目默认页面

@@ -126,9 +126,10 @@ public interface ViewDao {
 			"   where status=4 and start_time like '${time}%'  and tp.prisoner_id is not null  \n" +
 			" ) t\n" +
 			"   left join outbound_area a on a.id=t.area_id\n" +
-			"   group by t.type" +
+			"   group by t.type ,a.name,a.id " +
 			"   order by t.type " +
-			") m")
+			") m" +
+			" group by m.name,m.areaId")
 	List<CountTypeByCity> getTypeByCity(@Param("time")String time);
 
 	//获取某个地级市各个监所状态
@@ -144,8 +145,10 @@ public interface ViewDao {
 			"   where status=4 and start_time like '${time}%'  and tp.prisoner_id is not null  and a.par_id=#{areaId}\n" +
 			" ) t\n" +
 			"   left join outbound_area a on a.id=t.area_id\n" +
-			" group by t.type order by  t.type" +
-			")m ")
+			" group by t.type  ,a.name,a.id" +
+			" order by  t.type" +
+			")m " +
+			" group by m.name,m.areaId")
 	List<CountTypeByCity> getSecTypeByCity(@Param("time")String time, @Param("areaId")int areaId);
 	@Cacheable(value = "getThrTypeByCity")
 	//获取某个监所状态
