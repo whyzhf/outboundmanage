@@ -28,7 +28,7 @@ public class ClientTest {
 		ClientTest client = new ClientTest();
 		client.initClient(8899);
 		client.lister();
-	//	pp();
+
 	}
 
 

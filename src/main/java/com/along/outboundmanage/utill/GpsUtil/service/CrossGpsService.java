@@ -88,6 +88,7 @@ public class CrossGpsService implements Runnable {
 								message1.setSportsman(cs);
 								message1.setUrlCode(info.getCompetitionId() + info.getCompetitionItemId());
 								String jsonString1 = JSONObject.toJSONString(message1);
+								//System.out.println(jsonString1);
 								drive.setNewActiveTime(new Date());// 更新最新时间搓
 								client.send(jsonString1);
 							} else {
@@ -137,6 +138,7 @@ public class CrossGpsService implements Runnable {
 		gd.setCompetitionId(info.getCompetitionId());
 		gd.setGroupId(info.getGroupId());
 		gd.setCompetitionItemId(info.getCompetitionItemId());
+
 		return gd;
 
 	}

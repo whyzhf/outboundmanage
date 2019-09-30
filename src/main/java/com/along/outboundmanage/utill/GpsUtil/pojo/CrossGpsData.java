@@ -34,8 +34,29 @@ public class  CrossGpsData {
 
     private String competitionItemId;
 
+    @Override
+    public String toString() {
+        return "CrossGpsData{" +
+                "id='" + id + '\'' +
+                ", gpsNo='" + gpsNo + '\'' +
+                ", sportsmanId='" + sportsmanId + '\'' +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                ", altitude=" + altitude +
+                ", speed=" + speed +
+                ", direction=" + direction +
+                ", currTime=" + currTime +
+                ", lot='" + lot + '\'' +
+                ", lat='" + lat + '\'' +
+                ", competitionId='" + competitionId + '\'' +
+                ", isLocation=" + isLocation +
+                ", groupId='" + groupId + '\'' +
+                ", competitionItemId='" + competitionItemId + '\'' +
+                ", sportsman=" + sportsman +
+                '}';
+    }
 
-	public String getId() {
+    public String getId() {
         return id;
     }
 

@@ -15,9 +15,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-import javax.swing.*;
+/*import javax.swing.*;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableColumnModel;*/
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -53,11 +53,13 @@ public class IntermediatePointServer extends javax.swing.JFrame {
 	 * Creates new form IntermediatePointServer
 	 */
 	public IntermediatePointServer() {
-		initComponents();
-		setJtableColumnWidth();
+		//initComponents();
+		//setJtableColumnWidth();
+		openNettyServer(8899);
+		openServer(8899);
 	}
 
-	private void setJtableColumnWidth() {
+/*	private void setJtableColumnWidth() {
 		int width = jClientList.getSize().width;
 		TableColumnModel cm = jClientList.getColumnModel(); // 表格的列模型
 		TableColumn column0 = cm.getColumn(0);// 得到第i个列对象
@@ -68,7 +70,7 @@ public class IntermediatePointServer extends javax.swing.JFrame {
 		column2.setPreferredWidth(width / 8);// 将此列的首选宽度设置为 preferredWidth。
 
 		// jClientList.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-	}
+	}*/
 
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -223,14 +225,14 @@ public class IntermediatePointServer extends javax.swing.JFrame {
 		}
 		// </editor-fold>
 		// </editor-fold>
-		//new IntermediatePointServer().openNettyServer(8899);
-		//new IntermediatePointServer().openServer(8899);
+		new IntermediatePointServer().openNettyServer(8899);
+		new IntermediatePointServer().openServer(8899);
 		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
+		/*java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				new IntermediatePointServer().setVisible(true);
 			}
-		});
+		});*/
 	}
 
 	/**
@@ -248,7 +250,7 @@ public class IntermediatePointServer extends javax.swing.JFrame {
 	/**
 	 * 启动服务
 	 */
-	private void openServer(int port) {
+	public void openServer(int port) {
 		try {
 			ssc = ServerSocketChannel.open();
 			ssc.bind(new InetSocketAddress(port));
@@ -419,6 +421,11 @@ public class IntermediatePointServer extends javax.swing.JFrame {
 				//saveMsgToLog(ctx, hexData);
 				String data = ConvertData.getHexMsgToString(hexData);
 				String[] strArr = data.split(";");
+				String[] strArrName ={"Gps:","维度","经度","定位","维度值","经度值","高度","速度","方向","时间"};
+				String str="";
+				for (int i = 0; i < strArr.length; i++) {
+					str+=strArrName;
+				}
 				System.out.println(data);
 				service.updateData(strArr);
 
@@ -439,7 +446,7 @@ public class IntermediatePointServer extends javax.swing.JFrame {
 	 *
 	 */
 
-	private void openNettyServer(int port) {
+	public void openNettyServer(int port) {
 		EventLoopGroup group = new NioEventLoopGroup();// 连接服务对象
 		EventLoopGroup workGroup = new NioEventLoopGroup();// 读写服务对象
 		try {
@@ -569,14 +576,14 @@ public class IntermediatePointServer extends javax.swing.JFrame {
 		/**
 		 * 将swing界面操作交给swing线程处理
 		 */
-		SwingUtilities.invokeLater(new Runnable() {
+	/*	SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
 				jClientList.updateUI();
 			}
 		});
-
+*/
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables
