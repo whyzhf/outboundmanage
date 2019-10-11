@@ -2,6 +2,7 @@ package com.along.outboundmanage.service;
 
 import com.along.outboundmanage.model.OutboundTask;
 import com.along.outboundmanage.model.OutboundTaskDesc;
+import com.along.outboundmanage.model.OutboundTaskJson;
 import com.along.outboundmanage.model.OutboundTaskV2;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,8 @@ public interface TaskService {
 	List<OutboundTask> getAllTask(int areaId);
 	//查询
 	List<OutboundTask> getTaskByStatus(String status,String areaId);
+
+	List<OutboundTaskJson> getTaskByStatus2(String status, String areaId);
 	Integer getCountTask(String status,String areaId);
 	//修改
 	//boolean updateTaskById( OutboundTaskDesc outboundTask);

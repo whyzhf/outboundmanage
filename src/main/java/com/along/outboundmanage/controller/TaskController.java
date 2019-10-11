@@ -297,8 +297,8 @@ public class TaskController {
 	@RequestMapping("/getTaskCenterList")
 	public Result getTaskCenterList(@RequestBody PubParam pubParam){
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
-		List<OutboundTask> allList = taskService.getTaskByStatus("3",pubParam.getAreaId()+"");
-		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allList);
+		List<OutboundTaskJson> allList = taskService.getTaskByStatus2("3",pubParam.getAreaId()+"");
+		PageInfo<OutboundTaskJson> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
 

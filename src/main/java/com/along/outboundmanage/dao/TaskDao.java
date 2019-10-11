@@ -51,6 +51,14 @@ public interface TaskDao {
 	@Delete("delete from outbound_task where id in (${ids})")
 	boolean delTask(@Param("ids") String ids);
 
+	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,a.name as areaName,r.rail as rail\n" +
+			" FROM outbound_task t\n" +
+			" left join outbound_route r on t.route_id=r.id\n" +
+			" left join outbound_area a on t.area_id=a.id\n" +
+			" WHERE t.area_id in (${areaId}) and  t.status in (${status})" +
+			"  order by t.status, t.id, t.area_id" )
+	List<OutboundTaskJson> getAllTaskByStatus2(@Param("status")String status,@Param("areaId") String areaId);
+
 	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,a.name as areaName\n" +
 			" FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
@@ -58,6 +66,8 @@ public interface TaskDao {
 			" WHERE t.area_id in (${areaId}) and  t.status in (${status})" +
 			"  order by t.status, t.id, t.area_id" )
 	List<OutboundTask> getAllTaskByStatus(@Param("status")String status,@Param("areaId") String areaId);
+
+
 
 	@Select(" SELECT count(id)" +
 			" FROM outbound_task " +

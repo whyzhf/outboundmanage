@@ -26,9 +26,9 @@ public class ClientTest {
 
 	public static void main(String args[]) throws IOException {
 		ClientTest client = new ClientTest();
-		client.initClient(8899);
+		client.initClient(8989);
 		client.lister();
-
+	//	pp();
 	}
 
 
@@ -38,7 +38,9 @@ public class ClientTest {
 		SocketChannel sc = SocketChannel.open();
 		sc.configureBlocking(false);
 		sel = Selector.open();
+		//boolean connect = sc.connect(new InetSocketAddress("120.77.252.208", port));
 		boolean connect = sc.connect(new InetSocketAddress("localhost", port));
+
 		sc.register(sel, SelectionKey.OP_CONNECT);
 		System.out.println("初始化客户端成功");
 	}
