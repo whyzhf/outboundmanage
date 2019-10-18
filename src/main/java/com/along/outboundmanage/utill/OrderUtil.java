@@ -17,8 +17,9 @@ public class OrderUtil {
 
 	public static void main(String[] args) {
 		//System.out.println(retuenCreatePubOrder("A5140000005A000C35010104FF00000000000059"));
-		System.out.println(15%10);
-		System.out.println(27%10);
+		System.out.println(send("799999","1050000",17));
+		//System.out.println(27%10);
+
 	}
 
 	/**

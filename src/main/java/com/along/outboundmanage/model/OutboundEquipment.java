@@ -5,6 +5,7 @@ public class OutboundEquipment {
 
   private int id;
   private String card;//编号
+  private String num;//电话号码
   private String name;//名称
   private int type;//0：正常，1：故障
   private int status;//0：使用中，1：未使用

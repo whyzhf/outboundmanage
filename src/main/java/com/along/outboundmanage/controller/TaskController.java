@@ -224,8 +224,9 @@ public class TaskController {
 	@RequestMapping("/getMyCurTaskList")
 	public Result getMyCurTaskList(@RequestBody PubParam pubParam){
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
-		List<OutboundTask> allList = taskService.getMyCurrTaskByStatus("1,3",pubParam.getAreaId()+"",pubParam.getUserId());
-		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allList);
+
+		List<OutboundTaskJson> allList = taskService.getMyCurrTaskByStatus("1,3",pubParam.getAreaId()+"",pubParam.getUserId());
+		PageInfo<OutboundTaskJson> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
 
@@ -233,6 +234,7 @@ public class TaskController {
 	@ResponseBody
 	@RequestMapping("/getMyHisTaskList")
 	public Result getMyHisTaskList(@RequestBody PubParam pubParam){
+		System.out.println("123456");
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
 		List<String> allList = taskService.getAllMyTaskHistoryFir(pubParam.getUserId(),pubParam.getAreaId()+"");
 		PageInfo<Object> pageInfo = new PageInfo<>(allList.stream().map(e-> JSON.parseObject(e)).collect(Collectors.toList()));

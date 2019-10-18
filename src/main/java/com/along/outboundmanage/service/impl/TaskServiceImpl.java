@@ -520,7 +520,7 @@ public class TaskServiceImpl implements TaskService {
 
 
     @Override
-    public List<OutboundTask>  getMyCurrTaskByStatus(String status,String areaId,int userId){
+    public List<OutboundTaskJson>  getMyCurrTaskByStatus(String status,String areaId,int userId){
         return taskDao.getMyCurrTaskByStatus(status, areaId, userId);
     }
     @Override

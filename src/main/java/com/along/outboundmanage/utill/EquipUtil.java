@@ -31,7 +31,7 @@ public class EquipUtil {
 		System.out.println(sum+" = "+get16Num(sum));
 		System.out.println(coun+" = "+get16Num(coun));
 		System.out.println("low8 "+get16Num(low8(sum)));*/
-		System.out.println(check("A5141D0E051C000C350109001C005A1807130800"));
+		//System.out.println(check("A5141D0E051C000C350109001C005A1807130800"));
 	}
 	/**
 	 * 机器连接

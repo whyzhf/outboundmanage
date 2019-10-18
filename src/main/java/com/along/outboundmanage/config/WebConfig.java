@@ -36,6 +36,7 @@ public class WebConfig  implements WebMvcConfigurer {
    //当前激活的配置文件
   /*  @Value("${spring.profiles.active}")
     private String env;*/
+
     @Bean
     MyInterceptor myInterceptor() {
         return new MyInterceptor();
@@ -54,11 +55,11 @@ public class WebConfig  implements WebMvcConfigurer {
     public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
     }*/
-    @Override
+   /* @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //设置项目默认页面
         registry.addViewController("/").setViewName("index");
-    }
+    }*/
 
     /**
      * 配置静态访问资源
@@ -140,6 +141,7 @@ public class WebConfig  implements WebMvcConfigurer {
         corsConfiguration.addAllowedOrigin("http://localhost:8081");
         corsConfiguration.addAllowedOrigin("http://localhost:63342");
         corsConfiguration.addAllowedOrigin("http://120.77.252.208:8080");
+
 
         // 允许任何头
         corsConfiguration.addAllowedHeader("*");

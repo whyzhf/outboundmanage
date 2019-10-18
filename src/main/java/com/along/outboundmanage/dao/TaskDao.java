@@ -86,9 +86,9 @@ public interface TaskDao {
 	OutboundTaskV2 getTaskDesc( @Param("id") int id);
 
 	//我的当前任务（一级）
-	@Select(" SELECT distinct  t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName\n" +
+	@Select(" SELECT distinct  t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,r.rail as rail" +
 			" from \n" +
-			" (SELECT distinct t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id\n" +
+			" (SELECT distinct t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id" +
 			"    FROM outbound_task t\n" +
 			"    left join outbound_task_police_rel pr on pr.task_id=t.id\n" +
 			"    left join outbound_police p on p.id=pr.police_id\n" +
@@ -97,7 +97,7 @@ public interface TaskDao {
 			" left join outbound_route r on t.route_id=r.id \n" +
 			" WHERE t.area_id in (${areaId}) and  t.status in (${status}) \n" +
 			" order by  t.status,t.area_id" )
-	List<OutboundTask> getMyCurrTaskByStatus(@Param("status")String status,@Param("areaId") String areaId,@Param("userId") int userId);
+	List<OutboundTaskJson> getMyCurrTaskByStatus(@Param("status")String status,@Param("areaId") String areaId,@Param("userId") int userId);
 	//我的任务（历史记录）（一级）
 	@Select("SELECT  firjson " +
 			" FROM outbound_task_history where user_id=#{userId} and area_id=#{areaId}")

@@ -45,7 +45,7 @@ public interface TaskService {
 	Map<String, Object> addPrisonerEquip(Map<String, Object> map);
 
 	//我的任务（未完成的任务）
-	List<OutboundTask>  getMyCurrTaskByStatus(String status,String areaId,int userId);
+	List<OutboundTaskJson>  getMyCurrTaskByStatus(String status,String areaId,int userId);
 	//我的任务（历史的任务）
 	List<String> getAllMyTaskHistoryFir(int userId,String areaId);
 	//我的任务（历史的任务详情）
