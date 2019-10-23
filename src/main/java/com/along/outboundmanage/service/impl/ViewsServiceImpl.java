@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.along.outboundmanage.utill.DataUtil.*;
+import static com.along.outboundmanage.utill.fileUtil.read;
 
 @Service
 public class ViewsServiceImpl implements ViewsService {
@@ -20,6 +21,17 @@ public class ViewsServiceImpl implements ViewsService {
 	ViewDao viewDao;
 	@Resource
 	AreaDao areaDao;
+	@Override
+	public String getMapJson(String area) {
+		//获取地域信息
+		List<OutboundArea> areaDesc = areaDao.getAreaDesc(Integer.valueOf(area));
+		//获取地图信息
+		String path="E:/Download/";
+		//String path="/usr/tomcat/tomcat8/gps/map/";
+		return read(path+areaDesc.get(0).getName()+".json");
+	}
+
+
 	@Override
 	public EchartsData getCustody(String area) {
 		String data = getLastMonth("yyyy-MM");
@@ -262,6 +274,8 @@ public class ViewsServiceImpl implements ViewsService {
 		return result;
 	}
 
+
+
 	public List<EchartsMapData> getMap(String area){
 		List<EchartsMapData> res=new ArrayList<>();
 		//获取地级市
@@ -285,6 +299,7 @@ public class ViewsServiceImpl implements ViewsService {
 		for (int i = 0; i < areaList.size(); i++) {
 			emd=new EchartsMapData();
 			emd.setName(areaList.get(i).getName());
+			emd.setAreaId(areaList.get(i).getId()+"");
 			typeMap=new HashMap<>();
 			typeMap.put("在押人员总数",0);
 			typeMap.put("外出就医",0);
@@ -372,6 +387,7 @@ public class ViewsServiceImpl implements ViewsService {
 		for (int i = 0; i < areaList.size(); i++) {
 			emd=new EchartsMapData();
 			emd.setName(areaList.get(i).getName());
+			emd.setAreaId(areaList.get(i).getId()+"");
 			typeMap=new HashMap<>();
 			typeMap.put("在押人员总数",0);
 			typeMap.put("外出就医",0);

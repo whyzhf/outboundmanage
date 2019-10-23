@@ -42,6 +42,14 @@ public class ManageController {
 	}*/
 
 	@ResponseBody
+	@RequestMapping("/getAreaDesc")
+	public Result getAreaDesc(@RequestBody Map<String, Integer> pubParam){
+		List<OutboundArea> getAreaDesc = areaService.getAreaDesc(pubParam.get("areaId"));
+
+		return ResultGenerator.genSuccessResult(getAreaDesc);
+	}
+
+	@ResponseBody
 	@RequestMapping("/getPoliceList")
 	public Result getPoliceList(@RequestBody Map<String, Integer> pubParam){
 		//pubParam.forEach((K,V)-> System.out.println(K+" : "+V));

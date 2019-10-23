@@ -6,14 +6,24 @@ import java.util.Map;
 
 public class EchartsMapData {
 	private String name;
+	private String areaId;
 	private Map<String,Integer>value;
 
 	@Override
 	public String toString() {
 		return "EchartsMapData{" +
 				"name='" + name + '\'' +
+				", areaId='" + areaId + '\'' +
 				", value=" + value +
 				'}';
+	}
+
+	public String getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(String areaId) {
+		this.areaId = areaId;
 	}
 
 	public String getName() {

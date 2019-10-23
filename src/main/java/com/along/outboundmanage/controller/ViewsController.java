@@ -19,11 +19,24 @@ public class ViewsController {
 	@Resource
 	ViewsService viewsService;
 
-	//地域图
+	//地域图json
+	@ResponseBody
+	@RequestMapping("/getMapDataJson")
+	public Result getMapJson(@RequestBody Map<String,String> pubParam){
+		return ResultGenerator.genSuccessResult(viewsService.getMapJson(pubParam.get("areaId")));
+	}
+	//城市拼音
 	@ResponseBody
 	@RequestMapping("/translation")
 	public Result translation(@RequestBody Map<String,String> pubParam){
 		return ResultGenerator.genSuccessResult(SpellHelper.toHanyuPinyin(pubParam.get("key")).toUpperCase());
+	}
+
+	//地域图
+	@ResponseBody
+	@RequestMapping("/getMapJson")
+	public Result getMapJson(@RequestBody PubParam pubParam){
+		return ResultGenerator.genSuccessResult(viewsService.getMap(pubParam.getAreaId()+""));
 	}
 	/*****************************省厅视图**********************************************/
 	//地域图

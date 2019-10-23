@@ -4,11 +4,13 @@ import com.along.outboundmanage.model.EchartsData;
 import com.along.outboundmanage.model.EchartsMapData;
 import com.along.outboundmanage.model.EchartsPieData;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
 public interface ViewsService {
-
+	@Cacheable(value = "getMapJson" , key = "#p0")
+	String getMapJson(String area);
 	/********************************省厅视图*************************************/
 	//地域图
 	List<EchartsMapData> getMap(String area);

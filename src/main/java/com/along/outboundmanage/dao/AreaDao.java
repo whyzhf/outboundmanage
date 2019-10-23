@@ -15,4 +15,7 @@ public interface AreaDao {
 
 	@Select("SELECT id, name, par_id as parId, initials,type, level FROM outbound_area where par_id=#{areaId}")
 	List<OutboundArea> getAllAreaDesc(@Param("areaId") int areaId);
+
+	@Select("SELECT id, name, par_id as parId, initials,type, level FROM outbound_area where id=#{areaId}")
+	List<OutboundArea> getAreaDesc(@Param("areaId") int areaId);
 }

@@ -29,6 +29,11 @@ public class AreaServiceImpl implements AreaService {
         return areaDao.getAreaIdsByPar(areaId);
     }
 
+    @Override
+    public List<OutboundArea> getAreaDesc(int areaId) {
+        return areaDao.getAreaDesc(areaId);
+    }
+
     public Map<String, Object> getTree(List<OutboundArea> list) {
         Map<String, Object> resmap=new HashMap<>();
         Map<Integer, OutboundArea> map;
