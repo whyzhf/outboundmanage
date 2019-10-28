@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Map;
-
+/**
+ * 视图管理
+ * @author why
+ * @return
+ * @description 视图管理
+ */
 @RestController
 @RequestMapping(value = "/views")
 public class ViewsController {

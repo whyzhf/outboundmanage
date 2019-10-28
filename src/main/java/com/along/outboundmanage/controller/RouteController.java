@@ -16,7 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.along.outboundmanage.utill.DataUtil.getNowData;
-
+/**
+ * 路线管理
+ * @author why
+ * @return
+ * @description 路线管理
+ */
 @RestController
 @RequestMapping(value = "/route")
 public class RouteController {
@@ -80,33 +85,5 @@ public class RouteController {
 			return ResultGenerator.genSuccessResult(outboundRouteJson);
 		}
 	}
-	/***************************************未完成****************************************************/
-	//存储路线（gps位置）
-	@ResponseBody
-	@RequestMapping("/saveGpsRoute")
-	public Result saveGpsRoute(@RequestBody OutboundRoadlog outboundRoadlog, HttpServletRequest request){
-			return ResultGenerator.genSuccessResult();
-	}
-	//存储围栏（gps位置）
-	@ResponseBody
-	@RequestMapping("/saveFence")
-	public Result saveFence(@RequestBody  OutboundRoadlog outboundRoadlog, HttpServletRequest request){
-		//{["12.36,35.69","12.36,35.69"]}
-		return ResultGenerator.genSuccessResult();
-	}
-	//清除记录（gps位置）
-	@ResponseBody
-	@RequestMapping("/delRoadLog")
-	public Result delRoadLog(@RequestBody PubParam pubParam, HttpServletRequest request){
 
-		return ResultGenerator.genSuccessResult();
-	}
-
-	//当前位置（gps位置）
-	@ResponseBody
-	@RequestMapping("/currRoad")
-	public Result currRoad(@RequestBody PubParam pubParam, HttpServletRequest request){
-
-		return ResultGenerator.genSuccessResult();
-	}
 }

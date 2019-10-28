@@ -23,7 +23,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.along.outboundmanage.utill.DataUtil.getNowData;
-
+/**
+ * 任务管理
+ * @author why
+ * @return
+ * @description 任务管理
+ */
 @RestController
 @RequestMapping(value = "/task")
 public class TaskController {

@@ -12,7 +12,12 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * 管理界面接口
+ * @author why
+ * @return
+ * @description 管理界面接口
+ */
 @RestController
 @RequestMapping(value = "/manage")
 public class ManageController {
@@ -45,7 +50,6 @@ public class ManageController {
 	@RequestMapping("/getAreaDesc")
 	public Result getAreaDesc(@RequestBody Map<String, Integer> pubParam){
 		List<OutboundArea> getAreaDesc = areaService.getAreaDesc(pubParam.get("areaId"));
-
 		return ResultGenerator.genSuccessResult(getAreaDesc);
 	}
 

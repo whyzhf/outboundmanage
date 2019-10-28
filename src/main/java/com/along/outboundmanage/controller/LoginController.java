@@ -1,11 +1,5 @@
 package com.along.outboundmanage.controller;
-/**
- * @Description:
- * @Author: why
- * @Date: 2018-11-29 19:41
- */
 
-import com.alibaba.fastjson.JSON;
 import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultCode;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
@@ -36,7 +30,6 @@ import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
 /**
    * 功能描述 
    * @author why
-   * @date 2019/4/29
    * @return
    * @description  ${description}
  */

@@ -9,14 +9,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-
+/**
+ * 路线管理
+ * @author why
+ * @return
+ * @description 已利用高德地图处理
+ */
 @RestController
 @RequestMapping(value = "/roadlog")
 public class RoadLogController {
 	@Resource
 	RoadLogService roadLogService;
 
-	/***************************************未完成****************************************************/
+	/***************************************已处理****************************************************/
 	//存储路线（gps位置）
 	@ResponseBody
 	@RequestMapping("/saveGpsRoute")
