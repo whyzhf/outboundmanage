@@ -1,9 +1,5 @@
 package com.along.outboundmanage.utill;
 
-import com.along.outboundmanage.model.Enclosure.AddJson;
-import org.springframework.cglib.beans.BeanMap;
-
-import static com.sun.xml.internal.ws.policy.subject.WsdlBindingSubject.WsdlMessageType.OUTPUT;
 
 public class EnclosureUtil {
 	/**

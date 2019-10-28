@@ -1,5 +1,6 @@
 package com.along.outboundmanage.service;
 
+import com.along.outboundmanage.config.CacheExpire;
 import com.along.outboundmanage.model.EchartsData;
 import com.along.outboundmanage.model.EchartsMapData;
 import com.along.outboundmanage.model.EchartsPieData;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public interface ViewsService {
 	@Cacheable(value = "getMapJson" , key = "#p0")
+	@CacheExpire(expire = 60*60*24)
 	String getMapJson(String area);
 	/********************************省厅视图*************************************/
 	//地域图

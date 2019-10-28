@@ -7,9 +7,11 @@ public class OutboundArea {
 
   private int id;//地域ID
   private String name;//名称
+  private String initials;//别名
   private int parId;//上级id
   private int type;//0：地域；1：监所
   private int level;//层级
+
   public ArrayList<OutboundArea> children;
   public OutboundArea() {
     super();
@@ -19,10 +21,19 @@ public class OutboundArea {
   private OutboundArea(Builder builder) {
     setId(builder.id);
     setName(builder.name);
+    setInitials(builder.initials);
     setParId(builder.parId);
     setType(builder.type);
     setLevel(builder.level);
     setChildren(builder.children);
+  }
+
+  public String getInitials() {
+    return initials;
+  }
+
+  public void setInitials(String initials) {
+    this.initials = initials;
   }
 
   public void addChildren(OutboundArea Area) {
@@ -99,6 +110,7 @@ public class OutboundArea {
   public static final class Builder {
     private int id;
     private String name;
+    private String initials;
     private int parId;
     private int type;
     private int level;
@@ -114,6 +126,11 @@ public class OutboundArea {
 
     public Builder name(String name) {
       this.name = name;
+      return this;
+    }
+
+    public Builder initials(String initials) {
+      this.initials = initials;
       return this;
     }
 

@@ -26,8 +26,8 @@ public class ViewsServiceImpl implements ViewsService {
 		//获取地域信息
 		List<OutboundArea> areaDesc = areaDao.getAreaDesc(Integer.valueOf(area));
 		//获取地图信息
-		String path="E:/Download/";
-		//String path="/usr/tomcat/tomcat8/gps/map/";
+		//String path="E:/Download/";
+		String path="/usr/tomcat/tomcat8/gps/map/";
 		return read(path+areaDesc.get(0).getName()+".json");
 	}
 

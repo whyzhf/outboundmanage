@@ -35,7 +35,7 @@ public class RXTXUtil {
 	/**
 	 * 检测系统中可用的端口
 	 */
-	private CommPortIdentifier portId;
+//	private CommPortIdentifier portId;
 	/**
 	 * 获得系统可用的端口名称列表
 	 */
