@@ -24,6 +24,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -109,10 +111,11 @@ public class WebConfig  implements WebMvcConfigurer {
                     }
                     logger.error(message, e);
                 }
+
                 responseResult(response, result);
                /* ModelAndView  modelAndView=new ModelAndView();
-                 modelAndView.addObject("msg", e.getMessage());
-                 modelAndView.setViewName("error");
+                 modelAndView.addObject("msg",result);
+                // modelAndView.setViewName("error");
                  return  modelAndView;*/
                return new ModelAndView();
             }
@@ -124,10 +127,18 @@ public class WebConfig  implements WebMvcConfigurer {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-type", "application/json;charset=UTF-8");
         response.setStatus(200);
+        PrintWriter output= null;
         try {
-            response.getWriter().write(JSON.toJSONString(result));
+            output= response.getWriter();
+          //  output.write(JSON.toJSONString(result));
+            output.print(JSON.toJSONString(result));
+            output.flush();
+            output.close();
+           // response.getWriter().write(JSON.toJSONString(result));
         } catch (IOException ex) {
            // logger.error(ex.getMessage());
+        }finally {
+            //output.close();
         }
     }
     // 跨域

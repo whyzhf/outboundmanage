@@ -40,7 +40,8 @@ public class HttpClientUtil {
 		String jsonString = JSON.toJSONString(pubParam);
 
 		StringEntity entity = new StringEntity(jsonString, "UTF-8");
-
+		entity.setContentType("application/json");
+		entity.setChunked(true);
 		// post请求是将参数放在请求体里面传过去的;这里将entity放入post请求体中
 		httpPost.setEntity(entity);
 
