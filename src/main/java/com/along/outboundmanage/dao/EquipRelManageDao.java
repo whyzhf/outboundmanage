@@ -74,7 +74,7 @@ public interface EquipRelManageDao {
 	//查询可使用的设备
 	@Select("SELECT id, card, name, `type`, status, form, area_id" +
 			" FROM outbound_equipment " +
-			" where area_id =#{areaId} and `type`=0 and status=1 and form = #{form} or id in(${id})")
+			" where (area_id =#{areaId} and `type`=0 and status=1   or id in(${id}) ) and form = #{form}")
 	List<OutboundEquipment> getAllEquipment(@Param("areaId") int areaId, @Param("form") int form, @Param("id") String id);
 
 	@Select("SELECT p.id, p.card, p.name, p.equipment_id as equipmentId, p.area_id as areaId,e.card as equipmentCard" +

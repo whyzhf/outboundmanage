@@ -36,7 +36,7 @@ public class PubServiceImpl implements PubService {
 	public List<OutboundEquipment> getEquips(String time, String areaId,int form,String taskId) {
 		time=time.substring(0,10);
 		String id="0";
-		if (form==3) {
+		if (form==0) {
 			List<OutboundPrisoner> prisoners = equipRelManageDao.getPrisoners(taskId,time, areaId);
 			if (prisoners!=null && !prisoners.isEmpty()){
 				List<String> list =new ArrayList<>();

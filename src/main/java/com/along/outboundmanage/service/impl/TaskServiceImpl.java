@@ -418,8 +418,30 @@ public class TaskServiceImpl implements TaskService {
         }*/
 
         for (int i = 0; i < policeList.size(); i++) {//重新匹配设备
+            if(wList!=null  && !wList.isEmpty() ){
+             //   System.out.println(policeList.get(i).getEquipmentId2()+"##"+wList.contains(policeList.get(i).getEquipmentId2()));
+                if( wList.contains(policeList.get(i).getEquipmentId2())){//如果已装配选中的设备，则该设备不再分配
+                    wList.remove(policeList.get(i).getEquipmentId2());
+                }else{//如果已装配的设备不再选中设备中，清空重新分配
+                    policeList.get(i).setEquipmentId2(null);
+                    //  wList.remove(0);
+                }
 
-            if(hList!=null && !hList.isEmpty() ){
+            }else{
+                policeList.get(i).setEquipmentId2(null);
+            }
+
+            if(hList!=null  && !hList.isEmpty() ){
+                if( hList.contains(policeList.get(i).getEquipmentId())){//如果已装配选中的设备，则该设备不再分配
+                    hList.remove(policeList.get(i).getEquipmentId());
+                }else{//如果已装配的设备，不再选中设备中，清空重新分配
+                    policeList.get(i).setEquipmentId(null);
+                    //  wList.remove(0);
+                }
+            }else{
+                policeList.get(i).setEquipmentId(null);
+            }
+            /*if(hList!=null && !hList.isEmpty() ){
                 policeList.get(i).setEquipmentId(hList.get(0));
                 hList.remove(0);
             }else{
@@ -433,7 +455,35 @@ public class TaskServiceImpl implements TaskService {
             }
             policeId=policeId+","+policeList.get(i).getId();
             eids=eids+","+policeList.get(i).getEquipmentId()+","+policeList.get(i).getEquipmentId2();
+            */
         }
+        for (int i = 0; i < policeList.size(); i++) {//重新匹配设备
+            if(hList!=null  && !hList.isEmpty() ){
+                if(policeList.get(i).getEquipmentId()!=null){//如果该已装配选中的设备，则该设备不再分配
+                }else{//如果该已装配的设备，不再选中设备中，清空重新分配
+                    policeList.get(i).setEquipmentId(hList.get(0));
+                    hList.remove(0);
+                }
+
+            }else{
+                //prisonerList.get(i).setEquipmentId(null);
+            }
+
+            if(wList!=null  && !wList.isEmpty() ){
+                if(policeList.get(i).getEquipmentId2()!=null){//如果该已装配选中的设备，则该设备不再分配
+                }else{//如果该已装配的设备，不再选中设备中，清空重新分配
+                    policeList.get(i).setEquipmentId2(wList.get(0));
+                    wList.remove(0);
+                }
+
+            }else{
+                //prisonerList.get(i).setEquipmentId(null);
+            }
+
+            policeId=policeId+","+policeList.get(i).getId();
+            eids=eids+","+policeList.get(i).getEquipmentId()+","+policeList.get(i).getEquipmentId2();
+        }
+
        /* policeId=policeId.substring(0,policeId.length()-1);
         eids=eids.substring(0,eids.length()-1);*/
         //修改原来设备为可用
@@ -494,15 +544,36 @@ public class TaskServiceImpl implements TaskService {
        wList=wList.stream().distinct().collect(Collectors.toList());
        String policeId="0",eids="0";
        for (int i = 0; i < prisonerList.size(); i++) {//重新匹配设备
+               if(wList!=null  && !wList.isEmpty() ){
+                   if( wList.contains(prisonerList.get(i).getEquipmentId())){//如果该犯人已装配选中的设备，则该设备不再分配
+                       wList.remove(prisonerList.get(i).getEquipmentId());
+                   }else{//如果该犯人已装配的设备，不再选中设备中，清空重新分配
+                       prisonerList.get(i).setEquipmentId(null);
+                       //  wList.remove(0);
+                   }
+
+               }else{
+                   prisonerList.get(i).setEquipmentId(null);
+               }
+
+       }
+       for (int i = 0; i < prisonerList.size(); i++) {//重新匹配设备
            if(wList!=null  && !wList.isEmpty() ){
-               prisonerList.get(i).setEquipmentId(wList.get(0));
-               wList.remove(0);
+               if(prisonerList.get(i).getEquipmentId()!=null){//如果该犯人已装配选中的设备，则该设备不再分配
+
+               }else{//如果该犯人已装配的设备，不再选中设备中，清空重新分配
+                   prisonerList.get(i).setEquipmentId(wList.get(0));
+                   wList.remove(0);
+               }
+
            }else{
-               prisonerList.get(i).setEquipmentId(null);
+               //prisonerList.get(i).setEquipmentId(null);
            }
            policeId=policeId+","+prisonerList.get(i).getId();
            eids=eids+","+prisonerList.get(i).getEquipmentId();
        }
+
+
        /* policeId=policeId.substring(0,policeId.length()-1);
         eids=eids.substring(0,eids.length()-1);*/
        //修改原来设备为可用
