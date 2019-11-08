@@ -21,15 +21,16 @@ import static com.along.outboundmanage.utill.GpsUtil.MyThread.asyncGet;
 public class FileUtil {
 	public static void main(String[] args) throws Exception {
 		//System.out.println("548".split("-")[0]);
-		new FileUtil().readFileReturnMap("E:\\gpsData\\demo.txt");
+		List<HistData> histData = new FileUtil().readFileReturnMap("E:\\gpsData\\demo.txt");
+		System.out.println(histData.get(0));
 	}
 
 
 
 	//获取单个文件里的值
 	public static 	List<HistData> getData(String taskId){
-		String path =SysUtil.LOCAL_DATA_LOCATION;
-		//String path =SysUtil.WEB_DATA_LOCATION;
+		//String path =SysUtil.LOCAL_DATA_LOCATION;
+		String path =SysUtil.WEB_DATA_LOCATION;
 		String fileName=FindFile(taskId);
 		String url=path+"/"+fileName;
 		try {
@@ -124,7 +125,7 @@ public class FileUtil {
 		fis.close();
 		br.close();
 		long end = System.currentTimeMillis();
-		System.out.println(i/10000.0+" w条数据   readTxt1方法，使用内存="+(Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/ 1024 / 1024 + "M"+",使用时间毫秒="+(end-start));
+	//	System.out.println(i/10000.0+" w条数据   readTxt1方法，使用内存="+(Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/ 1024 / 1024 + "M"+",使用时间毫秒="+(end-start));
 
 		return list;
 	}
@@ -155,8 +156,8 @@ public class FileUtil {
 	public static String FindFile(String taskId){
 		// 设置日期转换格式
 		SimpleDateFormat smp = new SimpleDateFormat("yyMMddHHmmss");
-		//String path =SysUtil.WEB_DATA_LOCATION;
-		String path =SysUtil.LOCAL_DATA_LOCATION;
+		String path =SysUtil.WEB_DATA_LOCATION;
+		//String path =SysUtil.LOCAL_DATA_LOCATION;
 		File file = new File(path);
 		// 定义文件修改时间
 		long modify_time = 0;
@@ -177,7 +178,7 @@ public class FileUtil {
 			}
 		}
 		// 打印符合要求的文件名
-		System.out.println(fileName);
+	//	System.out.println(fileName);
 		return fileName;
 	}
 

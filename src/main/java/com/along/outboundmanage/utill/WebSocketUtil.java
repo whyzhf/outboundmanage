@@ -4,19 +4,27 @@ package com.along.outboundmanage.utill;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.timeout.IdleStateEvent;
 
+import org.yeauty.pojo.ParameterMap;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
 import org.yeauty.annotation.*;
 import org.yeauty.pojo.Session;
 
 import java.io.IOException;
 
-@ServerEndpoint(prefix = "netty-websocket")
+@ServerEndpoint(prefix = "netty-websocket" )
 @Component
 public class WebSocketUtil {
 
 	@OnOpen
-	public void onOpen(Session session, HttpHeaders headers) throws IOException {
-		System.out.println("new connection");
+	public void onOpen(Session session, HttpHeaders headers,ParameterMap parameterMap) throws IOException {
+		parameterMap.getParameterMap().forEach((K,V)->{
+			System.out.println(K+":");
+			V.forEach(e-> System.out.println(e));
+		});
+		System.out.println(headers.get("SEC_WEBSOCKET_KEY"));
+		//System.out.println(headers.get("taskId"));
+		System.out.println("new connection:");
 	}
 
 	@OnClose

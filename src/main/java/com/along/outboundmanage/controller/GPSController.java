@@ -31,7 +31,7 @@ public class GPSController {
 	@RequestMapping(value = "sendOrder")
 	@ResponseBody
 	public JSON sendOrder(HttpServletRequest request, @RequestBody Map<String,String> pubParam) {
-		String url = "http://localhost:8085/gps/Order/sendOrder";
+		String url = "http://120.77.252.208:8080/gps/Order/sendOrder";
 		return doPostTestTwo(pubParam, url);
 	}
 

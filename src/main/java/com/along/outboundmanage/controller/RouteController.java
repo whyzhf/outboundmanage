@@ -44,6 +44,15 @@ public class RouteController {
 
 		return ResultGenerator.genSuccessResult(allList);
 	}
+
+	@ResponseBody
+	@RequestMapping("/getRouteById")
+	public Result getRouteById(@RequestBody PubParam pubParam){
+		OutboundRouteJson json = routeService.getRouteById(pubParam.getAreaId());
+
+		return ResultGenerator.genSuccessResult(json);
+	}
+
 	@ResponseBody
 	@RequestMapping("/upRoute")
 	public Result upRoute(@RequestBody  OutboundRoute outboundRoute){

@@ -30,4 +30,10 @@ public interface RouteDao {
 	@Select("SELECT concat_ws(\",\", origin, destination,name) FROM outbound_route where id=#{id}")
 	String getOd(@Param("id") int id);
 
+	@Select(" SELECT id, name, uptime, distance, origin, destination, area_id,rail" +
+			" FROM outbound_route" +
+			" WHERE id=#{id} " )
+	OutboundRouteJson getRouteById(@Param("id") int id);
+
+
 }

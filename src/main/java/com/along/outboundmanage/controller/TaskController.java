@@ -206,7 +206,7 @@ public class TaskController {
 			return ResultGenerator.setCustomResult(4000,"修改失败",map);
 		}
 	}
-	//结束任务(备份历史数据,关系表清空  未测)
+	//结束任务(备份历史数据,关系表清空  )
 	@ResponseBody
 	@RequestMapping("/endTask")
 	public Result endTask(@RequestBody PubParam pubParam){

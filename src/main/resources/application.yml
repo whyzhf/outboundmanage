@@ -83,6 +83,7 @@ pagehelper:
 
 netty-websocket:
   host: 0.0.0.0
-  path: /
+  path: /netty-websocket
   port: 80
+
 

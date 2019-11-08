@@ -28,6 +28,11 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public OutboundRouteJson getRouteById(int id) {
+        return routeDao.getRouteById(id);
+    }
+
+    @Override
     public boolean updateRouteById(OutboundRoute outboundRoute) {
         return routeDao.updateRouteById(outboundRoute);
     }

@@ -11,6 +11,8 @@ public interface RouteService {
 
 	//查询
 	List<OutboundRouteJson> getAllRoute(int areaId);
+
+	OutboundRouteJson getRouteById(int id);
 	//修改
 	boolean updateRouteById(OutboundRoute outboundRoute);
 	//删除
