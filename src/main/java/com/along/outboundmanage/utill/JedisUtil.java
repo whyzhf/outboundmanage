@@ -53,11 +53,13 @@ public class JedisUtil {
 	public static void main(String[] args) {
 
 		JedisUtil jedisUtil = JedisUtil.getInstance();
-		Set<String> set = jedisUtil.getJedis().keys("54*");
+		Jedis jedis = JedisUtil.getInstance().getJedis();
+		Set<String> set = jedis.keys("*48*");
+
 		for (String key : set) {
 			System.out.println(key);
 		}
-
+		JedisUtil.getInstance().returnJedis(jedis);
 		/*JedisUtil.Strings strings = jedisUtil.new Strings();
 		strings.set("nnn", "nnnn");
 		System.out.println("-----" + strings.get("nnn"));

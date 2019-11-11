@@ -54,4 +54,24 @@ public class GPSController {
 		}
 
 	}
+
+	@RequestMapping(value = "gethisData20")
+	@ResponseBody
+	public  Map<String,Object>  gethisData2( @RequestBody Map<String,String> pubParam) {
+		String taskId=pubParam.get("taskId");
+		Map<String,Object> map=new HashMap<>();
+		return gpsService.getHisGpsData(taskId);
+
+	}
+
+
+
+	@RequestMapping(value = "getGpsData20")
+	@ResponseBody
+	public  Map<String,Object>  getGpsData( @RequestBody Map<String,String> pubParam) {
+		String taskId=pubParam.get("taskId");
+		Map<String,Object> map=new HashMap<>();
+		return gpsService.getGpsData(taskId);
+
+	}
 }

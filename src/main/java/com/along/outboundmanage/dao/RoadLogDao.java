@@ -2,9 +2,11 @@ package com.along.outboundmanage.dao;
 
 import com.along.outboundmanage.model.OutboundRoadlog;
 import com.along.outboundmanage.model.OutboundRoute;
+import com.along.outboundmanage.model.WSgpsData;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RoadLogDao {
 	@Select(" SELECT id, route_id, equipment_id, `type`, longitude, latitude, lot, lat, speed, direction, form, uptime " +
@@ -23,5 +25,11 @@ public interface RoadLogDao {
 	@Delete("DELETE FROM outbound_roadlog WHERE route_id=#{id}")
 	boolean delRoadLog(@Param("id") int id);
 
+	@Select("SELECT  taskId, equip, equipCard, police, prisoner, stauts, errorStatus, uptime,  longitude, latitude, speed, direction, color" +
+			" FROM outbound_gpslog" +
+			" WHERE taskId in (${taskId}) " +
+			" GROUP BY equipCard, taskId, equip,  police, prisoner, stauts, errorStatus, uptime, longitude, latitude,speed, direction, color" +
+			" Order BY uptime  ")
+	List<WSgpsData> getGpsData(@Param("taskId") String taskId);
 
 }

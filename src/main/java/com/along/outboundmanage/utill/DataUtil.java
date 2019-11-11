@@ -27,6 +27,17 @@ public class DataUtil {
 		String str = df.format(time);
 		return str;
 	}
+	//时间字符串转long(到精确到ms)"yyyy-MM-dd HH:mm:ss"
+	public static Long StringToLong(String str,String strFormat){
+		DateFormat df = new SimpleDateFormat(strFormat);
+		Date date =new Date();
+		try {
+			date = df.parse(str);
+		} catch (ParseException pe) {
+			System.out.println(pe.getMessage());
+		}
+		return date.getTime();
+	}
 
 	/**
 	 * 将String字符串转换为java.sql.Timestamp格式日期,用于数据库保存
