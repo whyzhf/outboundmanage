@@ -32,4 +32,7 @@ public interface RoadLogDao {
 			" Order BY uptime  ")
 	List<WSgpsData> getGpsData(@Param("taskId") String taskId);
 
+	@Select(" SELECT DISTINCT id from outbound_task where status=3 and area_id=${areaId}")
+	List<Integer> getTaskIdByArea(@Param("areaId") String areaId);
+
 }

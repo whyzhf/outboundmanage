@@ -40,6 +40,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public OutboundTaskJson getTaskByIds(String taskIds) {
+        return taskDao.getTaskByIds(taskIds);
+    }
+
+    @Override
     public List<OutboundTaskJson> getTaskByStatus2(String status, String areaId) {
         return taskDao.getAllTaskByStatus2(status,areaId);
 

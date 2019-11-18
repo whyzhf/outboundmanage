@@ -2,6 +2,7 @@ package com.along.outboundmanage.utill.GpsUtil;
 
 import com.alibaba.fastjson.JSONObject;
 import com.along.outboundmanage.model.ExceptionEntity.HisFpsData;
+import com.along.outboundmanage.model.HisGpsData;
 import com.along.outboundmanage.model.WSgpsData;
 import com.along.outboundmanage.utill.JedisUtil;
 import redis.clients.jedis.Jedis;
@@ -37,7 +38,7 @@ public class GetData {
 	}
 
 	//历史回放
-	public static Map<String,Object> getHisGpsData(String taskId ){
+	/*public static Map<String,Object> getHisGpsData(String taskId ){
 		Jedis jedis = JedisUtil.getInstance().getJedis();
 		//获取所有该任务的key(设备)
 		Set<String> set = jedis.keys(taskId+"*");
@@ -46,8 +47,6 @@ public class GetData {
 		}
 		List<Map<String,Object>> resList=new ArrayList<>();
 		Map<String,Object> resmap=new HashMap<>();
-
-
 		for (String key : set) {
 			//每一个设备对象
 			List<BigDecimal[]> gpsDataList=new ArrayList<>();
@@ -68,7 +67,40 @@ public class GetData {
 		}
 		resmap.put("data",resList);
 		return resmap;
+	}*/
+
+	public static Map<String,HisGpsData> getHisGpsData(String taskId ){
+		Jedis jedis = JedisUtil.getInstance().getJedis();
+		Map<String, HisGpsData> resultMap = new HashMap<>();
+		//获取所有该任务的key(设备)
+		Set<String> set = jedis.keys(taskId+"*");
+		if (set==null||set.isEmpty()){
+			return null;
+		}
+		List<BigDecimal[]>gpslist=null;
+		String equipCard=null;
+		for (String key : set) {
+			//每一个设备对象
+			Set<String> zrange = jedis.zrange(key, 0, -1);
+			for (String e : zrange) {
+				WSgpsData FirwSgpsData = new JSONObject().parseObject(e, WSgpsData.class);
+				if(resultMap.get(equipCard=FirwSgpsData.getEquipCard())!=null){
+					resultMap.get(equipCard).getGpsData().add(new BigDecimal[]{FirwSgpsData.getLongitude(),FirwSgpsData.getLatitude()});
+				}else{//首次加载
+					gpslist=new ArrayList<>();
+					gpslist.add(new BigDecimal[]{FirwSgpsData.getLongitude(),FirwSgpsData.getLatitude()});
+					resultMap.put(FirwSgpsData.getEquipCard(),new HisGpsData.Builder().color(FirwSgpsData.getColor())
+							.equipCard(FirwSgpsData.getEquipCard())
+							.prisoner(FirwSgpsData.getPrisoner())
+							.police(FirwSgpsData.getPolice())
+							.gpsData(gpslist).build()
+					);
+				}
+			}
+		}
+		return resultMap;
 	}
+
 
 	//从数据库获取值
 	public static void getDataByCache(){

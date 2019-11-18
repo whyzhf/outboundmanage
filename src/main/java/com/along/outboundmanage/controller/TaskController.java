@@ -308,7 +308,13 @@ public class TaskController {
 		PageInfo<OutboundTaskJson> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
-
+	//根据taskId查询任务详情
+	@ResponseBody
+	@RequestMapping("/getTaskByIds")
+	public Result getTaskByIds(@RequestBody Map<String, Object> map ){
+		OutboundTaskJson allList = taskService.getTaskByIds(map.get("taskId")+"");
+		return ResultGenerator.genSuccessResult(allList);
+	}
 	/***************************************未完成****************************************************/
 	//当前位置
 	@ResponseBody
@@ -317,7 +323,6 @@ public class TaskController {
 
 		return ResultGenerator.genSuccessResult();
 	}
-
 	//历史轨迹
 	@ResponseBody
 	@RequestMapping("/getHisRoute")

@@ -18,6 +18,8 @@ public interface TaskDao {
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" WHERE t.id in(${ids}) order by t.id" )
 	List<OutboundTask> getAllTaskByIds(@Param("ids") String ids);
+
+
 	@Update("UPDATE outbound_task\n" +
 			" SET status=${status}, " +
 			" ${time}"+
@@ -58,6 +60,14 @@ public interface TaskDao {
 			" WHERE t.area_id in (${areaId}) and  t.status in (${status})" +
 			"  order by t.status, t.id, t.area_id" )
 	List<OutboundTaskJson> getAllTaskByStatus2(@Param("status")String status,@Param("areaId") String areaId);
+
+	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,a.name as areaName,r.rail as rail\n" +
+			" FROM outbound_task t\n" +
+			" left join outbound_route r on t.route_id=r.id\n" +
+			" left join outbound_area a on t.area_id=a.id\n" +
+			" WHERE t.id in (${taskIds}) and  t.status =3" +
+			"  order by t.status, t.id, t.area_id" )
+	OutboundTaskJson getTaskByIds(@Param("taskIds")String taskIds);
 
 	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,a.name as areaName\n" +
 			" FROM outbound_task t\n" +
@@ -149,4 +159,5 @@ public interface TaskDao {
 			" SET status=1 \n" +
 			" WHERE id in (${ids})")
 	boolean clearEquipStatus(@Param("ids") String ids);
+
 }

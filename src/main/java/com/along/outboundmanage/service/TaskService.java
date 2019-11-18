@@ -14,6 +14,9 @@ public interface TaskService {
 
 	//查询
 	List<OutboundTask> getAllTask(int areaId);
+
+	//根据taskId查询任务详情
+	OutboundTaskJson  getTaskByIds(String ids);
 	//查询
 	List<OutboundTask> getTaskByStatus(String status,String areaId);
 

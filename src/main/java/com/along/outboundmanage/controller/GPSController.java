@@ -1,6 +1,8 @@
 package com.along.outboundmanage.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.along.outboundmanage.model.ExceptionEntity.Result;
+import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.service.GpsService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.along.outboundmanage.utill.HttpClientUtil.doPostTestTwo;
@@ -41,6 +45,7 @@ public class GPSController {
 		//String url = "http://localhost:8085/gps/Order/gethisData";
 		//return doPostTestTwo(pubParam, url);
 		String taskId=pubParam.get("taskId");
+
 		Map<String,Object> map=new HashMap<>();
 		try {
            /* if (resmap.get(taskId)!=null){
@@ -55,23 +60,47 @@ public class GPSController {
 
 	}
 
-	@RequestMapping(value = "gethisData20")
+	@RequestMapping(value = "getHisData")
 	@ResponseBody
-	public  Map<String,Object>  gethisData2( @RequestBody Map<String,String> pubParam) {
+	public  Result  gethisData2( @RequestBody Map<String,String> pubParam) {
 		String taskId=pubParam.get("taskId");
-		Map<String,Object> map=new HashMap<>();
-		return gpsService.getHisGpsData(taskId);
+		String areaId=pubParam.get("areaId");
+		List<Map<String,Object>> mapList=new ArrayList<>();
+		if(!"-1".equals(areaId)){
+			List<Integer> taskIdList = gpsService.getTaskIdByArea(areaId);
+			taskIdList.forEach(e->{
+				mapList.add(gpsService.getHisGpsData(e+""));
+			});
+
+		}else{
+			mapList.add(gpsService.getHisGpsData(taskId));
+		}
+		return ResultGenerator.genSuccessResult(mapList);
 
 	}
 
 
-
-	@RequestMapping(value = "getGpsData20")
+	/**
+	 * 获取当前任务之前轨迹（中途进入查看轨迹）
+	 * @param pubParam
+	 * @return
+	 */
+	@RequestMapping(value = "getCurrentGpsData")
 	@ResponseBody
-	public  Map<String,Object>  getGpsData( @RequestBody Map<String,String> pubParam) {
+	public Result getGpsData(@RequestBody Map<String,String> pubParam) {
 		String taskId=pubParam.get("taskId");
-		Map<String,Object> map=new HashMap<>();
-		return gpsService.getGpsData(taskId);
+		String areaId=pubParam.get("areaId");
+		List<Map<String,Object>> mapList=new ArrayList<>();
+		if(!"-1".equals(areaId)){
+			List<Integer> taskIdList = gpsService.getTaskIdByArea(areaId);
+			taskIdList.forEach(e->{
+				mapList.add(gpsService.getGpsData(e+""));
+			});
+
+		}else{
+			mapList.add(gpsService.getGpsData(taskId));
+		}
+		return ResultGenerator.genSuccessResult(mapList);
 
 	}
 }

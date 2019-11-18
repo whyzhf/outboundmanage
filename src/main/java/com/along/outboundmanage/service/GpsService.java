@@ -12,4 +12,5 @@ public interface GpsService {
 	Map<String, Object> getGpsData(String taskId);
 
 	Map<String, Object> getHisGpsData(String taskId);
+	List<Integer> getTaskIdByArea(String areaId);
 }

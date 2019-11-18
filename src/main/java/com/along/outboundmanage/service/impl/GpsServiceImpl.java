@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 import static com.along.outboundmanage.utill.DataUtil.StringToLong;
 import static com.along.outboundmanage.utill.GpsUtil.FileUtil.getData;
 import static com.along.outboundmanage.utill.GpsUtil.GetData.savaRedis;
+import static com.along.outboundmanage.utill.JdbcUtils.queryHisGpsList;
 
 @Service
 public class GpsServiceImpl implements GpsService {
@@ -39,22 +40,62 @@ public class GpsServiceImpl implements GpsService {
 	/**
 	 * 获取正在执行任务数据
 	 */
-	@Override
+	/*@Override
 	public Map<String, Object> getGpsData(String taskId) {
 		//先从redis取数据
 		Map<String, Object> gpsData = GetData.getGpsData(taskId);
 		if (gpsData!=null && !gpsData.isEmpty()){
+			gpsData.put("code",200);
+			gpsData.put("message",200);
 			return  gpsData;
 		}else{//redis无数据，再从数据库取数据,并写入redis
 			taskId=taskId.split("R")[0];//测试用，删除此行
 			List<WSgpsData> gpsData1 = roadLogDao.getGpsData(taskId);
-			Map<String, List<WSgpsData>> map = gpsData1.stream().collect(Collectors.groupingBy(WSgpsData::getEquipCard));
-			//System.out.println(map);
-			gpsData=new HashMap<>();
-			gpsData.put("data",map);
-			savaRedis(gpsData1);
+			if (gpsData1!=null && !gpsData1.isEmpty()){
+				gpsData.put("code",4000);
+				gpsData.put("message","not data");
+				return null;
+			}else {
+				Map<String, List<WSgpsData>> map = gpsData1.stream().collect(Collectors.groupingBy(WSgpsData::getEquipCard));
+				//System.out.println(map);
+				gpsData = new HashMap<>();
+				gpsData.put("code",200);
+				gpsData.put("message",200);
+				gpsData.put("data", map);
+				savaRedis(gpsData1);
+			}
 			return gpsData;
 		}
+	}*/
+
+	/**
+	 * 获取正在执行任务数据
+	 */
+	@Override
+	public Map<String, Object> getGpsData(String taskId) {
+		Map<String, Object> resMap =new HashMap<>();
+		Map<String, HisGpsData> gpsMap =new HashMap<>();
+		List<HisGpsData>gpsDataList=new ArrayList<>();
+		//先从redis取数据
+		gpsMap = GetData.getHisGpsData(taskId);
+		if (gpsMap!=null && !gpsMap.isEmpty()){
+			//return  gpsMap;
+		}else{//redis无数据，再从数据库取数据,并写入redis
+			//taskId=taskId.split("R")[0];//测试用，删除此行
+			try {
+				//流式查询本地测试查询10w条数据不超过1s,表分区;服务器查询依旧慢
+				gpsMap=queryHisGpsList("select id, taskId, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color " +
+						" from outbound_gpslog where taskId= "+taskId, null, "id,taskId,equip,equipCard,police,prisoner,stauts,errorStatus,uptime,type,longitude,latitude,lot,lat,speed,direction,color".split(","));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		gpsMap.forEach((K,V)->gpsDataList.add(V));
+		resMap.put("taskId",taskId);
+		resMap.put("taskdata",gpsDataList);
+		//写入redis
+		//savaRedis(gpsData1);
+		return resMap;
 	}
 
 
@@ -65,36 +106,33 @@ public class GpsServiceImpl implements GpsService {
 	@Override
 	public Map<String, Object> getHisGpsData(String taskId) {
 		//先从redis取数据
-		Map<String, Object> gpsData = GetData.getHisGpsData(taskId);
-		if (gpsData!=null && !gpsData.isEmpty()){
-			return  gpsData;
+		Map<String, Object> resMap =new HashMap<>();
+		Map<String, HisGpsData> gpsMap =new HashMap<>();
+		List<HisGpsData>gpsDataList=new ArrayList<>();
+		//先从redis取数据
+		gpsMap = GetData.getHisGpsData(taskId);
+		if (gpsMap!=null && !gpsMap.isEmpty()){
+			//return  gpsMap;
 		}else{//redis无数据，再从数据库取数据,并写入redis
-			taskId=taskId.split("R")[0];//测试用，删除此行
-			List<WSgpsData> gpsData1 = roadLogDao.getGpsData(taskId);
-			Map<String, HisGpsData> gpsMap =new HashMap<>();
-			for (WSgpsData key : gpsData1) {
-				if(gpsMap.get(key.getEquipCard())!=null){
-					gpsMap.get(key.getEquipCard()).getGpsData().add(new BigDecimal[]{key.getLongitude(),key.getLatitude()});
-				}else{
-					List<BigDecimal[]> gpslist=new ArrayList<>();
-					gpslist.add(new BigDecimal[]{key.getLongitude(),key.getLatitude()});
-					gpsMap.put(key.getEquipCard(),new HisGpsData.Builder().color(key.getColor())
-																	.equipCard(key.getEquipCard())
-																	.prisoner(key.getPrisoner())
-																	.police(key.getPolice())
-																	.gpsData(gpslist).build()
-															);
-				}
-
+			//taskId=taskId.split("R")[0];//测试用，删除此行
+			try {
+				//流式查询本地测试查询10w条数据不超过1s,表分区;服务器查询依旧慢
+				gpsMap=queryHisGpsList("select id, taskId, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color " +
+						" from outbound_gpshislog where taskId= "+taskId, null, "id,taskId,equip,equipCard,police,prisoner,stauts,errorStatus,uptime,type,longitude,latitude,lot,lat,speed,direction,color".split(","));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			List<HisGpsData>gpsDataList=new ArrayList<>();
-			gpsMap.forEach((K,V)->gpsDataList.add(V));
-			//System.out.println(map);
-			gpsData=new HashMap<>();
-			gpsData.put("data",gpsDataList);
-			//写入redis
-			savaRedis(gpsData1);
-			return gpsData;
 		}
+		gpsMap.forEach((K,V)->gpsDataList.add(V));
+		resMap.put("taskId",taskId);
+		resMap.put("taskdata",gpsDataList);
+		//写入redis
+		//savaRedis(gpsData1);
+		return resMap;
+	}
+
+	@Override
+	public List<Integer> getTaskIdByArea(String areaId) {
+		return roadLogDao.getTaskIdByArea(areaId);
 	}
 }
