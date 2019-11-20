@@ -1,35 +1,47 @@
 package com.along.outboundmanage.model;
-
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class HisGpsData {
+public class HisGpsData implements Serializable{
+	//private static final long serialVersionUID = 8822818790694831649L;
+	private Integer taskId;
+	private String taskName;
 	private String police;
 	private String prisoner;
 	private String equipCard;
 	private String color;
 	private List<BigDecimal[]>  gpsData;
+	private List<String>  gpsTime;
 
 	public HisGpsData() {
 	}
 
 	private HisGpsData(Builder builder) {
+		setTaskId(builder.taskId);
+		setTaskName(builder.taskName);
 		setPolice(builder.police);
 		setPrisoner(builder.prisoner);
 		setEquipCard(builder.equipCard);
 		setColor(builder.color);
 		setGpsData(builder.gpsData);
+		setGpsTime(builder.gpsTime);
 	}
 
-	@Override
-	public String toString() {
-		return "HisGpsData{" +
-				"police='" + police + '\'' +
-				", prisoner='" + prisoner + '\'' +
-				", equipCard='" + equipCard + '\'' +
-				", color='" + color + '\'' +
-				", gpsData=" + gpsData +
-				'}';
+	public Integer getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(Integer taskId) {
+		this.taskId = taskId;
+	}
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
 	}
 
 	public String getPolice() {
@@ -72,14 +84,35 @@ public class HisGpsData {
 		this.gpsData = gpsData;
 	}
 
+	public List<String> getGpsTime() {
+		return gpsTime;
+	}
+
+	public void setGpsTime(List<String> gpsTime) {
+		this.gpsTime = gpsTime;
+	}
+
 	public static final class Builder {
+		private Integer taskId;
+		private String taskName;
 		private String police;
 		private String prisoner;
 		private String equipCard;
 		private String color;
 		private List<BigDecimal[]> gpsData;
+		private List<String> gpsTime;
 
 		public Builder() {
+		}
+
+		public Builder taskId(Integer taskId) {
+			this.taskId = taskId;
+			return this;
+		}
+
+		public Builder taskName(String taskName) {
+			this.taskName = taskName;
+			return this;
 		}
 
 		public Builder police(String police) {
@@ -104,6 +137,11 @@ public class HisGpsData {
 
 		public Builder gpsData(List<BigDecimal[]> gpsData) {
 			this.gpsData = gpsData;
+			return this;
+		}
+
+		public Builder gpsTime(List<String> gpsTime) {
+			this.gpsTime = gpsTime;
 			return this;
 		}
 

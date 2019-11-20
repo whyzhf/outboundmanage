@@ -183,19 +183,28 @@ public class JdbcUtils {
 			}
 			result = prepareStatement.executeQuery();
 			List<BigDecimal[]>gpslist=null;
+			List<String>timelist=null;
 			HisGpsData hisGpsData= new HisGpsData();
 			String equipCard=null;
 			while (result.next()) {
 				if(resultMap.get(equipCard=result.getString("equipCard"))!=null){
 					resultMap.get(equipCard).getGpsData().add(new BigDecimal[]{result.getBigDecimal("longitude"),result.getBigDecimal("latitude")});
+					resultMap.get(equipCard).getGpsTime().add(result.getString("uptime"));
 				}else{//首次加载
 					gpslist=new ArrayList<>();
+					timelist=new ArrayList<>();
+					timelist.add(result.getString("uptime"));
 					gpslist.add(new BigDecimal[]{result.getBigDecimal("longitude"),result.getBigDecimal("latitude")});
 					resultMap.put(result.getString("equipCard"),new HisGpsData.Builder().color(result.getString("color"))
 							.equipCard(result.getString("equipCard"))
 							.prisoner(result.getString("prisoner"))
 							.police(result.getString("police"))
-							.gpsData(gpslist).build()
+							.gpsData(gpslist)
+							.gpsTime(timelist)
+							.taskId(Integer.valueOf(result.getString("taskId")))
+							.taskName(result.getString("taskName"))
+							.build()
+
 					);
 				}
 

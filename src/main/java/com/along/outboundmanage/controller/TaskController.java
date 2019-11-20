@@ -312,39 +312,15 @@ public class TaskController {
 	@ResponseBody
 	@RequestMapping("/getTaskByIds")
 	public Result getTaskByIds(@RequestBody Map<String, Object> map ){
-		OutboundTaskJson allList = taskService.getTaskByIds(map.get("taskId")+"");
+		String areaId=map.get("areaId")+"";
+		List<OutboundTaskJson> allList=new ArrayList<>();
+		if("-1".equals(areaId)) {
+			OutboundTaskJson outboundTaskJson = taskService.getTaskByIds(map.get("taskId") + "");
+			allList.add(outboundTaskJson);
+		}else{
+			 allList = taskService.getTaskByStatus2("3",areaId);
+		}
 		return ResultGenerator.genSuccessResult(allList);
-	}
-	/***************************************未完成****************************************************/
-	//当前位置
-	@ResponseBody
-	@RequestMapping("/getCurrRoute")
-	public Result getCurrRoute( ){
-
-		return ResultGenerator.genSuccessResult();
-	}
-	//历史轨迹
-	@ResponseBody
-	@RequestMapping("/getHisRoute")
-	public Result getHisRoute( ){
-
-		return ResultGenerator.genSuccessResult();
-	}
-
-	//抓捕路线
-	@ResponseBody
-	@RequestMapping("/getArrestRoute")
-	public Result getArrestRoute( ){
-
-		return ResultGenerator.genSuccessResult();
-	}
-
-	//制伏
-	@ResponseBody
-	@RequestMapping("/getSubdue")
-	public Result getSubdue( ){
-
-		return ResultGenerator.genSuccessResult();
 	}
 
 }

@@ -78,22 +78,31 @@ public class GetData {
 			return null;
 		}
 		List<BigDecimal[]>gpslist=null;
+		List<String>timelist=null;
 		String equipCard=null;
+		WSgpsData FirwSgpsData =null;
 		for (String key : set) {
 			//每一个设备对象
 			Set<String> zrange = jedis.zrange(key, 0, -1);
 			for (String e : zrange) {
-				WSgpsData FirwSgpsData = new JSONObject().parseObject(e, WSgpsData.class);
+				 FirwSgpsData = new JSONObject().parseObject(e, WSgpsData.class);
 				if(resultMap.get(equipCard=FirwSgpsData.getEquipCard())!=null){
 					resultMap.get(equipCard).getGpsData().add(new BigDecimal[]{FirwSgpsData.getLongitude(),FirwSgpsData.getLatitude()});
+					resultMap.get(equipCard).getGpsTime().add(FirwSgpsData.getUptime());
 				}else{//首次加载
 					gpslist=new ArrayList<>();
+					timelist=new ArrayList<>();
 					gpslist.add(new BigDecimal[]{FirwSgpsData.getLongitude(),FirwSgpsData.getLatitude()});
+					timelist.add(FirwSgpsData.getUptime());
 					resultMap.put(FirwSgpsData.getEquipCard(),new HisGpsData.Builder().color(FirwSgpsData.getColor())
 							.equipCard(FirwSgpsData.getEquipCard())
 							.prisoner(FirwSgpsData.getPrisoner())
 							.police(FirwSgpsData.getPolice())
-							.gpsData(gpslist).build()
+							.gpsData(gpslist)
+							.gpsTime(timelist)
+							.taskId(FirwSgpsData.getTaskId())
+							.taskName(FirwSgpsData.getTaskName())
+							.build()
 					);
 				}
 			}

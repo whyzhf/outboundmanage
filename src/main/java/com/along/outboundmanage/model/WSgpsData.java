@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  */
 public class WSgpsData {
 	private Integer taskId;
+	private String taskName;
 	private String police;//干警信息
 	private String prisoner;//犯人信息
 	private String equip;//设备号
@@ -17,6 +18,14 @@ public class WSgpsData {
 	private BigDecimal latitude;//纬度值
 	private String uptime;
 	private String color;
+
+	public String getTaskName() {
+		return taskName;
+	}
+
+	public void setTaskName(String taskName) {
+		this.taskName = taskName;
+	}
 
 	public String getColor() {
 		return color;

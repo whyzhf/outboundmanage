@@ -84,7 +84,7 @@ public class GpsServiceImpl implements GpsService {
 			//taskId=taskId.split("R")[0];//测试用，删除此行
 			try {
 				//流式查询本地测试查询10w条数据不超过1s,表分区;服务器查询依旧慢
-				gpsMap=queryHisGpsList("select id, taskId, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color " +
+				gpsMap=queryHisGpsList("select id, taskId,taskName, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color " +
 						" from outbound_gpslog where taskId= "+taskId, null, "id,taskId,equip,equipCard,police,prisoner,stauts,errorStatus,uptime,type,longitude,latitude,lot,lat,speed,direction,color".split(","));
 			} catch (Exception e) {
 				e.printStackTrace();

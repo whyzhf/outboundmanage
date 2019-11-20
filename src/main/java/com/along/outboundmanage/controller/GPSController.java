@@ -1,6 +1,7 @@
 package com.along.outboundmanage.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.along.outboundmanage.model.ExceptionEntity.Result;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.service.GpsService;
@@ -39,6 +40,7 @@ public class GPSController {
 		return doPostTestTwo(pubParam, url);
 	}
 
+	//不用
 	@RequestMapping(value = "gethisData")
 	@ResponseBody
 	public  Map<String,Object>  gethisData( @RequestBody Map<String,String> pubParam) {
@@ -74,7 +76,9 @@ public class GPSController {
 
 		}else{
 			mapList.add(gpsService.getHisGpsData(taskId));
+
 		}
+
 		return ResultGenerator.genSuccessResult(mapList);
 
 	}
@@ -100,6 +104,7 @@ public class GPSController {
 		}else{
 			mapList.add(gpsService.getGpsData(taskId));
 		}
+		System.out.println(JSONObject.toJSONString(mapList));
 		return ResultGenerator.genSuccessResult(mapList);
 
 	}

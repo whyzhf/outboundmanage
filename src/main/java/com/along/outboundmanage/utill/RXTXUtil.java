@@ -1,3 +1,4 @@
+/*
 package com.along.outboundmanage.utill;
 
 
@@ -19,9 +20,11 @@ import static com.along.outboundmanage.utill.HexadecimalUtil.hexStringToByteArra
 import static com.along.outboundmanage.utill.OrderUtil.retuenLogOrder;
 import static com.along.outboundmanage.utill.OrderUtil.send;
 
+*/
 /**
  * 使用rxtx连接串口工具类
- */
+ *//*
+
 public class RXTXUtil {
 	public static void main(String[] args) {
 		String order = send("00000090", "800001", 90);
@@ -32,34 +35,46 @@ public class RXTXUtil {
 	}
 	private static final String DEMONAME = "串口测试";
 
-	/**
+	*/
+/**
 	 * 检测系统中可用的端口
-	 */
+	 *//*
+
 //	private CommPortIdentifier portId;
-	/**
+	*/
+/**
 	 * 获得系统可用的端口名称列表
-	 */
+	 *//*
+
 	private static Enumeration<CommPortIdentifier> portList;
-	/**
+	*/
+/**
 	 * 输入流
-	 */
+	 *//*
+
 	private static InputStream inputStream;
-	/**
+	*/
+/**
 	 * RS-232的串行口
-	 */
+	 *//*
+
 	private static SerialPort serialPort;
-	/**
+	*/
+/**
 	 * 返回结果
-	 */
+	 *//*
+
 	private static String res=null;
-	/**
+	*/
+/**
 	 * 串口命令执行
 	 * @param order 命令
 	 * @param portName 端口名
 	 * @param baudRate 波特率
 	 * @return
 	 * @throws UnsupportedEncodingException
-	 */
+	 *//*
+
 	public synchronized  static String executeOrder(String order,String portName,int baudRate)  {
 		String str="";
 		if (serialPort==null) {
@@ -68,7 +83,8 @@ public class RXTXUtil {
 		//发送消息
 		sendData(order);
 		//代替监听
-		/*for (int i = 0; i <1000; i++) {
+		*/
+/*for (int i = 0; i <1000; i++) {
 			str=readData();
 			str=returnCheck(order,str);
 			if (str!=null){
@@ -80,7 +96,8 @@ public class RXTXUtil {
 					e.printStackTrace();
 				}
 			}
-		}*/
+		}*//*
+
 		//设置监听
 		setListenerToSerialPort( new SerialPortEventListener(){
 			@Override
@@ -110,10 +127,12 @@ public class RXTXUtil {
 		return res;
 	}
 
-	/**
+	*/
+/**
 	 * 返回命令校验
 	 * @return
-	 */
+	 *//*
+
 	public static String returnCheck(String order,String str){
 		if(str!=null&&str.contains("A5")&&str.indexOf("A5")+40<=str.length()){
 			String res=str;
@@ -138,10 +157,12 @@ public class RXTXUtil {
 	}
 
 
-	/**
+	*/
+/**
 	 * 获得系统可用的端口名称列表
 	 * @return 可用端口名称列表
-	 */
+	 *//*
+
 	@SuppressWarnings("unchecked")
 	public static void getSystemPort(){
 		List<String> systemPorts = new ArrayList<>();
@@ -154,12 +175,14 @@ public class RXTXUtil {
 
 	}
 
-	/**
+	*/
+/**
 	 * 开启串口
 	 * @param serialPortName 串口名称
 	 * @param baudRate 波特率
 	 * @return 串口对象
-	 */
+	 *//*
+
 	public static void openSerialPort(String serialPortName,int baudRate) {
 		try {
 			//通过端口名称得到端口
@@ -182,10 +205,12 @@ public class RXTXUtil {
 
 	}
 
-	/**
+	*/
+/**
 	 * 向串口发送数据
 	 * @param order 发送的命令
-	 */
+	 *//*
+
 	public static void sendData( String order) {
 		//16进制表示的字符串转换为字节数组
 		byte[] data =hexStringToByteArray(order);
@@ -209,10 +234,12 @@ public class RXTXUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 从串口读取数据
 	 * @return 读取的数据
-	 */
+	 *//*
+
 	public static String  readData() {
 		//保存串口返回信息
 		StringBuffer res=new StringBuffer(40);
@@ -249,10 +276,12 @@ public class RXTXUtil {
 		return res.toString();
 	}
 
-	/**
+	*/
+/**
 	 * 关闭串口
 	 *
-	 */
+	 *//*
+
 	public static void closeSerialPort() {
 		if(serialPort != null) {
 			serialPort.close();
@@ -261,10 +290,12 @@ public class RXTXUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 给串口设置监听
 	 * @param listener
-	 */
+	 *//*
+
 	public static void setListenerToSerialPort( SerialPortEventListener listener) {
 		try {
 			//给串口添加事件监听
@@ -277,3 +308,4 @@ public class RXTXUtil {
 
 	}
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.along.outboundmanage.utill;
 
 import gnu.io.*;
@@ -16,32 +17,44 @@ import static com.along.outboundmanage.utill.HexadecimalUtil.*;
 public class FirdayUtil implements SerialPortEventListener{
 	private static final String DEMONAME = "串口测试";
 
-	/**
+	*/
+/**
 	 * 检测系统中可用的端口
-	 */
+	 *//*
+
 	private CommPortIdentifier portId;
-	/**
+	*/
+/**
 	 * 枚举类
-	 */
+	 *//*
+
 	private Enumeration portList;
-	/**
+	*/
+/**
 	 * 输入流
-	 */
+	 *//*
+
 	private static InputStream inputStream;
-	/**
+	*/
+/**
 	 * RS-232的串行口
-	 */
+	 *//*
+
 	private SerialPort serialPort;
-	/**
+	*/
+/**
 	 * 串口返回信息
-	 */
+	 *//*
+
 	private static String test = "";
 
-	/**
+	*/
+/**
 	 * 初始化
 	 *
 	 * @param baudRate 波特率
-	 */
+	 *//*
+
 	public void init(int baudRate) {
 		//获取系统中可用的端口
 
@@ -92,10 +105,12 @@ public class FirdayUtil implements SerialPortEventListener{
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 监听函数
 	 * @param serialPortEvent
-	 */
+	 *//*
+
 	public void serialEvent(SerialPortEvent serialPortEvent) {
 		switch (serialPortEvent.getEventType()) {
 			//获取到有效信息
@@ -107,9 +122,11 @@ public class FirdayUtil implements SerialPortEventListener{
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 读取串口信息
-	 */
+	 *//*
+
 	private void readComm() {
 		byte[] readBuffer = new byte[20];
 		try {
@@ -170,3 +187,4 @@ public class FirdayUtil implements SerialPortEventListener{
 }
 
 
+*/
