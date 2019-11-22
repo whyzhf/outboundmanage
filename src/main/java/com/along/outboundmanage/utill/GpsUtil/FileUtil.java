@@ -2,13 +2,16 @@ package com.along.outboundmanage.utill.GpsUtil;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.along.outboundmanage.model.HisGpsData;
 import com.along.outboundmanage.model.HistData;
+import org.checkerframework.checker.units.qual.K;
 
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -21,11 +24,28 @@ import static com.along.outboundmanage.utill.GpsUtil.MyThread.asyncGet;
 public class FileUtil {
 	public static void main(String[] args) throws Exception {
 		//System.out.println("548".split("-")[0]);
-		List<HistData> histData = new FileUtil().readFileReturnMap("E:\\gpsData\\demo.txt");
-		System.out.println(histData.get(0));
+		Map<String, HisGpsData> stringHisGpsDataMap = new FileUtil().readFileReturnMap2("E:\\gpsData\\548-json.txt");
+	//	System.out.println(stringHisGpsDataMap.size());
+		stringHisGpsDataMap.forEach((K,V)->{
+			System.out.println(K+" # "+V.toString());
+		});
+
 	}
 
-
+	//获取单个文件里的值
+	public static 	Map<String,HisGpsData> getData2(String taskId){
+		//String path =SysUtil.LOCAL_DATA_LOCATION;
+		String path =SysUtil.WEB_DATA_LOCATION;
+		String fileName=FindFile(taskId);
+		String url=path+"/"+fileName;
+		try {
+			//return readFile(url);
+			return readFileReturnMap2(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	//获取单个文件里的值
 	public static 	List<HistData> getData(String taskId){
@@ -98,7 +118,58 @@ public class FileUtil {
 	}
 
 
+	//读取文件
+	public static	Map<String,HisGpsData>  readFileReturnMap2(String path) throws IOException {
+		Map<String,HisGpsData> map=new HashMap<>();
+		int i=0;
+		long start = System.currentTimeMillis();
+		File file = new File(path );
+		//	System.out.println("start.....");
+		FileInputStream fis = new FileInputStream(file);
+		UnicodeReader unicodeReader = new UnicodeReader(fis, Charset.defaultCharset().name());
+		BufferedReader br = new BufferedReader(unicodeReader);
+		String tempString=null;
+		String equipCard=null;
+		List<BigDecimal[]>gpslist=null;
+		List<String>timelist=null;
+		while (( tempString = br.readLine()) != null ) {
+			if ("".equals(tempString)){
+				break;
+			}
+			JSONObject jsonObject = JSONObject.parseObject(tempString);
+		//	System.out.println(jsonObject.get("longitude"));
+			equipCard=jsonObject.get("equipCard")+"";
+			if(map.get(equipCard)!=null){
+				map.get(equipCard).getGpsData().add(new BigDecimal[]{new BigDecimal(jsonObject.get("longitude")+""),new BigDecimal(jsonObject.get("latitude")+"")});
+				map.get(equipCard).getGpsTime().add(jsonObject.get("uptime")+"");
+			}else{//首次加载
+				gpslist=new ArrayList<>();
+				timelist=new ArrayList<>();
+				timelist.add(jsonObject.get("uptime")+"");
+				gpslist.add(new BigDecimal[]{new BigDecimal(jsonObject.get("longitude")+""),new BigDecimal(jsonObject.get("latitude")+"")});
+				map.put(equipCard,new HisGpsData.Builder().color(jsonObject.get("color")+"")
+						.equipCard(jsonObject.get("equipCard")+"")
+						.prisoner(jsonObject.get("prisoner")+"")
+						.police(jsonObject.get("police")+"")
+						.gpsData(gpslist)
+						.gpsTime(timelist)
+						.taskId(Integer.valueOf(jsonObject.get("taskId")+""))
+						.taskName(jsonObject.get("taskName")+"")
+						.build()
 
+				);
+			}
+			i++;
+			//res.add(jsonObject.toString());
+		}
+
+		unicodeReader.close();
+		fis.close();
+		br.close();
+		long end = System.currentTimeMillis();
+		System.out.println(i/10000.0+" w条数据   readTxt1方法，使用内存="+(Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory())/ 1024 / 1024 + "M"+",使用时间秒="+(end-start)/1000.0+"s");
+		return map;
+	}
 
 	//读取文件
 	public static List<String> readFile(String path) throws IOException {
@@ -178,7 +249,7 @@ public class FileUtil {
 			}
 		}
 		// 打印符合要求的文件名
-	//	System.out.println(fileName);
+		System.out.println(fileName);
 		return fileName;
 	}
 

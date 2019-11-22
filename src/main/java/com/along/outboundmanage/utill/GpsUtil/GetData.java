@@ -70,6 +70,7 @@ public class GetData {
 	}*/
 
 	public static Map<String,HisGpsData> getHisGpsData(String taskId ){
+
 		Jedis jedis = JedisUtil.getInstance().getJedis();
 		Map<String, HisGpsData> resultMap = new HashMap<>();
 		//获取所有该任务的key(设备)
@@ -82,10 +83,14 @@ public class GetData {
 		String equipCard=null;
 		WSgpsData FirwSgpsData =null;
 		for (String key : set) {
+			long startTime = System.currentTimeMillis();
 			//每一个设备对象
 			Set<String> zrange = jedis.zrange(key, 0, -1);
+			long startTime2 = System.currentTimeMillis();
+			System.out.println(key+":"+(startTime2-startTime)+"  "+zrange.size());
 			for (String e : zrange) {
 				 FirwSgpsData = new JSONObject().parseObject(e, WSgpsData.class);
+
 				if(resultMap.get(equipCard=FirwSgpsData.getEquipCard())!=null){
 					resultMap.get(equipCard).getGpsData().add(new BigDecimal[]{FirwSgpsData.getLongitude(),FirwSgpsData.getLatitude()});
 					resultMap.get(equipCard).getGpsTime().add(FirwSgpsData.getUptime());
@@ -106,6 +111,7 @@ public class GetData {
 					);
 				}
 			}
+
 		}
 		return resultMap;
 	}

@@ -6,6 +6,7 @@ import com.along.outboundmanage.model.HisGpsData;
 import com.along.outboundmanage.model.HistData;
 import com.along.outboundmanage.model.WSgpsData;
 import com.along.outboundmanage.service.GpsService;
+import com.along.outboundmanage.utill.GpsUtil.FileUtil;
 import com.along.outboundmanage.utill.GpsUtil.GetData;
 import com.along.outboundmanage.utill.JedisUtil;
 import org.springframework.stereotype.Service;
@@ -109,30 +110,52 @@ public class GpsServiceImpl implements GpsService {
 		Map<String, Object> resMap =new HashMap<>();
 		Map<String, HisGpsData> gpsMap =new HashMap<>();
 		List<HisGpsData>gpsDataList=new ArrayList<>();
-		//先从redis取数据
-		gpsMap = GetData.getHisGpsData(taskId);
+
+		gpsMap =FileUtil.getData2(taskId);
 		if (gpsMap!=null && !gpsMap.isEmpty()){
 			//return  gpsMap;
-		}else{//redis无数据，再从数据库取数据,并写入redis
-			//taskId=taskId.split("R")[0];//测试用，删除此行
-			try {
-				//流式查询本地测试查询10w条数据不超过1s,表分区;服务器查询依旧慢
-				gpsMap=queryHisGpsList("select id, taskId, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color " +
-						" from outbound_gpshislog where taskId= "+taskId, null, "id,taskId,equip,equipCard,police,prisoner,stauts,errorStatus,uptime,type,longitude,latitude,lot,lat,speed,direction,color".split(","));
-			} catch (Exception e) {
-				e.printStackTrace();
+		}else {
+			//先从redis取数据
+			long startTime = System.currentTimeMillis();
+			gpsMap = GetData.getHisGpsData(taskId);
+			long startTime2 = System.currentTimeMillis();
+			System.out.println("redis:" + (startTime2 - startTime));
+			if (gpsMap != null && !gpsMap.isEmpty()) {
+				//return  gpsMap;
+			} else {//redis无数据，再从数据库取数据,并写入redis
+				//taskId=taskId.split("R")[0];//测试用，删除此行
+				try {
+					//流式查询本地测试查询10w条数据不超过1s,表分区;服务器查询依旧慢
+					gpsMap = queryHisGpsList("select id, taskId, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color " +
+							" from outbound_gpshislog where taskId= " + taskId, null, "id,taskId,equip,equipCard,police,prisoner,stauts,errorStatus,uptime,type,longitude,latitude,lot,lat,speed,direction,color".split(","));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
+		/*long startTime3 = System.currentTimeMillis();
+		System.out.println("sql:"+(startTime3-startTime2));*/
 		gpsMap.forEach((K,V)->gpsDataList.add(V));
 		resMap.put("taskId",taskId);
 		resMap.put("taskdata",gpsDataList);
 		//写入redis
 		//savaRedis(gpsData1);
+	//	long startTime4 = System.currentTimeMillis();
+		//System.out.println("all:"+(startTime4-startTime3));
 		return resMap;
 	}
 
 	@Override
 	public List<Integer> getTaskIdByArea(String areaId) {
 		return roadLogDao.getTaskIdByArea(areaId);
+	}
+
+	@Override
+	public int deleteGpslog() {
+		return roadLogDao.deleteGpslog();
+	}
+	@Override
+	public boolean addhisData() {
+		return roadLogDao.addhisData();
 	}
 }

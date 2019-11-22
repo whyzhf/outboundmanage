@@ -13,4 +13,7 @@ public interface GpsService {
 
 	Map<String, Object> getHisGpsData(String taskId);
 	List<Integer> getTaskIdByArea(String areaId);
+
+	int deleteGpslog();
+	boolean addhisData();
 }

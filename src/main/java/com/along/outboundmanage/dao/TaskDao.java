@@ -155,6 +155,7 @@ public interface TaskDao {
 			" SET  status=1\n" +
 			" WHERE id in (${ids})")
 	boolean clearCarStatus(@Param("ids") String ids);
+
 	@Update("UPDATE outbound_equipment\n" +
 			" SET status=1 \n" +
 			" WHERE id in (${ids})")

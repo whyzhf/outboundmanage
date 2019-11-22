@@ -1,5 +1,6 @@
 package com.along.outboundmanage.utill;
 
+import com.alibaba.fastjson.JSONObject;
 import com.along.outboundmanage.utill.GpsUtil.SysUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -54,23 +55,21 @@ public class JedisUtil {
 
 		JedisUtil jedisUtil = JedisUtil.getInstance();
 		Jedis jedis = JedisUtil.getInstance().getJedis();
-		Set<String> set = jedis.keys("*48*");
 
-		for (String key : set) {
-			System.out.println(key);
-		}
-		JedisUtil.getInstance().returnJedis(jedis);
-		/*JedisUtil.Strings strings = jedisUtil.new Strings();
-		strings.set("nnn", "nnnn");
-		System.out.println("-----" + strings.get("nnn"));
-		Jedis jedis = JedisUtil.getInstance().getJedis();
-		for (int i = 0; i < 10; i++) {
-			jedis.set("test", "test");
-			System.out.println(i + "==" + jedis.get("test"));
+		String key="demo2";
 
-		}
 		JedisUtil.getInstance().returnJedis(jedis);
-*/
+
+		/*for (int i = 0; i < 1500; i++) {
+			double score=System.currentTimeMillis();
+			String jsonString = JSONObject.toJSONString("{\"color\":\"#FFA500\",\"equipCard\":\"114\",\"latitude\":22.529435506768934,\"longitude\":113.94434365372018,\"uptime\":"+score+"}");
+			jedisUtil.SORTSET.zadd(key,score, jsonString);
+			jedis.expire(key, 60 * 60 * 24 * 7);
+		}*/
+		double score=System.currentTimeMillis();
+		System.out.println(jedis.zrange(key, 0, -1).size());
+		double score2=System.currentTimeMillis();
+		System.out.println(score2-score);
 	}
 	/**
 	 * 初始化

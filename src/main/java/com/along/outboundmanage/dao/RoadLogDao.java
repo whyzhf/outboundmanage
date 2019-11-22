@@ -35,4 +35,13 @@ public interface RoadLogDao {
 	@Select(" SELECT DISTINCT id from outbound_task where status=3 and area_id=${areaId}")
 	List<Integer> getTaskIdByArea(@Param("areaId") String areaId);
 
+
+	@Delete("DELETE FROM outbound_gpslog where taskId not in(SELECT id FROM outbound_task where status=3)")
+	int deleteGpslog();
+
+	@Insert("INSERT INTO outbound_gpslogdemo\n" +
+			" (id,taskId, taskName, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color)\n" +
+			" SELECT id, taskId,taskName, equip, equipCard, police, prisoner, stauts, errorStatus, uptime, `type`, longitude, latitude, lot, lat, speed, direction, color\n" +
+			" FROM outbound_gpslog where taskId not in(SELECT id FROM outbound_task where status=3) ")
+	boolean addhisData();
 }
