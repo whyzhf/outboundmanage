@@ -110,12 +110,12 @@ public class GpsServiceImpl implements GpsService {
 		Map<String, Object> resMap =new HashMap<>();
 		Map<String, HisGpsData> gpsMap =new HashMap<>();
 		List<HisGpsData>gpsDataList=new ArrayList<>();
-
+		//先读取文件
 		gpsMap =FileUtil.getData2(taskId);
 		if (gpsMap!=null && !gpsMap.isEmpty()){
 			//return  gpsMap;
 		}else {
-			//先从redis取数据
+			//再从redis取数据
 			long startTime = System.currentTimeMillis();
 			gpsMap = GetData.getHisGpsData(taskId);
 			long startTime2 = System.currentTimeMillis();

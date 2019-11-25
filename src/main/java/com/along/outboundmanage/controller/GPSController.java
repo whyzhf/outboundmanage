@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.along.outboundmanage.utill.HttpClientUtil.doPostTestTwo;
+import static com.along.outboundmanage.utill.HttpClientUtil.doPostTestTwo2;
 
 /**
  *gps接口管理
@@ -78,6 +79,13 @@ public class GPSController {
 			mapList.add(gpsService.getHisGpsData(taskId));
 
 		}
+		/*new Thread() {
+			public void run() {
+				//发送虚拟数据
+				String url = "http://120.77.252.208:8080/gps/Order/initgpsServer";
+				doPostTestTwo2(url);
+			}
+		}.start();*/
 
 		return ResultGenerator.genSuccessResult(mapList);
 

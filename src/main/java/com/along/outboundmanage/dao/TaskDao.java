@@ -12,7 +12,11 @@ public interface TaskDao {
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" WHERE t.area_id=#{areaId} order by  t.status <> 3 ,t.id Desc" )
 	List<OutboundTask> getAllTaskByAreaId(@Param("areaId") int areaId);
-
+	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName" +
+			" FROM outbound_task t\n" +
+			" left join outbound_route r on t.route_id=r.id\n" +
+			" WHERE t.area_id=#{areaId} and t.status in(${status}) order by  t.status <> 3,t.id Desc" )
+	List<OutboundTask> getTaskByAreaIdStatus(@Param("areaId") int areaId,@Param("status") String status);
 	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName" +
 			" FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +

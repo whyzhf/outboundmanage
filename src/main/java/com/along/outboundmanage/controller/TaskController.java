@@ -43,7 +43,16 @@ public class TaskController {
 	@RequestMapping("/getTaskList")
 	public Result getTaskList(@RequestBody PubParam pubParam){
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
-		List<OutboundTask> allPolice = taskService.getAllTask(pubParam.getAreaId());
+		List<OutboundTask> allPolice = taskService.getCurrTaskList(pubParam.getAreaId());
+		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allPolice);
+		return ResultGenerator.genSuccessResult(pageInfo);
+	}
+
+	@ResponseBody
+	@RequestMapping("/getHisTaskList")
+	public Result getHisTaskList(@RequestBody PubParam pubParam){
+		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
+		List<OutboundTask> allPolice = taskService.getHisTaskList(pubParam.getAreaId());
 		PageInfo<OutboundTask> pageInfo = new PageInfo<>(allPolice);
 		return ResultGenerator.genSuccessResult(pageInfo);
 	}
