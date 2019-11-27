@@ -225,15 +225,16 @@ public class ViewsServiceImpl implements ViewsService {
 	public EchartsPieData getPie(String area){
 		EchartsPieData result=new EchartsPieData();
 		String type=" and type in (0,1,2,3,4) ";
-		String data = getLastMonth("yyyy-MM");
+		/*String data = getLastMonth("yyyy-MM");
 		String time=data;
-		String timename=time.replace("-","年");
+		String timename=time.replace("-","年");*/
+		String time = getNowData("yyyy-MM-dd");
 		if ("16".equals(area)){
 			area="";
 			//result.setTitleName(timename+"月全省统计");
 			result.setTitleName("全局统计");
 		}else{
-			result.setTitleName(timename+"月全市统计");
+			result.setTitleName("全市统计");
 			String id="0";
 			List<Integer> ids = areaDao.getAreaIdsByPar(Integer.valueOf(area));
 			id=ids.stream().map(e->e+"").collect(Collectors.joining(","));

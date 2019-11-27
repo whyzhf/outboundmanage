@@ -100,7 +100,6 @@ public class GpsServiceImpl implements GpsService {
 	}
 
 
-
 	/**
 	 * 获取历史任务数据
 	 */
@@ -116,10 +115,10 @@ public class GpsServiceImpl implements GpsService {
 			//return  gpsMap;
 		}else {
 			//再从redis取数据
-			long startTime = System.currentTimeMillis();
+		//	long startTime = System.currentTimeMillis();
 			gpsMap = GetData.getHisGpsData(taskId);
-			long startTime2 = System.currentTimeMillis();
-			System.out.println("redis:" + (startTime2 - startTime));
+		//	long startTime2 = System.currentTimeMillis();
+		//	System.out.println("redis:" + (startTime2 - startTime));
 			if (gpsMap != null && !gpsMap.isEmpty()) {
 				//return  gpsMap;
 			} else {//redis无数据，再从数据库取数据,并写入redis

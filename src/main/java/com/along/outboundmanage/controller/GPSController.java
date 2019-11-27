@@ -33,14 +33,20 @@ public class GPSController {
 	@Resource
 	private GpsService gpsService;
 
-
+	//电击命令
 	@RequestMapping(value = "sendOrder")
 	@ResponseBody
 	public JSON sendOrder(HttpServletRequest request, @RequestBody Map<String,String> pubParam) {
 		String url = "http://120.77.252.208:8080/gps/Order/sendOrder";
 		return doPostTestTwo(pubParam, url);
 	}
-
+	//电击命令
+	@RequestMapping(value = "stopPower")
+	@ResponseBody
+	public JSON stopPower(HttpServletRequest request, @RequestBody Map<String,String> pubParam) {
+		String url = "http://120.77.252.208:8080/gps/Order/stopPower";
+		return doPostTestTwo(pubParam, url);
+	}
 	//不用
 	@RequestMapping(value = "gethisData")
 	@ResponseBody

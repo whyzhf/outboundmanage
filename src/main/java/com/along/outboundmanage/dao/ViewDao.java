@@ -51,11 +51,11 @@ public interface ViewDao {
 	List<ViewCount> getDateByData(@Param("time") String time,@Param("type") String type, @Param("area")String area);
 
 	@Cacheable(value = "getPreByData"  ,key = "#area + ''+#time + ''+#type")
-	@CacheExpire(expire = 60*60)
+	@CacheExpire(expire = 60*5)
 	@Select("select   t.type as type,count(t.pid) as count,${time} as data from (\n" +
 			" select   t.id,`type`, tp.prisoner_id as pid,convert(start_time,date) as times from outbound_task t\n" +
 			" left join outbound_task_prisoner_rel tp on t.id=tp.task_id\n" +
-			" where  status=4 and start_time like '${time}%' " +
+			" where  status=3 and start_time like '${time}%' " +
 			"  ${type}"+
 			"  ${area}"+
 			" and  tp.prisoner_id is not null\n" +
