@@ -34,6 +34,7 @@ public class TaskServiceImpl implements TaskService {
     private EquipRelManageDao equipRelManageDao;
     @Resource
     private EquipmentDao equipmentDao;
+
     @Override
     public List<OutboundTask> getAllTask(int areaId) {
         return taskDao.getAllTaskByAreaId(areaId);
@@ -46,7 +47,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<OutboundTask> getCurrTaskList(int areaId) {
-        return taskDao.getTaskByAreaIdStatus(areaId,"1,2,3");
+        return taskDao.getTaskByAreaIdStatus(areaId,"0,1,2,3");
     }
 
     @Override
@@ -196,10 +197,8 @@ public class TaskServiceImpl implements TaskService {
                         th.setFirjson(getJsonStr(firmap.get(Integer.parseInt(idarr[i]))));
                         th.setSecjson(getJsonStr(map));
                         res.add(th);
-
                         policIds = policIds + allPolice.get(i).getId() + ",";
                         equipIds = equipIds + allPolice.get(i).getEquipmentCard() + "," + allPolice.get(i).getEquipmentCard2() + ",";
-
                     }
                 }
                 List<OutboundPrisoner> allPrisoner= (List<OutboundPrisoner>) map.get("prisoner");
@@ -508,7 +507,7 @@ public class TaskServiceImpl implements TaskService {
         //修改设备状态
        // eids=eids.substring(0,eids.length()-1);
         equipmentDao.upEquipmentTypeAndStatus(0,0,eids);
-      //返回拼接字符串
+      //返回拼接字符串addPoliceEquip
         Map<String, Object> res=new HashMap<>();
         res.put("data",equipRelManageDao.getreturn(policeId));
         return res;

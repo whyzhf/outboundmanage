@@ -42,9 +42,11 @@ public class FileUtil {
 			//return readFile(url);
 			return readFileReturnMap2(url);
 		} catch (IOException e) {
+
 			e.printStackTrace();
+			return null;
 		}
-		return null;
+	//	return null;
 	}
 
 	//获取单个文件里的值
@@ -249,7 +251,7 @@ public class FileUtil {
 			}
 		}
 		// 打印符合要求的文件名
-		System.out.println(fileName);
+	//	System.out.println(fileName);
 		return fileName;
 	}
 

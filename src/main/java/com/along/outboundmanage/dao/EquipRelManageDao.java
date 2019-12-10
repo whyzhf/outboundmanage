@@ -87,6 +87,6 @@ public interface EquipRelManageDao {
 			"   where start_time like \"${time}%\" and area_id=${areaId}" +
 			"    and t.id <> ${taskId}" +
 			" )\n" +
-			"  and  p.area_id=${areaId}")
+			"  and  p.area_id=${areaId} and p.ifdel=1")
 	List<OutboundPrisoner> getPrisoners(@Param("taskId") String taskId,@Param("time") String time,@Param("areaId")String areaId);
 }

@@ -69,7 +69,7 @@ public interface TaskDao {
 			" FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" left join outbound_area a on t.area_id=a.id\n" +
-			" WHERE t.id in (${taskIds}) and  t.status =3" +
+			" WHERE t.id in (${taskIds}) and  t.status in (3,4) " +
 			"  order by t.status, t.id, t.area_id" )
 	OutboundTaskJson getTaskByIds(@Param("taskIds")String taskIds);
 

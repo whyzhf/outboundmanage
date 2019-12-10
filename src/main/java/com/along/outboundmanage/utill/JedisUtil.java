@@ -58,7 +58,7 @@ public class JedisUtil {
 
 		String key="demo2";
 
-		JedisUtil.getInstance().returnJedis(jedis);
+	//	JedisUtil.getInstance().returnJedis(jedis);
 
 		/*for (int i = 0; i < 1500; i++) {
 			double score=System.currentTimeMillis();
@@ -66,10 +66,15 @@ public class JedisUtil {
 			jedisUtil.SORTSET.zadd(key,score, jsonString);
 			jedis.expire(key, 60 * 60 * 24 * 7);
 		}*/
-		double score=System.currentTimeMillis();
-		System.out.println(jedis.zrange(key, 0, -1).size());
+	//	double score=System.currentTimeMillis();
+		Set<String> set = jedis.keys("548_799994");
+
+		for (String key1 : set) {
+			System.out.println(key1);
+		}
+	/*	System.out.println(jedis.zrange(key, 0, -1).size());
 		double score2=System.currentTimeMillis();
-		System.out.println(score2-score);
+		System.out.println(score2-score);*/
 	}
 	/**
 	 * 初始化
