@@ -643,7 +643,7 @@ public class TaskServiceImpl implements TaskService {
             for (int i = 0; i < allPoliceById.size(); i++) {
                 harr[i]=allPoliceById.get(i).getEquipmentId();
                 warr[i]=allPoliceById.get(i).getEquipmentId2();
-                allPoliceById.get(i).setUserId(0);
+                allPoliceById.get(i).setUserId(allPoliceById.get(i).getUserId());
             }
             taskDesc.setHandsetIds(harr);
             taskDesc.setWatchIds(warr);

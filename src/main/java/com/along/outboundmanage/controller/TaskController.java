@@ -248,7 +248,7 @@ public class TaskController {
 	@ResponseBody
 	@RequestMapping("/getMyHisTaskList")
 	public Result getMyHisTaskList(@RequestBody PubParam pubParam){
-		System.out.println("123456");
+	//	System.out.println("123456");
 		PageHelper.startPage(pubParam.getPageNum(),pubParam.getPageSize());
 		List<String> allList = taskService.getAllMyTaskHistoryFir(pubParam.getUserId(),pubParam.getAreaId()+"");
 		PageInfo<Object> pageInfo = new PageInfo<>(allList.stream().map(e-> JSON.parseObject(e)).collect(Collectors.toList()));
