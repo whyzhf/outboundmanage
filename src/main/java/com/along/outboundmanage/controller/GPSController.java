@@ -118,7 +118,7 @@ public class GPSController {
 		}else{
 			mapList.add(gpsService.getGpsData(taskId));
 		}
-		System.out.println(JSONObject.toJSONString(mapList));
+	//	System.out.println(JSONObject.toJSONString(mapList));
 		return ResultGenerator.genSuccessResult(mapList);
 
 	}
