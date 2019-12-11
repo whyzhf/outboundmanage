@@ -17,7 +17,9 @@ public interface EquipRelManageDao {
 	@Update("update outbound_equipment\n" +
 			" SET `type`=0, status=1\n" +
 			" WHERE id in (\n" +
-			"   select concat_ws(\",\",GROUP_CONCAT(equipment_id),GROUP_CONCAT(equipment_id2)) from outbound_police where id in(${ids})\n" +
+				" select equipment_id from outbound_police where id in(${ids})\n" +
+				"  UNION" +
+				" select equipment_id2 from outbound_police where id in(${ids})"+
 			" )")
 	boolean updataEquip(@Param("ids") String ids);
 
@@ -40,7 +42,7 @@ public interface EquipRelManageDao {
 	@Update("update outbound_equipment\n" +
 			" SET `type`=0, status=1\n" +
 			" WHERE id in (\n" +
-			"   select GROUP_CONCAT(equipment_id) from outbound_prisoner where id in(${ids})\n" +
+			"   select equipment_id from outbound_prisoner where id in(${ids})\n" +
 			" )")
 	boolean updatapriEquip(@Param("ids") String ids);
 
@@ -66,7 +68,7 @@ public interface EquipRelManageDao {
 			"  FROM outbound_task  t\n" +
 			" left join outbound_task_police_rel r on t.id=r.task_id \n" +
 			" where start_time like \"${time}%\" and area_id=${areaId}\n" +
-			"    and t.id <> ${taskId}" +
+			"    and t.id <> ${taskId} and t.status<4" +
 			" )\n" +
 			" and p.area_id=${areaId}")
 	List<OutboundPoliceForSel> getPolices(@Param("taskId") String taskId, @Param("time") String time, @Param("areaId")String areaId);
@@ -85,8 +87,8 @@ public interface EquipRelManageDao {
 			"    FROM outbound_task  t\n" +
 			"    left join outbound_task_prisoner_rel r on t.id=r.task_id \n" +
 			"   where start_time like \"${time}%\" and area_id=${areaId}" +
-			"    and t.id <> ${taskId}" +
+			"    and t.id <> ${taskId} and t.status<4 " +
 			" )\n" +
-			"  and  p.area_id=${areaId} and p.ifdel=1")
+			"  and  p.area_id=${areaId} and p.ifdel=0")
 	List<OutboundPrisoner> getPrisoners(@Param("taskId") String taskId,@Param("time") String time,@Param("areaId")String areaId);
 }

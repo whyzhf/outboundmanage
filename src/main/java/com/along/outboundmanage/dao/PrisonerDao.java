@@ -18,7 +18,7 @@ public interface PrisonerDao {
 	boolean upPrisoner(@Param("OutboundPrisoner") OutboundPrisoner outboundPrisoner);
 	//需修改，将要删除的犯人修改状态，依旧保存犯人数据，（统计在押人数）
 	//@Delete("Delete from  outbound_prisoner where id in (${id})")
-	@Update("UPDATE outbound_prisoner  SET outtime=now(), ifdel=1" +
+	@Update("UPDATE outbound_prisoner  SET outtime=now(), ifdel=1,equipment_id=null" +
 			" WHERE id in (${id})")
 	boolean delPrisoner(@Param("id") String id);
 

@@ -152,7 +152,7 @@ public interface TaskDao {
 			" WHERE id in (${ids})")
 	boolean clearPoliceEquip(@Param("ids") String ids);
 	@Update("UPDATE outbound_prisoner\n" +
-			" SET equipment_id=null, equipment_id2=null \n" +
+			" SET equipment_id=null \n" +
 			" WHERE id in (${ids})")
 	boolean clearPrisonerEquip(@Param("ids") String ids);
 	@Update("UPDATE outbound_car\n" +
@@ -165,4 +165,8 @@ public interface TaskDao {
 			" WHERE id in (${ids})")
 	boolean clearEquipStatus(@Param("ids") String ids);
 
+	@Update("UPDATE outbound_equipment\n" +
+			" SET status=1 \n" +
+			" WHERE card in (${ids})")
+	boolean clearEquipStatusByCard(@Param("ids") String ids);
 }

@@ -48,6 +48,9 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public boolean upEquipmentTypeAndStatus(int type, int status, String id) {
+        if(type==1||status==1){//取消已分配
+
+        }
         return equipmentDao.upEquipmentTypeAndStatus(type,status,id);
     }
 

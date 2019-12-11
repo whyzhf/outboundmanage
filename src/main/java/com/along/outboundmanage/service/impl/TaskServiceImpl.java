@@ -191,27 +191,27 @@ public class TaskServiceImpl implements TaskService {
                 if(allPolice!=null && !allPolice.isEmpty()) {
                     for (int j = 0; j < allPolice.size(); j++) {
                         TaskHistory th = new TaskHistory();
-                        th.setUserId(allPolice.get(i).getUserId());
+                        th.setUserId(allPolice.get(j).getUserId());
                         th.setTaskId(Integer.parseInt(idarr[i]));
-                        th.setAreaId(allPolice.get(i).getAreaId());
+                        th.setAreaId(allPolice.get(j).getAreaId());
                         th.setFirjson(getJsonStr(firmap.get(Integer.parseInt(idarr[i]))));
                         th.setSecjson(getJsonStr(map));
                         res.add(th);
-                        policIds = policIds + allPolice.get(i).getId() + ",";
-                        equipIds = equipIds + allPolice.get(i).getEquipmentCard() + "," + allPolice.get(i).getEquipmentCard2() + ",";
+                        policIds = policIds + allPolice.get(j).getId() + ",";
+                        equipIds = equipIds + allPolice.get(j).getEquipmentCard() + "," + allPolice.get(j).getEquipmentCard2() + ",";
                     }
                 }
                 List<OutboundPrisoner> allPrisoner= (List<OutboundPrisoner>) map.get("prisoner");
                 if(allPrisoner != null && !allPrisoner.isEmpty()) {
                     for (int j = 0; j < allPrisoner.size(); j++) {
-                        prisonerIds = prisonerIds + allPrisoner.get(i).getId() + ",";
-                        equipIds = equipIds + allPrisoner.get(i).getEquipmentCard() + ",";
+                        prisonerIds = prisonerIds + allPrisoner.get(j).getId() + ",";
+                        equipIds = equipIds + allPrisoner.get(j).getEquipmentCard() + ",";
                     }
                 }
                 List<OutboundCar> allCar= (List<OutboundCar>) map.get("car");
                 if(allCar!=null && !allCar.isEmpty()) {
                     for (int j = 0; j < allCar.size(); j++) {
-                        carIds = carIds + allCar.get(i).getId() + ",";
+                        carIds = carIds + allCar.get(j).getId() + ",";
                     }
                 }
             }
@@ -235,9 +235,10 @@ public class TaskServiceImpl implements TaskService {
                 }
                 //设备状态
                 equipIds=equipIds.replaceAll("null,","");
-                if (equipIds.length()>1){
+            System.out.println("equipIds:"+equipIds);
+            if (equipIds.length()>1){
                     equipIds=equipIds.substring(0,equipIds.length()-1);
-                    taskDao.clearEquipStatus(equipIds);
+                    taskDao.clearEquipStatusByCard(equipIds);
                 }
                 //车辆状态
                 carIds=carIds.replaceAll("null,","");
