@@ -41,7 +41,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 		template.setHashValueSerializer(fastSerializer);
 		// 如果 KeySerializer 或者 ValueSerializer 没有配置，则对应的 KeySerializer、ValueSerializer 才使用这个 Serializer
 		template.setDefaultSerializer(fastSerializer);
-		String.format("redis: {}", redisConnectionFactory);
+		//String.format("redis: {}", redisConnectionFactory);// NOSONAR
 		LettuceConnectionFactory factory = (LettuceConnectionFactory) redisConnectionFactory;
 		log.info("spring.redis.database: {}", factory.getDatabase());
 		log.info("spring.redis.host: {}", factory.getHostName());
@@ -97,16 +97,16 @@ public class RedisConfig extends CachingConfigurerSupport {
 				.serializeKeysWith(TedisCacheManager.STRING_PAIR)
 				.serializeValuesWith(TedisCacheManager.FASTJSON_PAIR);
 
-		// Map<String, RedisCacheConfiguration> caches = new HashMap<>();
-		// // 缓存配置
-		// RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
-		//         .entryTtl(Duration.ofSeconds(60))
-		//         .disableCachingNullValues()
-		//         // .prefixKeysWith("redis.service")
-		//         .serializeKeysWith(stringPair)
-		//         .serializeValuesWith(fastJsonPair);
-		// caches.put("redis.service", config);
-		// return new TedisCacheManager(cacheWriter, defaultCacheConfig, caches);
+		/* Map<String, RedisCacheConfiguration> caches = new HashMap<>(); // NOSONAR
+		 // 缓存配置
+		 RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+		         .entryTtl(Duration.ofSeconds(60))
+		         .disableCachingNullValues()
+		         // .prefixKeysWith("redis.service")
+		         .serializeKeysWith(stringPair)
+		         .serializeValuesWith(fastJsonPair);// NOSONAR
+		 caches.put("redis.service", config);// NOSONAR
+		 return new TedisCacheManager(cacheWriter, defaultCacheConfig, caches);*/ // NOSONAR
 
 		return new TedisCacheManager(cacheWriter, defaultCacheConfig);
 	}

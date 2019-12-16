@@ -74,7 +74,7 @@ public class fileUtil {
 	}
 	public static void main(String args[]) {
 
-		read("E:\\gpsData\\demo.txt");
+		//read("E:\\gpsData\\demo.txt");
 
 
 	}
