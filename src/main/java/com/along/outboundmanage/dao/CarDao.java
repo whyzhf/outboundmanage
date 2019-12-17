@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface CarDao {
+	@Select("Select id  FROM outbound_car  WHERE card =#{card}")
+	Integer checCar(@Param("card") String card);
+
 	@Insert("INSERT INTO outbound_car" +
 			" ( card, `type`, status, area_id)" +
 			" VALUES( #{OutboundCar.card}, #{OutboundCar.type}," +

@@ -8,12 +8,22 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface EquipmentDao {
+	@Select("SELECT id" +
+			" FROM outboundmanage.outbound_equipment\n" +
+			" WHERE card=#{OutboundEquipment.card} and form=#{OutboundEquipment.form}")
+	Integer checkEquipment(@Param("OutboundEquipment") OutboundEquipment outboundEquipment);
+
 	@Insert("INSERT INTO outbound_equipment" +
 			" (card, name, `type`, status, form, area_id)" +
 			" VALUES ( #{OutboundEquipment.card}, #{OutboundEquipment.name}," +
 			" #{OutboundEquipment.type},#{OutboundEquipment.status},#{OutboundEquipment.form},#{OutboundEquipment.areaId})")
 	@Options(useGeneratedKeys = true, keyProperty = "OutboundEquipment.id", keyColumn = "id")
 	int addEquipment(@Param("OutboundEquipment") OutboundEquipment outboundEquipment);
+
+	@Select("SELECT id" +
+			" FROM outboundmanage.outbound_equipment\n" +
+			" WHERE card=#{OutboundEquipment.card} and form=#{OutboundEquipment.form} ")
+	Integer checkEquipmentByUpdata(@Param("OutboundEquipment") OutboundEquipment outboundEquipment);
 
 	@UpdateProvider(type = SqlProvider.class, method = "upEquipment")
 	boolean upEquipment(@Param("OutboundEquipment") OutboundEquipment outboundEquipment);
@@ -25,6 +35,7 @@ public interface EquipmentDao {
 			" FROM outbound_equipment " +
 			" where area_id =#{areaId} order by form ,id desc")
 	List<OutboundEquipment> getAllEquipment(@Param("areaId") int areaId);
+
 
 	@Update("UPDATE outbound_equipment " +
 			" SET `type`=#{type}, status=#{status}" +

@@ -28,7 +28,8 @@ public interface PoliceDao {
 
 	@Select("Select user_id  FROM outbound_police  WHERE card =#{card}")
 	Integer findPoliceUserId(@Param("card") String card);
-
+	@Select("Select id  FROM outbound_police  WHERE card =#{card}")
+	Integer checPolice(@Param("card") String card);
 	@Select("SELECT p.id,p.user_id, p.card, p.name, p.equipment_id as equipmentId, p.equipment_id2 as equipmentId2, " +
 			" p.area_id as areaId,e1.card as equipmentCard,e2.card as equipmentCard2\n" +
 			" FROM outbound_police p\n" +

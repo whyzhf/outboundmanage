@@ -21,19 +21,30 @@ public class EquipmentServiceImpl implements EquipmentService {
     @Override
     public OutboundEquipment addEquipment(OutboundEquipment outboundPolice) {
          int id= 0;
-         id= equipmentDao.addEquipment(outboundPolice);
-         if(id>0){
+        Integer pid = equipmentDao.checkEquipment(outboundPolice);
+     //   System.out.println("res: "+pid);
+        if (pid==null){
+            id= equipmentDao.addEquipment(outboundPolice);
+             if(id>0){
+             }else{
+                 outboundPolice=null;
 
-         }else{
-             outboundPolice=null;
-
-         }
+             }
+        }else{
+            outboundPolice=null;
+        }
         return outboundPolice;
     }
 
     @Override
     public boolean upEquipment(OutboundEquipment outboundPolice) {
-        return equipmentDao.upEquipment(outboundPolice);
+        Integer pid = equipmentDao.checkEquipmentByUpdata(outboundPolice);
+        if(pid!=null&&pid!=outboundPolice.getId()){//该card已存在
+            return false;
+        }else{
+            return equipmentDao.upEquipment(outboundPolice);
+        }
+
     }
 
     @Override

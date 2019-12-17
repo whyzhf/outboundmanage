@@ -24,6 +24,11 @@ public class PrisonerServiceImpl implements PrisonerService {
     @Override
     public OutboundPrisoner addPrisoner(OutboundPrisoner outboundPrisoner) {
          int id= 0;
+        String card=outboundPrisoner.getCard();
+        Integer policeUserId = PrisonerDao.checPrisoner(card);
+        if(policeUserId!=null){//该card已存在
+            return null;
+        }
          id= PrisonerDao.addPrisoner(outboundPrisoner);
          if(id>0){
              if(null!=outboundPrisoner.getEquipmentId()){
@@ -40,6 +45,10 @@ public class PrisonerServiceImpl implements PrisonerService {
 
     @Override
     public boolean upPrisoner(OutboundPrisoner outboundPrisoner) {
+        Integer policeUserId = PrisonerDao.checPrisoner(outboundPrisoner.getCard());
+        if(policeUserId!=null&&policeUserId!=outboundPrisoner.getId()){//该card已存在
+            return false;
+        }
         String equipId=getEquipmentID(outboundPrisoner.getId()+"");
         if(PrisonerDao.upPrisoner(outboundPrisoner)) {
             if (outboundPrisoner.equals(outboundPrisoner.getEquipmentId() + "")) {

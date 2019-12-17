@@ -86,7 +86,7 @@ public class ManageController {
 		}
 		OutboundPoliceForSel returnPolice=policeService.addPolice(outboundPolice);
 		if(returnPolice==null){
-			return ResultGenerator.setCustomResult(4000,"新增失败");
+			return ResultGenerator.setCustomResult(4000,"新增失败,该警员编号已使用");
 		}else{
 			return ResultGenerator.genSuccessResult(returnPolice);
 		}
@@ -103,7 +103,7 @@ public class ManageController {
 		}
 		boolean flag=policeService.upPolice(outboundPolice);
 		if(!flag){
-			return ResultGenerator.setCustomResult(4000,"修改失败");
+			return ResultGenerator.setCustomResult(4000,"修改失败,该警员编号已使用");
 		}else{
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}
@@ -133,7 +133,7 @@ public class ManageController {
 	public Result addEquipment(@RequestBody OutboundEquipment outboundEquipment){
 		OutboundEquipment returnEquipment=equipmentService.addEquipment(outboundEquipment);
 		if(returnEquipment==null){
-			return ResultGenerator.setCustomResult(4000,"新增失败");
+			return ResultGenerator.setCustomResult(4000,"新增失败,该设备id已被录入");
 		}else{
 			return ResultGenerator.genSuccessResult(returnEquipment);
 		}
@@ -144,7 +144,7 @@ public class ManageController {
 	public Result upEquipment(@RequestBody OutboundEquipment outboundEquipment){
 		boolean flag=equipmentService.upEquipment(outboundEquipment);
 		if(!flag){
-			return ResultGenerator.setCustomResult(4000,"修改失败");
+			return ResultGenerator.setCustomResult(4000,"修改失败,该设备id已被录入");
 		}else{
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}

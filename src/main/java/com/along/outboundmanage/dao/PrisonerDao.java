@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface PrisonerDao {
+	@Select("Select id  FROM outbound_prisoner  WHERE card =#{card}")
+	Integer checPrisoner(@Param("card") String card);
+
 	@Insert("INSERT INTO outbound_prisoner" +
 			" ( card, name, equipment_id, area_id,intime,ifdel)" +
 			" VALUES( #{OutboundPrisoner.card}, #{OutboundPrisoner.name}," +

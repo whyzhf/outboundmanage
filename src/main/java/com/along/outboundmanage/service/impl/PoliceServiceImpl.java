@@ -28,6 +28,13 @@ public class PoliceServiceImpl implements PoliceService {
     public OutboundPoliceForSel addPolice(OutboundPolice outboundPolice) {
          int id= 0;
          String card=outboundPolice.getCard();
+        Integer policeUserId = policeDao.checPolice(card);
+
+        if(policeUserId!=null){//该card已存在
+            return null;
+        }
+
+
          Integer userId= userDao.checkCard(card);
          if(userId!=null){//user表存在
             /* Integer userP=policeDao.findPoliceUserId(card);
@@ -49,7 +56,8 @@ public class PoliceServiceImpl implements PoliceService {
 
          }
         outboundPolice.setUserId(userId);
-         id= policeDao.addPolice(outboundPolice);
+
+        id= policeDao.addPolice(outboundPolice);
          if(id>0){
              if(null!=outboundPolice.getEquipmentId()|| null!=outboundPolice.getEquipmentId2()){
                  String equipId=(outboundPolice.getEquipmentId()!=null?outboundPolice.getEquipmentId():"0")+","+(outboundPolice.getEquipmentId2()!=null?outboundPolice.getEquipmentId2():"0");
@@ -66,6 +74,10 @@ public class PoliceServiceImpl implements PoliceService {
 
     @Override
     public boolean upPolice(OutboundPolice outboundPolice) {
+        Integer policeUserId = policeDao.checPolice(outboundPolice.getCard());
+        if(policeUserId!=null&&policeUserId!=outboundPolice.getId()){//该card已存在
+            return false;
+        }
         String equipId=getEquipmentID(outboundPolice.getId()+"");
         String newEquipId=(outboundPolice.getEquipmentId()!=null?outboundPolice.getEquipmentId():"0")+","+(outboundPolice.getEquipmentId2()!=null?outboundPolice.getEquipmentId2():"0");
 

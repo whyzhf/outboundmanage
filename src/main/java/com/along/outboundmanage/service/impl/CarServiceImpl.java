@@ -16,7 +16,13 @@ public class CarServiceImpl implements CarService {
     private CarDao CarDao;
     @Override
     public OutboundCar addCar(OutboundCar outboundCar) {
+        Integer policeUserId = CarDao.checCar(outboundCar.getCard());
+        if(policeUserId!=null){//该card已存在
+            return null;
+        }
+
          int id= 0;
+
          id= CarDao.addCar(outboundCar);
          if(id>0){
 
@@ -29,6 +35,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public boolean upCar(OutboundCar outboundCar ) {
+        Integer policeUserId = CarDao.checCar(outboundCar.getCard());
+        if(policeUserId!=null && policeUserId!=outboundCar.getId()){//该card已存在
+            return false;
+        }
         return CarDao.upCar(outboundCar);
     }
 

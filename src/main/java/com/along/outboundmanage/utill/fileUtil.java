@@ -77,6 +77,7 @@ public class fileUtil {
 		//read("E:\\gpsData\\demo.txt");
 
 
+
 	}
 
 	/**
