@@ -235,7 +235,7 @@ public class TaskServiceImpl implements TaskService {
                 }
                 //设备状态
                 equipIds=equipIds.replaceAll("null,","");
-            System.out.println("equipIds:"+equipIds);
+           // System.out.println("equipIds:"+equipIds);
             if (equipIds.length()>1){
                     equipIds=equipIds.substring(0,equipIds.length()-1);
                     taskDao.clearEquipStatusByCard(equipIds);
@@ -584,6 +584,8 @@ public class TaskServiceImpl implements TaskService {
            }else{
                //prisonerList.get(i).setEquipmentId(null);
            }
+
+
            policeId=policeId+","+prisonerList.get(i).getId();
            eids=eids+","+prisonerList.get(i).getEquipmentId();
        }

@@ -37,7 +37,8 @@ public class ViewsServiceImpl implements ViewsService {
 		String data = getLastMonth("yyyy-MM");
 		EchartsData result=new EchartsData();
 		String name=data.replace("-","年");
-		if ("16".equals(area)){
+		Integer level = areaDao.getLevel(Integer.valueOf(area));
+		if (level==1){
 			area="";
 			result.setTitleName(name+"月全省监所在押情况");
 		}else{
@@ -85,25 +86,26 @@ public class ViewsServiceImpl implements ViewsService {
 
 	@Override
 	public EchartsData getOut(String area) {
-		//0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+		//0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 		String type=" and type in (0) ";
 		return getPub(area,type,"外出就医");
 	}
 
 	@Override
 	public EchartsData getDesignate(String area) {
-		//0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+		//0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 		String type=" and type in (1) ";
 		return getPub(area,type,"指认现场");
 	}
 
 	public EchartsData getPub(String area,String type,String pname) {
-		//0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+		//0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 		String data = getLastMonth("yyyy-MM");
 		String time=data+"%";
 		EchartsData result=new EchartsData();
 		String name=data.replace("-","年");
-		if ("16".equals(area)){
+		Integer level = areaDao.getLevel(Integer.valueOf(area));
+		if (level==1){
 			area="";
 			result.setTitleName(name+"月全省监所"+pname);
 		}else{
@@ -149,7 +151,8 @@ public class ViewsServiceImpl implements ViewsService {
 		String type=" and type in (2,3,4) ";
 		String data = getLastMonth("yyyy-MM");
 		String time=data+"%";
-		if ("16".equals(area)){
+		Integer level = areaDao.getLevel(Integer.valueOf(area));
+		if (level==1){
 			area="";
 		}else{
 			String id="0";
@@ -194,9 +197,9 @@ public class ViewsServiceImpl implements ViewsService {
 			}
 		}
 		result.setxAxisData(xAxisData);
-		//0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+		//0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 		Series series2 =new Series();
-		series2.setName("出庭作证");
+		series2.setName("出庭");
 		series2.setType("line");
 		series2.setStack("总量");
 		series2.setData(seriesData2);
@@ -217,7 +220,7 @@ public class ViewsServiceImpl implements ViewsService {
 		list.add(series3);
 		list.add(series4);
 
-		result.setLegendData(new String[]{"出庭作证","投牢","审讯"});
+		result.setLegendData(new String[]{"出庭","投牢","审讯"});
 		result.setSeries(list);
 		return result;
 	}
@@ -229,7 +232,8 @@ public class ViewsServiceImpl implements ViewsService {
 		String time=data;
 		String timename=time.replace("-","年");*/
 		String time = getNowData("yyyy-MM-dd");
-		if ("16".equals(area)){
+		Integer level = areaDao.getLevel(Integer.valueOf(area));
+		if (level==1){
 			area="";
 			//result.setTitleName(timename+"月全省统计");
 			result.setTitleName("全局统计");
@@ -241,10 +245,10 @@ public class ViewsServiceImpl implements ViewsService {
 			area=" and area_id in("+id+") ";
 		}
 
-		//0：外出就医，1：指认现场，2：出庭作证，3: 投牢，4：审讯，5：其他
+		//0：外出就医，1：指认现场，2：出庭，3: 投牢，4：审讯，5：其他
 		Pie p0=new Pie(0,"外出就医");
 		Pie p1=new Pie(0,"指认现场");
-		Pie p2=new Pie(0,"出庭作证");
+		Pie p2=new Pie(0,"出庭");
 		Pie p3=new Pie(0,"投牢");
 		Pie p4=new Pie(0,"审讯");
 
@@ -305,7 +309,7 @@ public class ViewsServiceImpl implements ViewsService {
 			typeMap.put("在押人员总数",0);
 			typeMap.put("外出就医",0);
 			typeMap.put("指认现场",0);
-			typeMap.put("出庭作证",0);
+			typeMap.put("出庭",0);
 			typeMap.put("投牢",0);
 			typeMap.put("审讯",0);
 			areaId=areaList.get(i).getId();
@@ -318,13 +322,13 @@ public class ViewsServiceImpl implements ViewsService {
 				//3:1&4:2
 				String[] type=ctb.getType().split("&");
 				for (int j = 0; j < type.length; j++) {
-					//0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+					//0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 					if ("0".equals(type[j].split(":")[0])){
 						typeMap.put("外出就医",Integer.valueOf(type[j].split(":")[1]));
 					} else if ("1".equals(type[j].split(":")[0])){
 						typeMap.put("指认现场",Integer.valueOf(type[j].split(":")[1]));
 					}else if ("2".equals(type[j].split(":")[0])){
-						typeMap.put("出庭作证",Integer.valueOf(type[j].split(":")[1]));
+						typeMap.put("出庭",Integer.valueOf(type[j].split(":")[1]));
 					}else if ("3".equals(type[j].split(":")[0])){
 						typeMap.put("投牢",Integer.valueOf(type[j].split(":")[1]));
 					}else if ("4".equals(type[j].split(":")[0])){
@@ -332,7 +336,7 @@ public class ViewsServiceImpl implements ViewsService {
 					}
 				}
 			}
-			typeMap.put("监所内人员",typeMap.get("在押人员总数")-typeMap.get("外出就医")-typeMap.get("指认现场")-typeMap.get("出庭作证")-typeMap.get("投牢")-typeMap.get("审讯"));
+			typeMap.put("监所内人员",typeMap.get("在押人员总数")-typeMap.get("外出就医")-typeMap.get("指认现场")-typeMap.get("出庭")-typeMap.get("投牢")-typeMap.get("审讯"));
 			emd.setValue(typeMap);
 			res.add(emd);
 		}
@@ -393,7 +397,7 @@ public class ViewsServiceImpl implements ViewsService {
 			typeMap.put("在押人员总数",0);
 			typeMap.put("外出就医",0);
 			typeMap.put("指认现场",0);
-			typeMap.put("出庭作证",0);
+			typeMap.put("出庭",0);
 			typeMap.put("投牢",0);
 			typeMap.put("审讯",0);
 			areaId=areaList.get(i).getId();
@@ -406,13 +410,13 @@ public class ViewsServiceImpl implements ViewsService {
 				//3:1&4:2
 				String[] type=ctb.getType().split("&");
 				for (int j = 0; j < type.length; j++) {
-					//0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+					//0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 					if ("0".equals(type[j].split(":")[0])){
 						typeMap.put("外出就医",Integer.valueOf(type[j].split(":")[1]));
 					} else if ("1".equals(type[j].split(":")[0])){
 						typeMap.put("指认现场",Integer.valueOf(type[j].split(":")[1]));
 					}else if ("2".equals(type[j].split(":")[0])){
-						typeMap.put("出庭作证",Integer.valueOf(type[j].split(":")[1]));
+						typeMap.put("出庭",Integer.valueOf(type[j].split(":")[1]));
 					}else if ("3".equals(type[j].split(":")[0])){
 						typeMap.put("投牢",Integer.valueOf(type[j].split(":")[1]));
 					}else if ("4".equals(type[j].split(":")[0])){
@@ -420,7 +424,7 @@ public class ViewsServiceImpl implements ViewsService {
 					}
 				}
 			}
-			typeMap.put("监所内人员",typeMap.get("在押人员总数")-typeMap.get("外出就医")-typeMap.get("指认现场")-typeMap.get("出庭作证")-typeMap.get("投牢")-typeMap.get("审讯"));
+			typeMap.put("监所内人员",typeMap.get("在押人员总数")-typeMap.get("外出就医")-typeMap.get("指认现场")-typeMap.get("出庭")-typeMap.get("投牢")-typeMap.get("审讯"));
 			emd.setValue(typeMap);
 			res.add(emd);
 		}

@@ -8,7 +8,7 @@ import static com.along.outboundmanage.utill.DataUtil.strToSqlDate;
 
 public class OutboundTaskV2 {
 	private int id;
-	private String name;//任务名：0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+	private String name;//任务名：0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 	private String origin;
 	private String destination;
 	private java.sql.Timestamp startTime;
@@ -17,7 +17,7 @@ public class OutboundTaskV2 {
 	private String describe;//描述
 	private Integer routeId;//路线
 	private String routeName;//路线名称
-	private Integer type;//0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+	private Integer type;//0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
 	private String remarks;//上级审核反馈
 	private Integer areaId;
 	private String areaName;//地域名

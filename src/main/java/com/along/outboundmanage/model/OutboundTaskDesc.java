@@ -10,7 +10,7 @@ import static com.along.outboundmanage.utill.DataUtil.strToSqlDate;
 public class OutboundTaskDesc {
 
   private int id;
-  private String name;//任务名：0：外出就医，1：指认现场，2：出庭作证，3投牢，4：审讯，5：其他
+  private String name;//任务名：0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
   private String origin;
   private String destination;
   private java.sql.Timestamp startTime;
