@@ -144,6 +144,15 @@
 			<version>4.5.9</version>
 		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.11</version>
+		</dependency>
+
+
 		<!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
 		<dependency>
 			<groupId>com.belerweb</groupId>

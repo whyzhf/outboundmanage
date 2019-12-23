@@ -40,4 +40,6 @@ public interface LoginService {
 	boolean upUserRole(int userId, int roleId);
 	//删除用户角色信息
 	boolean delUserRole(String userId);
+
+	String getLog(int id);
 }

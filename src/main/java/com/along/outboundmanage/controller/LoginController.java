@@ -9,6 +9,7 @@ import com.along.outboundmanage.model.OutboundUser;
 import com.along.outboundmanage.model.PubParam;
 import com.along.outboundmanage.service.LoginService;
 
+import com.along.outboundmanage.utill.Img2Base64Util;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
@@ -98,6 +99,23 @@ public class LoginController {
         return ResultGenerator.genSuccessResult(session.getAttribute("user"));
 
     }
+    /**
+     * 用户log
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getLog")
+    public Result getLog(@RequestBody PubParam pubParam, HttpServletRequest request) {
+        String log = loginService.getLog(pubParam.getAreaId().intValue());
+        if (log==null){
+            return ResultGenerator.setCustomResult(4000,"暂无log");
+        }else{
+            return ResultGenerator.genSuccessResult(log);
+        }
+
+    }
+
     /**
      * 用户清单
      * @param request

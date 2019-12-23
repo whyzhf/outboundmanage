@@ -10,5 +10,6 @@ public interface PLoginDao {
 			" FROM outbound_user where user_name=#{OutboundUser.userName} and password=#{OutboundUser.password}")
 	OutboundUser checkLogin(@Param("OutboundUser") OutboundUser user);
 
-
+	@Select("SELECT logname FROM outbound_area where id=#{id}")
+	String getlogname(@Param("id") int id);
 }
