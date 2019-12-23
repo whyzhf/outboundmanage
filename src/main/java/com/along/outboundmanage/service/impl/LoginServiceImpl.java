@@ -5,6 +5,7 @@ import com.along.outboundmanage.dao.*;
 import com.along.outboundmanage.model.*;
 import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.service.LoginService;
+import com.along.outboundmanage.utill.FileURLUtil;
 import com.along.outboundmanage.utill.Img2Base64Util;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -159,9 +160,8 @@ public class LoginServiceImpl implements LoginService {
     public String getLog(int id){
         String getlogname = PLoginDao.getlogname(id);
         if (getlogname!=null&&!getlogname.isEmpty()){
-
-            return Img2Base64Util.getImgStr("E:\\Project\\"+getlogname);
-          //  return Img2Base64Util.getImgStr("/usr/tomcat/tomcat8/gps/arealog/"+getlogname);
+          //  return Img2Base64Util.getImgStr("E:\\Project\\"+getlogname);
+            return Img2Base64Util.getImgStr(FileURLUtil.WEB_AREALOG_LOCATION+getlogname);
         }else{
             return null;
         }
