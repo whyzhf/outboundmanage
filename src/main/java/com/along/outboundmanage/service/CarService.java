@@ -5,7 +5,8 @@ import com.along.outboundmanage.model.OutboundCar;
 import java.util.List;
 
 public interface CarService {
-
+	//新增
+	boolean checCar(OutboundCar outboundCar);
 	//新增
 	OutboundCar addCar(OutboundCar outboundCar);
 	//修改

@@ -9,6 +9,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,26 @@ public class ManageController {
 		return ResultGenerator.genSuccessResult(allPolice);
 	}
 
+	/**
+	 * 警员编号验证
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/checPolice")
+	public Result checkCard(@RequestBody OutboundPolice outboundPolice, HttpServletRequest request)throws IOException {
+		Map<String,String > map=new HashMap<>();
+		if(policeService.checPolice(outboundPolice)){
+			map.put("msg","Success");
+			return ResultGenerator.setCustomResult(200,"该警员编号未被使用",map);
+		}else{
+			map.put("msg","Error");
+			return ResultGenerator.setCustomResult(4000,"该警员编号已存在本市数据库，请核实编号",map);
+		}
+
+	}
+
+
 	@ResponseBody
 	@RequestMapping("/addPolice")
 	public Result addPolice(@RequestBody OutboundPolice outboundPolice){
@@ -127,6 +149,25 @@ public class ManageController {
 		List<OutboundEquipment> allList = equipmentService.getAllEquipment(pubParam.getAreaId());
 		PageInfo<OutboundEquipment> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
+	}
+
+	/**
+	 * Equip编号验证
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/checEquipment")
+	public Result checEquipment(@RequestBody OutboundEquipment outboundPolice, HttpServletRequest request)throws IOException {
+		Map<String,String > map=new HashMap<>();
+		if(equipmentService.checEquipment(outboundPolice)){
+			map.put("msg","Success");
+			return ResultGenerator.setCustomResult(200,"该编号未被使用",map);
+		}else{
+			map.put("msg","Error");
+			return ResultGenerator.setCustomResult(4000,"该编号已存在本市数据库，请核实编号",map);
+		}
+
 	}
 	@ResponseBody
 	@RequestMapping("/addEquipment")
@@ -208,6 +249,25 @@ public class ManageController {
 		}
 	}
 	/*****************************犯人管理**********************************************/
+
+	/**
+	 * Equip编号验证
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/checPrisoner")
+	public Result checPrisoner(@RequestBody OutboundPrisoner outboundPolice, HttpServletRequest request)throws IOException {
+		Map<String,String > map=new HashMap<>();
+		if(prisonerService.checPrisoner(outboundPolice)){
+			map.put("msg","Success");
+			return ResultGenerator.setCustomResult(200,"该编号未被使用",map);
+		}else{
+			map.put("msg","Error");
+			return ResultGenerator.setCustomResult(4000,"该编号已存在本市数据库，请核实编号",map);
+		}
+
+	}
 	@ResponseBody
 	@RequestMapping("/getPrisonerList")
 	public Result getPrisonerList(@RequestBody PubParam pubParam){
@@ -277,6 +337,25 @@ public class ManageController {
 		List<OutboundCar> allList = carService.getAllCar(pubParam.getAreaId());
 		PageInfo<OutboundCar> pageInfo = new PageInfo<>(allList);
 		return ResultGenerator.genSuccessResult(pageInfo);
+	}
+
+	/**
+	 * Equip编号验证
+	 * @param request
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/checCar")
+	public Result checCar(@RequestBody OutboundCar outboundPolice, HttpServletRequest request)throws IOException {
+		Map<String,String > map=new HashMap<>();
+		if(carService.checCar(outboundPolice)){
+			map.put("msg","Success");
+			return ResultGenerator.setCustomResult(200,"该编号未被使用",map);
+		}else{
+			map.put("msg","Error");
+			return ResultGenerator.setCustomResult(4000,"该编号已存在本市数据库，请核实编号",map);
+		}
+
 	}
 	@ResponseBody
 	@RequestMapping("/addCar")

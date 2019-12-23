@@ -25,14 +25,25 @@ public class PoliceServiceImpl implements PoliceService {
     @Resource
     private EquipmentDao equipmentDao;
     @Override
+    public boolean checPolice(OutboundPolice outboundPolice) {
+        String card=outboundPolice.getCard();
+        Integer policeId = policeDao.checPolice(card);
+        if (null==outboundPolice.getId()&&policeId!=null){//新增
+            return false;
+        }else if (policeId!=null&& !policeId.equals(outboundPolice.getId())){//修改
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public OutboundPoliceForSel addPolice(OutboundPolice outboundPolice) {
          int id= 0;
          String card=outboundPolice.getCard();
-        Integer policeUserId = policeDao.checPolice(card);
-
+       /* Integer policeUserId = policeDao.checPolice(card);
         if(policeUserId!=null){//该card已存在
             return null;
-        }
+        }*/
 
 
          Integer userId= userDao.checkCard(card);
@@ -74,10 +85,10 @@ public class PoliceServiceImpl implements PoliceService {
 
     @Override
     public boolean upPolice(OutboundPolice outboundPolice) {
-        Integer policeUserId = policeDao.checPolice(outboundPolice.getCard());
+       /* Integer policeUserId = policeDao.checPolice(outboundPolice.getCard());
         if(policeUserId!=null&&policeUserId!=outboundPolice.getId()){//该card已存在
             return false;
-        }
+        }*/
         String equipId=getEquipmentID(outboundPolice.getId()+"");
         String newEquipId=(outboundPolice.getEquipmentId()!=null?outboundPolice.getEquipmentId():"0")+","+(outboundPolice.getEquipmentId2()!=null?outboundPolice.getEquipmentId2():"0");
 

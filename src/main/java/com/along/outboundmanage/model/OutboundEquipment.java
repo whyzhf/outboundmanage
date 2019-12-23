@@ -3,7 +3,7 @@ package  com.along.outboundmanage.model;
 
 public class OutboundEquipment {
 
-  private int id;
+  private Integer id;
   private String card;//编号
   private String num;//电话号码
   private String name;//名称
@@ -27,11 +27,11 @@ public class OutboundEquipment {
   }
 
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -101,7 +101,7 @@ public class OutboundEquipment {
     public Builder() {
     }
 
-    public Builder id(int id) {
+    public Builder id(Integer id) {
       this.id = id;
       return this;
     }

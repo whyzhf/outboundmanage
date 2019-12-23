@@ -4,7 +4,7 @@ package  com.along.outboundmanage.model;
 public class OutboundCar {
 
 
-  private int id;
+  private Integer id;
 
   private String card;//车牌
 
@@ -15,11 +15,11 @@ public class OutboundCar {
   private int areaId;//区域ID
 
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

@@ -10,6 +10,8 @@ public interface EquipmentService {
 	//新增
 	OutboundEquipment addEquipment(OutboundEquipment OutboundEquipment);
 	//修改
+	boolean checEquipment( OutboundEquipment OutboundEquipment);
+	//修改
 	boolean upEquipment( OutboundEquipment OutboundEquipment);
 	//删除
 	boolean delEquipment(String id);

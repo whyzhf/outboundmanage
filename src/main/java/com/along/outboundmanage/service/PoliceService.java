@@ -10,6 +10,8 @@ public interface PoliceService {
 	//新增
 	OutboundPoliceForSel addPolice(OutboundPolice outboundPolice);
 	//修改
+	boolean checPolice( OutboundPolice outboundPolice);
+	//修改
 	boolean upPolice( OutboundPolice outboundPolice);
 	//删除
 	boolean delPolice( String id);

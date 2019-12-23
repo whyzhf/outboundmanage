@@ -18,18 +18,25 @@ import java.util.List;
 public class EquipmentServiceImpl implements EquipmentService {
     @Resource
     private EquipmentDao equipmentDao;
+
+    @Override
+    public boolean checEquipment(OutboundEquipment outboundPolice) {
+        String card=outboundPolice.getCard();
+        Integer policeId = equipmentDao.checkEquipment(outboundPolice);
+        System.out.println(policeId+" : "+outboundPolice.getId());
+        if (null==outboundPolice.getId() && policeId!=null){//新增
+            return false;
+        }else if (policeId!=null && !policeId.equals(outboundPolice.getId())){//修改
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public OutboundEquipment addEquipment(OutboundEquipment outboundPolice) {
          int id= 0;
-        Integer pid = equipmentDao.checkEquipment(outboundPolice);
-     //   System.out.println("res: "+pid);
-        if (pid==null){
-            id= equipmentDao.addEquipment(outboundPolice);
-             if(id>0){
-             }else{
-                 outboundPolice=null;
-
-             }
+        id= equipmentDao.addEquipment(outboundPolice);
+        if(id>0){
         }else{
             outboundPolice=null;
         }
@@ -38,13 +45,13 @@ public class EquipmentServiceImpl implements EquipmentService {
 
     @Override
     public boolean upEquipment(OutboundEquipment outboundPolice) {
-        Integer pid = equipmentDao.checkEquipmentByUpdata(outboundPolice);
+       /* Integer pid = equipmentDao.checkEquipmentByUpdata(outboundPolice);
         if(pid!=null&&pid!=outboundPolice.getId()){//该card已存在
             return false;
         }else{
-            return equipmentDao.upEquipment(outboundPolice);
-        }
 
+        }*/
+        return equipmentDao.upEquipment(outboundPolice);
     }
 
     @Override

@@ -3,7 +3,7 @@ package  com.along.outboundmanage.model;
 
 public class OutboundPrisoner {
 
-  private int id;
+  private Integer id;
   private String card;
   private String name;
   private Integer equipmentId;//设备号
@@ -42,11 +42,11 @@ public class OutboundPrisoner {
     this.equipmentCard = equipmentCard;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -96,7 +96,7 @@ public class OutboundPrisoner {
     public Builder() {
     }
 
-    public Builder id(int id) {
+    public Builder id(Integer id) {
       this.id = id;
       return this;
     }

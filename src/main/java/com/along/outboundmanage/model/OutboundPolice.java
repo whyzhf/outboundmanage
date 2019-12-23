@@ -3,7 +3,7 @@ package  com.along.outboundmanage.model;
 
 public class OutboundPolice {
 
-  private int id;
+  private Integer id;
   private String card;
   private String name;
   private Integer equipmentId;//遥控器
@@ -45,11 +45,11 @@ public class OutboundPolice {
     this.userId = userId;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
