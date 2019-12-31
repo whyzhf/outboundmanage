@@ -7,6 +7,7 @@ import com.along.outboundmanage.model.ExceptionEntity.ResultGenerator;
 import com.along.outboundmanage.service.LoginService;
 import com.along.outboundmanage.utill.FileURLUtil;
 import com.along.outboundmanage.utill.Img2Base64Util;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class LoginServiceImpl implements LoginService {
     private MenuDao menuDao;
     @Resource
     private PoliceDao policeDao;
+
     @Override
     public OutboundUser checkLogin(OutboundUser user) {
         return PLoginDao.checkLogin(user);
@@ -165,6 +167,5 @@ public class LoginServiceImpl implements LoginService {
         }else{
             return null;
         }
-
     }
 }

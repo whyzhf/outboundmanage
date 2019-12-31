@@ -79,7 +79,7 @@ public class LoginController {
     public Result logVal(@RequestBody OutboundUser user, HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map=new HashMap<>();
         HttpSession session = request.getSession();
-
+       // session.setMaxInactiveInterval(120*60);//以秒为单位，即在没有活动120分钟后，session将失效
 	    OutboundSession outSession=(OutboundSession)session.getAttribute("user");
         if (outSession != null && user.getUserName().equals(outSession.getUserName())) {
 	        map.put("url", "/index");

@@ -6,7 +6,7 @@ server:
   servlet:
     context-path: /outboundmanage
     session:
-      timeout: 1800S
+      timeout: PT3H
   ##  error: whitelabel: enabled: false
 
 #  compression:

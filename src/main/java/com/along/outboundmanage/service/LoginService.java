@@ -1,19 +1,23 @@
 package com.along.outboundmanage.service;
 
+import com.along.outboundmanage.config.CacheExpire;
 import com.along.outboundmanage.model.OutboundMenu;
 import com.along.outboundmanage.model.OutboundRole;
 import com.along.outboundmanage.model.OutboundSession;
 import com.along.outboundmanage.model.OutboundUser;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 import java.util.Map;
 
 public interface LoginService {
 	//判断是否可以登录
+
 	OutboundUser checkLogin(OutboundUser user);
 
 	OutboundUser getUser(int id);
+
 
 	//登录成功创建session
 	OutboundSession getSession(int userId);
