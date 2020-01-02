@@ -235,13 +235,15 @@ public class TaskServiceImpl implements TaskService {
                 }
                 //设备状态
                 equipIds=equipIds.replaceAll("null,","");
-           // System.out.println("equipIds:"+equipIds);
-            if (equipIds.length()>1){
+          //  System.out.println("equipIds:"+equipIds);
+                if (equipIds.length()>1){
                     equipIds=equipIds.substring(0,equipIds.length()-1);
-                    taskDao.clearEquipStatusByCard(equipIds);
+                    String join = String.join("','",  equipIds.split(","));
+                    taskDao.clearEquipStatusByCard("'"+join+"'");
                 }
                 //车辆状态
                 carIds=carIds.replaceAll("null,","");
+           // System.out.println("equipIds:"+equipIds);
                 if (carIds.length()>1){
                     carIds=carIds.substring(0,carIds.length()-1);
                     taskDao.clearCarStatus(carIds);
