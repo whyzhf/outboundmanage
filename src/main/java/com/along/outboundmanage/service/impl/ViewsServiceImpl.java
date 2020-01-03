@@ -153,7 +153,7 @@ public class ViewsServiceImpl implements ViewsService {
 		String time=data+"%";
 		Integer level = areaDao.getLevel(Integer.valueOf(area));
 		if (level==1){
-			area="";
+			area=" AND area_id LIKE '"+area.substring(0,2)+"%'";
 		}else{
 			String id="0";
 			List<Integer> ids = areaDao.getAreaIdsByPar(Integer.valueOf(area));
