@@ -60,7 +60,7 @@ public class SqlProvider extends SQL {
     }
 
     public  String updataRoute(@Param("OutboundRoute") OutboundRoute outboundRoute){
-        return updataSql(outboundRoute);
+        return updataSql3(outboundRoute);
     }
 
     public  String insertSql(Object clazz){
@@ -103,6 +103,28 @@ public class SqlProvider extends SQL {
         sql=sql+" where id=#{"+beanName+".id}";
         return sql;
     }
+
+	public  String updataSql3(Object clazz){
+		StringBuffer sqlBf=new StringBuffer();
+		String beanName=clazz.getClass().getName();
+		beanName=beanName.replace("com.along.outboundmanage.model.","");
+		String tableName=camelToUnderline(toLowerCaseFirstOne(beanName));
+		StringBuffer beanBf=new StringBuffer(beanName);
+		sqlBf.append("UPDATE ").append(tableName).append(" set ");
+		BeanMap.create(clazz).forEach((K,V)->{
+			if (!GeneralUtils.isNull(V)){
+				if("originLngLat".equals(K)||"destinationLngLat".equals(K)){
+					sqlBf.append(K  + "=#{" + beanBf + "." + K + "},");
+				}else {
+					sqlBf.append(camelToUnderline(K + "") + "=#{" + beanBf + "." + K + "},");
+				}
+			}
+		});
+		String sql=sqlBf.toString();
+		sql=sql.substring(0,sql.length()-1);
+		sql=sql+" where id=#{"+beanName+".id}";
+		return sql;
+	}
 
     public  String updataSql2(Object clazz){
         StringBuffer sqlBf=new StringBuffer();

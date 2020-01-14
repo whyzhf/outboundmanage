@@ -14,10 +14,10 @@ public interface RouteService {
 
 	OutboundRouteJson getRouteById(int id);
 	//修改
-	boolean updateRouteById(OutboundRoute outboundRoute);
+	boolean updateRouteById(OutboundRouteJson outboundRoute);
 	//删除
 	boolean delRoute(String ids);
 	//新增
-	OutboundRoute insertRoute(OutboundRoute outboundRoute);
+	OutboundRoute insertRoute(OutboundRouteJson outboundRoute);
 	String getOd( int id);
 }

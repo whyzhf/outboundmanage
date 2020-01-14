@@ -1,7 +1,12 @@
 package com.along.outboundmanage.utill;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.along.outboundmanage.utill.GeneralUtils.getJsonStr;
+
 /**
   * 驼峰转换
   * @author why
@@ -77,9 +82,14 @@ public class BeanHump {
 	 * 测试
 	 */
 	public static void main(String[] args) {
-		System.out.println(camelToUnderline("areaId"));
+		/*System.out.println(camelToUnderline("areaId"));
 		System.out.println(underlineToCamel("user_name_all"));
 		System.out.println(underlineToCamel2("user_name_all"));
-		System.out.println(underlineToCamel2("user_na_me_all"));
+		System.out.println(underlineToCamel2("user_na_me_all"));*/
+		//DecimalFormat format = new DecimalFormat("00.00");
+		//System.out.println(format.format(new BigDecimal("1.123456")));
+		String[] strArr = new String[2];
+		strArr="123".split(";");
+		System.out.println(getJsonStr(strArr));
 	}
 }

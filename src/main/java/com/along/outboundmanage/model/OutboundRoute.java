@@ -13,6 +13,8 @@ public class OutboundRoute {
   private String distance;//距离
   private String origin;//出发地
   private String destination;//目的地
+  private String originLngLat;//出发地经纬度
+  private String destinationLngLat;//目的地经纬度
   private String rail;//围栏
   private int areaId;
 
@@ -25,6 +27,8 @@ public class OutboundRoute {
             ", distance='" + distance + '\'' +
             ", origin='" + origin + '\'' +
             ", destination='" + destination + '\'' +
+            ", originLngLat='" + originLngLat + '\'' +
+            ", destinationLngLat='" + destinationLngLat + '\'' +
             ", rail='" + rail + '\'' +
             ", areaId=" + areaId +
             '}';
@@ -35,7 +39,11 @@ public class OutboundRoute {
   }
 
   public void setRail(Object rail) {
-    this.rail = getJsonStr(rail);
+    if(rail instanceof String){
+      this.rail =rail+"";
+    }else {
+      this.rail = getJsonStr(rail);
+    }
   }
 
   public int getId() {
@@ -101,4 +109,19 @@ public class OutboundRoute {
     this.areaId = areaId;
   }
 
+  public String getOriginLngLat() {
+    return originLngLat;
+  }
+
+  public void setOriginLngLat(String originLngLat) {
+    this.originLngLat = originLngLat;
+  }
+
+  public String getDestinationLngLat() {
+    return destinationLngLat;
+  }
+
+  public void setDestinationLngLat(String destinationLngLat) {
+    this.destinationLngLat = destinationLngLat;
+  }
 }

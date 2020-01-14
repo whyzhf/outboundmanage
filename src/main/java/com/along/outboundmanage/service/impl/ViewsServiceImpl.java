@@ -39,7 +39,7 @@ public class ViewsServiceImpl implements ViewsService {
 		String name=data.replace("-","年");
 		Integer level = areaDao.getLevel(Integer.valueOf(area));
 		if (level==1){
-			area="";
+			area=" AND area_id LIKE '"+area.substring(0,2)+"%'";
 			result.setTitleName(name+"月全省监所在押情况");
 		}else{
 			String id="0";
@@ -106,7 +106,7 @@ public class ViewsServiceImpl implements ViewsService {
 		String name=data.replace("-","年");
 		Integer level = areaDao.getLevel(Integer.valueOf(area));
 		if (level==1){
-			area="";
+			area=" AND area_id LIKE '"+area.substring(0,2)+"%'";
 			result.setTitleName(name+"月全省监所"+pname);
 		}else{
 			String id="0";
@@ -234,7 +234,7 @@ public class ViewsServiceImpl implements ViewsService {
 		String time = getNowData("yyyy-MM-dd");
 		Integer level = areaDao.getLevel(Integer.valueOf(area));
 		if (level==1){
-			area="";
+			area=" AND area_id LIKE '"+area.substring(0,2)+"%'";
 			//result.setTitleName(timename+"月全省统计");
 			result.setTitleName("全局统计");
 		}else{

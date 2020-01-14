@@ -13,6 +13,8 @@ public class OutboundTaskJson {
   private String name;//任务名：0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
   private String origin;
   private String destination;
+  private String originLngLat;//出发地经纬度
+  private String destinationLngLat;//出发地经纬度
   private Timestamp startTime;
   private Timestamp endTime;
   private Integer status;//0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
@@ -168,5 +170,19 @@ public class OutboundTaskJson {
   }
 
 
+  public String getOriginLngLat() {
+    return originLngLat;
+  }
 
+  public void setOriginLngLat(String originLngLat) {
+    this.originLngLat = originLngLat;
+  }
+
+  public String getDestinationLngLat() {
+    return destinationLngLat;
+  }
+
+  public void setDestinationLngLat(String destinationLngLat) {
+    this.destinationLngLat = destinationLngLat;
+  }
 }

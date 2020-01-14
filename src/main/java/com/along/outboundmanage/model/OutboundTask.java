@@ -12,8 +12,10 @@ public class OutboundTask {
   private String name;//任务名：0：外出就医，1：指认现场，2：出庭，3投牢，4：审讯，5：其他
   private String origin;
   private String destination;
-  private java.sql.Timestamp startTime;
-  private java.sql.Timestamp endTime;
+  private String originLngLat;//出发地经纬度
+  private String destinationLngLat;//出发地经纬度
+  private Timestamp startTime;
+  private Timestamp endTime;
   private Integer status;//0：审核中，1：审核通过，2：审核未通过，3：执行中，4：已完成
   private String describe;//描述
   private Integer routeId;//路线
@@ -37,6 +39,7 @@ public class OutboundTask {
       this.areaId=areaId;
   }
 
+
   @Override
   public String toString() {
     return "OutboundTask{" +
@@ -58,25 +61,6 @@ public class OutboundTask {
   }
 
   public OutboundTask() {
-  }
-
-
-
-  private OutboundTask(Builder builder) {
-    setId(builder.id);
-    setName(builder.name);
-    setOrigin(builder.origin);
-    setDestination(builder.destination);
-    setStartTime(builder.startTime==null?null:dateToStr(startTime,"yyyy-MM-dd HH:mm:ss"));
-    setEndTime(builder.endTime==null?null:dateToStr(endTime,"yyyy-MM-dd HH:mm:ss"));
-    setStatus(builder.status);
-    setDescribe(builder.describe);
-    setRouteId(builder.routeId);
-    setRouteName(builder.routeName);
-    setType(builder.type);
-    setRemarks(builder.remarks);
-    setAreaId(builder.areaId);
-    setAreaName(builder.areaName);
   }
 
   public int getId() {
@@ -111,8 +95,25 @@ public class OutboundTask {
     this.destination = destination;
   }
 
+  public String getOriginLngLat() {
+    return originLngLat;
+  }
+
+  public void setOriginLngLat(String originLngLat) {
+    this.originLngLat = originLngLat;
+  }
+
+  public String getDestinationLngLat() {
+    return destinationLngLat;
+  }
+
+  public void setDestinationLngLat(String destinationLngLat) {
+    this.destinationLngLat = destinationLngLat;
+  }
+
   public String getStartTime() {
-    return  startTime==null?null:dateToStr(startTime,"yyyy-MM-dd HH:mm:ss");
+
+    return startTime==null?null:dateToStr(startTime,"yyyy-MM-dd HH:mm:ss");
   }
 
   public void setStartTime(String startTime) {
@@ -181,7 +182,7 @@ public class OutboundTask {
     return areaId;
   }
 
-  public void setAreaId(int areaId) {
+  public void setAreaId(Integer areaId) {
     this.areaId = areaId;
   }
 
@@ -193,97 +194,6 @@ public class OutboundTask {
     this.areaName = areaName;
   }
 
-  public static final class Builder {
-    private int id;
-    private String name;
-    private String origin;
-    private String destination;
-    private Timestamp startTime;
-    private Timestamp endTime;
-    private Integer status;
-    private String describe;
-    private Integer routeId;
-    private String routeName;
-    private Integer type;
-    private String remarks;
-    private Integer areaId;
-    private String areaName;
 
-    public Builder() {
-    }
 
-    public Builder id(int id) {
-      this.id = id;
-      return this;
-    }
-
-    public Builder name(String name) {
-      this.name = name;
-      return this;
-    }
-
-    public Builder origin(String origin) {
-      this.origin = origin;
-      return this;
-    }
-
-    public Builder destination(String destination) {
-      this.destination = destination;
-      return this;
-    }
-
-    public Builder startTime(Timestamp startTime) {
-      this.startTime = startTime;
-      return this;
-    }
-
-    public Builder endTime(Timestamp endTime) {
-      this.endTime = endTime;
-      return this;
-    }
-
-    public Builder status(Integer status) {
-      this.status = status;
-      return this;
-    }
-
-    public Builder describe(String describe) {
-      this.describe = describe;
-      return this;
-    }
-
-    public Builder routeId(Integer routeId) {
-      this.routeId = routeId;
-      return this;
-    }
-
-    public Builder routeName(String routeName) {
-      this.routeName = routeName;
-      return this;
-    }
-
-    public Builder type(Integer type) {
-      this.type = type;
-      return this;
-    }
-
-    public Builder remarks(String remarks) {
-      this.remarks = remarks;
-      return this;
-    }
-
-    public Builder areaId(Integer areaId) {
-      this.areaId = areaId;
-      return this;
-    }
-
-    public Builder areaName(String areaName) {
-      this.areaName = areaName;
-      return this;
-    }
-
-    public OutboundTask build() {
-      return new OutboundTask(this);
-    }
-  }
 }

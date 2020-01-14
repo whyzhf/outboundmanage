@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static com.along.outboundmanage.utill.DataUtil.getNowData;
+import static com.along.outboundmanage.utill.GeneralUtils.getJsonArr;
+
 /**
  * 路线管理
  * @author why
@@ -55,7 +57,7 @@ public class RouteController {
 
 	@ResponseBody
 	@RequestMapping("/upRoute")
-	public Result upRoute(@RequestBody  OutboundRoute outboundRoute){
+	public Result upRoute(@RequestBody  OutboundRouteJson outboundRoute){
 		if(routeService.updateRouteById(outboundRoute)){
 			return ResultGenerator.setCustomResult(200,"修改成功");
 		}else{
@@ -75,9 +77,12 @@ public class RouteController {
 
 	@ResponseBody
 	@RequestMapping("/addRoute")
-	public Result addRoute(@RequestBody  OutboundRoute outboundRoute, HttpServletRequest request){
+	public Result addRoute(@RequestBody  OutboundRouteJson outboundRoute, HttpServletRequest request){
 		outboundRoute.setUptime(getNowData("yyyy-MM-dd HH:mm:ss"));
 		OutboundRoute returnRoute=routeService.insertRoute(outboundRoute);
+		String[] strArr = new String[2];
+		double[] OriginLngLat = new double[2];
+		double[] DestinationLngLat = new double[2];
 		OutboundRouteJson outboundRouteJson=new OutboundRouteJson();
 		outboundRouteJson.setId(returnRoute.getId());
 		outboundRouteJson.setAreaId(returnRoute.getAreaId());
@@ -86,7 +91,20 @@ public class RouteController {
 		outboundRouteJson.setName(returnRoute.getName());
 		outboundRouteJson.setOrigin(returnRoute.getOrigin());
 		outboundRouteJson.setUptime(returnRoute.getUptime());
-		outboundRouteJson.setRail(returnRoute.getRail());
+		outboundRouteJson.setRail(getJsonArr(returnRoute.getRail()));
+		strArr = returnRoute.getOriginLngLat().split(",");
+		if(strArr.length>0) {
+			OriginLngLat[0] = Double.parseDouble(strArr[0]);
+			OriginLngLat[1] = Double.parseDouble(strArr[1]);
+		}
+		outboundRouteJson.setOriginLngLat(OriginLngLat);
+		strArr = returnRoute.getDestinationLngLat().split(",");
+		if(strArr.length>0) {
+			DestinationLngLat[0] = Double.parseDouble(strArr[0]);
+			DestinationLngLat[1] = Double.parseDouble(strArr[1]);
+		}
+		outboundRouteJson.setDestinationLngLat(DestinationLngLat);
+
 		if(returnRoute==null){
 			return ResultGenerator.setCustomResult(4000,"新增失败");
 		}else{

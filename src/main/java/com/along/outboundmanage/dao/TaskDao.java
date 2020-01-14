@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface TaskDao {
-	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName" +
+	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName,r.originLngLat,r.destinationLngLat" +
 			" FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" WHERE t.area_id=#{areaId} order by  t.status <> 3 ,t.id Desc" )
 	List<OutboundTask> getAllTaskByAreaId(@Param("areaId") int areaId);
-	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName" +
+	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName,r.originLngLat,r.destinationLngLat" +
 			" FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" WHERE t.area_id=#{areaId} and t.status in(${status}) order by  t.status <> 3,t.id Desc" )
 	List<OutboundTask> getTaskByAreaIdStatus(@Param("areaId") int areaId,@Param("status") String status);
-	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName" +
+	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as routeName,r.originLngLat,r.destinationLngLat" +
 			" FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" WHERE t.id in(${ids}) order by t.id" )
@@ -58,7 +58,7 @@ public interface TaskDao {
 	boolean delTask(@Param("ids") String ids);
 
 	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,a.name as areaName,r.rail as rail\n" +
-			" FROM outbound_task t\n" +
+			" ,r.originLngLat,r.destinationLngLat FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" left join outbound_area a on t.area_id=a.id\n" +
 			" WHERE t.area_id in (${areaId}) and  t.status in (${status})" +
@@ -66,7 +66,7 @@ public interface TaskDao {
 	List<OutboundTaskJson> getAllTaskByStatus2(@Param("status")String status,@Param("areaId") String areaId);
 
 	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,a.name as areaName,r.rail as rail\n" +
-			" FROM outbound_task t\n" +
+			" ,r.originLngLat,r.destinationLngLat FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" left join outbound_area a on t.area_id=a.id\n" +
 			" WHERE t.id in (${taskIds}) and  t.status in (3,4) " +
@@ -74,7 +74,7 @@ public interface TaskDao {
 	OutboundTaskJson getTaskByIds(@Param("taskIds")String taskIds);
 
 	@Select(" SELECT t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,a.name as areaName\n" +
-			" FROM outbound_task t\n" +
+			",r.originLngLat,r.destinationLngLat FROM outbound_task t\n" +
 			" left join outbound_route r on t.route_id=r.id\n" +
 			" left join outbound_area a on t.area_id=a.id\n" +
 			" WHERE t.area_id in (${areaId}) and  t.status in (${status})" +
@@ -101,7 +101,7 @@ public interface TaskDao {
 
 	//我的当前任务（一级）
 	@Select(" SELECT distinct  t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id,r.name as route_name,r.rail as rail" +
-			" from \n" +
+			" ,r.originLngLat,r.destinationLngLat from \n" +
 			" (SELECT distinct t.id, t.name, t.origin, t.destination, t.start_time, t.end_time, t.status, t.describe, t.route_id, t.type, t.remarks, t.area_id" +
 			"    FROM outbound_task t\n" +
 			"    left join outbound_task_police_rel pr on pr.task_id=t.id\n" +
